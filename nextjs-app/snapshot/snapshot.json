@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-10-25T07:29:46.957Z",
+  "pins": [],
+  "details": {},
+  "charts": [],
+  "methods": {
+    "sourcesByKind": [],
+    "gaps": [],
+    "leadPins": [],
+    "counts": {
+      "pins": 0,
+      "sources": 0,
+      "byBadge": {},
+      "byStatus": {}
+    }
+  }
+}
