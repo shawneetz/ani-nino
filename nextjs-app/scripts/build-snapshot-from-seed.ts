@@ -1,3 +1,4 @@
+// What this file does: validates seed JSON and builds the snapshot used by the app.
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { SOURCE_KINDS, SOURCE_ROLES } from "../src/lib/enums";
@@ -64,6 +65,7 @@ interface RawLink {
 }
 
 function asArray<T>(value: unknown, key: string, file: string): T[] {
+  // Accept a plain array or a named array, but report other shapes as errors.
   if (Array.isArray(value)) return value as T[];
   if (value && typeof value === "object") {
     const nested = (value as Record<string, unknown>)[key];
@@ -198,6 +200,7 @@ async function build(): Promise<Snapshot> {
     const today = details[link.today];
     const past = details[link.past];
     if (!today || !past) throw new Error(`Unknown pin in link "${link.today}" -> "${link.past}"`);
+    // Store a small copy of the linked pin to keep snapshot links compact.
     const brief = (pin: PinDetail) => ({
       id: pin.id,
       title: pin.title,

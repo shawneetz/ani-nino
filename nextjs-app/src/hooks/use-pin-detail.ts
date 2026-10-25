@@ -1,3 +1,4 @@
+// What this file does: loads, validates, and caches the selected pin's details.
 "use client";
 
 import { useEffect, useState } from "react";
@@ -18,6 +19,7 @@ export function usePinDetail(slug: string | null): PinDetailState {
   useEffect(() => {
     if (!slug || cache.has(slug)) return;
 
+    // Cancel the request if the reader selects another pin before it finishes.
     const controller = new AbortController();
 
     fetch(`/api/pins/${encodeURIComponent(slug)}`, { signal: controller.signal })

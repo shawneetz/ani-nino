@@ -1,3 +1,4 @@
+// What this file does: groups a pin's sources by the claim or context they support.
 import type { PinDetail } from "@/lib/api-schemas";
 import { formatDate, KIND_LABELS, ROLE_LABELS } from "./detail-labels";
 

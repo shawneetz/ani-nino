@@ -1,3 +1,4 @@
+// What this file does: configures ESLint with the Next.js rules used by this app.
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";

@@ -1,3 +1,4 @@
+// What this file does: loads pins on the server and starts the interactive explorer.
 import { Suspense } from "react";
 import { connection } from "next/server";
 import { Explorer } from "@/components/Explorer";
@@ -6,6 +7,7 @@ import { loadPins } from "@/lib/load-pins";
 import { FAMILIES } from "@/lib/vocab";
 
 async function ExplorerData() {
+  // Keep request-time data inside Suspense so the static page shell can render first.
   await connection();
   const pins = await loadPins();
   const familyColors = Object.fromEntries(

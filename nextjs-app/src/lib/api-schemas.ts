@@ -1,3 +1,4 @@
+// What this file does: defines Zod checks for pin, source, and snapshot data.
 import { z } from "zod";
 import {
   BADGES,
@@ -13,6 +14,7 @@ import { FAMILIES } from "./vocab";
 
 export const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
+// Keep family values aligned with the labels used throughout the interface.
 const familySchema = z.enum(Object.keys(FAMILIES) as [keyof typeof FAMILIES, ...(keyof typeof FAMILIES)[]]);
 const sourceKindSchema = z.enum(SOURCE_KINDS);
 const sourceRoleSchema = z.enum(SOURCE_ROLES);

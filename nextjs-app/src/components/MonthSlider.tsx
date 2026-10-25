@@ -1,3 +1,4 @@
+// What this file does: lets readers choose a month and see the current pin count.
 "use client";
 
 import { MAX_MONTH, MIN_MONTH, monthFromIndex, monthIndex, monthLabel } from "@/lib/slider";

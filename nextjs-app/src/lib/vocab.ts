@@ -1,3 +1,4 @@
+// What this file does: keeps family, province, evidence, and status labels in one place.
 import type { BadgeKind, Province, SourceKind, Status } from "./enums";
 import { PROVINCES } from "./enums";
 

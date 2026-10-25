@@ -1,3 +1,4 @@
+// What this file does: shows the site name and short description at the top of each page.
 import Link from "next/link";
 
 export function SiteHeader() {

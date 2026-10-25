@@ -1,3 +1,4 @@
+// What this file does: checks the home page and pin APIs in a real browser server.
 import { expect, test } from "@playwright/test";
 
 test("home route renders the explorer", async ({ request }) => {

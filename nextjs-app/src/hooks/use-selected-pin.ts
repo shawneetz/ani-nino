@@ -1,3 +1,4 @@
+// What this file does: stores the selected pin in the URL for sharing and browser history.
 "use client";
 
 import { useCallback } from "react";
@@ -13,6 +14,7 @@ export function useSelectedPin() {
 
   const go = useCallback(
     (next: URLSearchParams, mode: "push" | "replace") => {
+      // Selecting adds history; closing replaces it so Back returns to the previous pin.
       const query = next.toString().replace(/%2C/g, ",");
       const url = query ? `${pathname}?${query}` : pathname;
       if (mode === "push") router.push(url, { scroll: false });

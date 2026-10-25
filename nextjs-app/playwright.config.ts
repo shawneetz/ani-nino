@@ -1,3 +1,4 @@
+// What this file does: runs browser tests against a local Next.js server.
 import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({

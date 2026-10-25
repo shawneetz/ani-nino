@@ -1,3 +1,4 @@
+// What this file does: connects filters, the map, the pin list, and URL selection.
 "use client";
 
 import dynamic from "next/dynamic";
@@ -49,6 +50,7 @@ export function Explorer({
   }, [urlMonth]);
 
   const handleMonthChange = useCallback((next: string) => {
+    // Update the slider now and wait briefly before changing the URL.
     setMonth(next);
     pendingRef.current = next;
     if (timerRef.current) clearTimeout(timerRef.current);
@@ -88,6 +90,7 @@ export function Explorer({
     if (!slug) return;
     const pin = pinById.get(slug);
     if (!pin) return;
+    // Shared links reveal selected pins that the current view would hide.
     const patch = revealPatch(pin, viewRef.current);
     if (patch?.today) setTodayRef.current(true);
     if (patch?.month) handleMonthChange(patch.month);

@@ -1,3 +1,4 @@
+// What this file does: loads the selected pin and returns focus when its panel closes.
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -21,6 +22,7 @@ export function PinDetailHost({
   useEffect(() => {
     const isOpen = slug !== null;
     if (isOpen && !wasOpenRef.current) {
+      // Remember the control that opened the panel so keyboard focus can return to it.
       const active = document.activeElement;
       triggerRef.current = active instanceof HTMLElement && active !== document.body ? active : null;
     }

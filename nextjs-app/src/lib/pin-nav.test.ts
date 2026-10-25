@@ -1,3 +1,4 @@
+// What this file does: checks when selecting a pin should reveal its month or layer.
 import { describe, expect, it } from "vitest";
 import type { ExplorerPin } from "./map-types";
 import { revealPatch } from "./pin-nav";

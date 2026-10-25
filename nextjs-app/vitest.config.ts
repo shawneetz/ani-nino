@@ -1,3 +1,4 @@
+// What this file does: configures Vitest paths and finds the app's unit tests.
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
