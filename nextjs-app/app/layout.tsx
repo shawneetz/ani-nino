@@ -1,3 +1,4 @@
+// What this file does: sets shared page metadata and the accessible root layout.
 import type { Metadata } from "next";
 import "./globals.css";
 

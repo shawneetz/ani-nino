@@ -1,3 +1,4 @@
+// What this file does: creates a titled, accessible section in the pin detail panel.
 import { useId, type ReactNode } from "react";
 
 export function Section({ title, children }: { title: string; children: ReactNode }) {

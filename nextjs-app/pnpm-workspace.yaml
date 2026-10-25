@@ -1,3 +1,4 @@
+# What this file does: lets pnpm apply project-level package build permissions.
 allowBuilds:
   sharp: false
   unrs-resolver: false

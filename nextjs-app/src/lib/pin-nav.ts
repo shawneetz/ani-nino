@@ -1,3 +1,4 @@
+// What this file does: decides which view setting must change to reveal a selected pin.
 import type { ExplorerPin } from "@/lib/map-types";
 import { visiblePinsForUi } from "@/lib/visible-for-ui";
 

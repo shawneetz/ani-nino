@@ -1,3 +1,4 @@
+// What this file does: reads filter settings from the URL and updates them.
 "use client";
 
 import { useCallback, useMemo } from "react";
@@ -28,6 +29,7 @@ export function useFilterState() {
 
   const update = useCallback(
     (key: string, value: string | null) => {
+      // Keep other filters and the selected pin when one setting changes.
       const next = new URLSearchParams(searchParams.toString());
       if (value) next.set(key, value);
       else next.delete(key);

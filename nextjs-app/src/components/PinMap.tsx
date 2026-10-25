@@ -1,3 +1,4 @@
+// What this file does: displays visible pins on a MapLibre map of the Philippines.
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -8,6 +9,7 @@ import type { ExplorerPin } from "@/lib/map-types";
 const mapStyle: StyleSpecification = {
   version: 8,
   sources: {
+    // OpenStreetMap provides the map tiles without an app-specific key.
     openstreetmap: {
       type: "raster",
       tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
@@ -34,6 +36,7 @@ export function PinMap({ pins, familyColors, selectedPinId, onSelectPin }: Props
   useEffect(() => {
     if (!containerRef.current) return;
 
+    // Create the map only in the browser; Next.js cannot render it on the server.
     const map = new maplibregl.Map({
       container: containerRef.current,
       style: mapStyle,

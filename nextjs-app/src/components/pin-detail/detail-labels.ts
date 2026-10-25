@@ -1,3 +1,4 @@
+// What this file does: shares the detail panel's labels and safe date formatting.
 import type { PinDetail } from "@/lib/api-schemas";
 import type { SourceKind } from "@/lib/enums";
 

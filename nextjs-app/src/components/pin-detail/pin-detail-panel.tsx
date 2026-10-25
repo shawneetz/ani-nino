@@ -1,3 +1,4 @@
+// What this file does: displays pin claims, sources, locations, and timeline details.
 "use client";
 
 import { useEffect, useId, useMemo, useRef, type ReactNode } from "react";
@@ -24,6 +25,7 @@ interface FrameProps {
 function Frame({ titleId, title, focusKey, busy = false, meta, onClose, children }: FrameProps) {
   const headingRef = useRef<HTMLHeadingElement>(null);
 
+  // Move focus into the panel when a pin finishes loading or selection changes.
   useEffect(() => {
     if (!busy) headingRef.current?.focus();
   }, [focusKey, busy]);

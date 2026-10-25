@@ -1,3 +1,4 @@
+// What this file does: shows related pins and labels their connection as interpretation.
 import type { PinDetail } from "@/lib/api-schemas";
 import { FAMILIES } from "@/lib/vocab";
 import { LAYER_LABELS } from "./detail-labels";

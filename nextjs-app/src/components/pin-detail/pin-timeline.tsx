@@ -1,3 +1,4 @@
+// What this file does: lists exact dated events and their source titles.
 import type { PinDetail } from "@/lib/api-schemas";
 import { formatDate } from "./detail-labels";
 

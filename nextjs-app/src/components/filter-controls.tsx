@@ -1,3 +1,4 @@
+// What this file does: lets readers filter pins by date, family, province, and layer.
 "use client";
 
 import { PROVINCES } from "@/lib/enums";
@@ -6,6 +7,7 @@ import { useFilterState } from "@/hooks/use-filter-state";
 import { FAMILIES, PROVINCE_LABELS, type Family } from "@/lib/vocab";
 
 export function FilterControls() {
+  // The shared hook keeps each control in sync with the URL.
   const { state, setToday, toggleFamily, toggleProvince, clearFilters } = useFilterState();
 
   return (

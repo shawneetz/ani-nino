@@ -1,3 +1,4 @@
+// What this file does: reports that the app is serving data from its local snapshot.
 import { getSnapshotMetadata } from "@/db/queries";
 
 export async function GET() {

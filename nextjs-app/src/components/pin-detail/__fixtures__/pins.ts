@@ -1,3 +1,4 @@
+// What this file does: provides example pins for detail-panel tests only.
 import type { PinDetail } from "@/lib/api-schemas";
 
 const decreeSource = {

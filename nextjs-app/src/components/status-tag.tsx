@@ -1,3 +1,4 @@
+// What this file does: shows whether a pin is a lead or has been verified.
 import type { Status } from "@/lib/enums";
 import { STATUS_LABELS } from "@/lib/vocab";
 

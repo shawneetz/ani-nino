@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+// What this file does: checks the panel's evidence, links, labels, and keyboard behavior.
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { PinDetailPanel } from "./pin-detail-panel";

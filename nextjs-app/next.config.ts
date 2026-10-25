@@ -1,7 +1,8 @@
+// What this file does: enables the Next.js features and CSS build rules used by the app.
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Cache Components and partial prefetching are enabled by this starter project.
   experimental: {
     agentFeedback: true,
   },

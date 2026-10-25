@@ -1,3 +1,4 @@
+// What this file does: shows the evidence label attached to a pin.
 import type { BadgeKind } from "@/lib/enums";
 import { BADGE_LABELS } from "@/lib/vocab";
 

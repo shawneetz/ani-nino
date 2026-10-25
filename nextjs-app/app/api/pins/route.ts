@@ -1,3 +1,4 @@
+// What this file does: returns pins filtered by the query string.
 import { getPins } from "@/db/queries";
 import { isValidMonth } from "@/lib/slider";
 
@@ -8,6 +9,7 @@ function csv(value: string | null): string[] {
 export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
   const rawMonth = params.get("month");
+  // Invalid dates are client errors; do not silently return an unrelated month.
   if (rawMonth && !isValidMonth(rawMonth)) {
     return Response.json({ error: "month must use YYYY-MM format" }, { status: 400 });
   }

@@ -1,3 +1,4 @@
+// What this file does: lists allowed layer, status, source, and location values.
 export const LAYERS = ["martial_law", "today"] as const;
 export const STATUSES = ["lead", "verified"] as const;
 export const BADGES = [

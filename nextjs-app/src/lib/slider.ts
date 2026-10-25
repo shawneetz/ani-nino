@@ -1,3 +1,4 @@
+// What this file does: validates, moves, and labels the explorer's month value.
 export const DEFAULT_MONTH = "1975-06";
 export const MIN_MONTH = "1972-09";
 export const MAX_MONTH = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}`;

@@ -1,3 +1,4 @@
+// What this file does: reads and validates pin data from the local snapshot.
 import "server-only";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
@@ -10,6 +11,7 @@ let cached: Snapshot | undefined;
 async function getSnapshot(): Promise<Snapshot> {
   if (cached) return cached;
 
+  // Cache the validated snapshot so API requests do not reread it each time.
   const file = path.join(process.cwd(), "snapshot", "snapshot.json");
   const text = await readFile(file, "utf8");
   cached = snapshotSchema.parse(JSON.parse(text));

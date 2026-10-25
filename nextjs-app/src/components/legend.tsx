@@ -1,3 +1,4 @@
+// What this file does: explains the colors used for program families on the map.
 import { FAMILIES, type Family } from "@/lib/vocab";
 
 export function Legend() {
