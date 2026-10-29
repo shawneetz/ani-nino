@@ -1,4 +1,12 @@
-# What this file does: lets pnpm apply project-level package build permissions.
-allowBuilds:
-  sharp: false
-  unrs-resolver: false
+# pnpm install settings (read by pnpm 10+).
+
+# Dependencies allowed to run their install/build scripts.
+# esbuild is pulled in by Vitest and needs its script to set up its binary.
+onlyBuiltDependencies:
+  - esbuild
+
+# Dependencies whose scripts are deliberately skipped (not needed here).
+# Keep any extra entries create-next-app generated for you.
+ignoredBuiltDependencies:
+  - sharp
+  - unrs-resolver
