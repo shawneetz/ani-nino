@@ -10,7 +10,11 @@ test("home route renders the explorer", async ({ request }) => {
 test("pins API serves a valid empty snapshot and rejects malformed months", async ({ request }) => {
   const response = await request.get("/api/pins?month=1975-06");
   expect(response.ok()).toBeTruthy();
-  expect(await response.json()).toEqual({ pins: [] });
+  expect(await response.json()).toMatchObject({
+    count: 0,
+    filters: { month: "1975-06", mode: "range", families: [], provinces: [], today: false },
+    pins: [],
+  });
 
   const invalidMonth = await request.get("/api/pins?month=June-1975");
   expect(invalidMonth.status()).toBe(400);

@@ -17,9 +17,9 @@ pnpm snapshot:seed
 pnpm dev
 ```
 
-The app continues to read its verified pin data from the generated snapshot. Phase 1 adds a
-read-only database connection for health reporting and migration/test infrastructure; a database
-outage does not prevent the site from serving the snapshot.
+The app reads content from Postgres when available and falls back to the validated snapshot when
+the database is unavailable. Requests are cached in memory for 60 seconds; after a database error,
+the app waits 15 seconds before retrying Postgres.
 
 The repository starts with an empty seed dataset and a matching snapshot. Add verified source and
 pin records under `data/`, then rerun `pnpm snapshot:seed`.
@@ -51,14 +51,17 @@ Postgres instance and verifies that the committed migrations match the schema.
 - `data/links.json`: optional links with `today`, `past`, and `interpretationNote`; each link appears
   in both pins' detail panels and is explicitly labelled as interpretation.
 
-`pnpm snapshot:seed` validates the generated output against the Zod API contract before writing
-`snapshot/snapshot.json`. Do not put unverified claims or placeholder citations into production
-seed files.
+`pnpm snapshot:seed` builds the static pin snapshot from the seed files.
+`pnpm export:snapshot` exports pins and their full details, charts, and methods data from Postgres
+to `snapshot/snapshot.json` for runtime fallback. Both outputs are validated against the Zod API
+contract. Do not put unverified claims or placeholder citations into production seed files.
 
 ## API
 
 - `GET /api/pins?month=1975-06&family=land_reform&province=laguna&today=1`
 - `GET /api/pins/{slug}`
+- `GET /api/charts`
+- `GET /api/methods`
 - `GET /api/health`
 
 The map uses MapLibre GL JS with OpenStreetMap raster tiles and requires an internet connection to
@@ -73,9 +76,10 @@ pnpm lint && pnpm typecheck && pnpm test && pnpm build
 pnpm test:e2e
 ```
 
-`pnpm test` applies migrations to the configured test database before running, so Postgres must be
-available. To verify the DB fallback, stop the local service with `docker compose stop db`, open
-`/api/health`, and confirm it returns HTTP 200 with `"db":"down"`.
+`pnpm test` applies migrations to the configured database and runs database integration tests, so
+Postgres must be available. `pnpm test:unit` runs the focused database-independent backend, fallback,
+and API contract tests. To verify the DB fallback, stop the local service with `docker compose stop db`,
+open `/api/health`, and confirm it returns HTTP 200 with `"db":"down"`.
 
 ## Deploy
 

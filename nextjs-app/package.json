@@ -10,12 +10,14 @@
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
+    "test:unit": "vitest run --config vitest.unit.config.ts",
     "test:watch": "vitest",
     "db:up": "docker compose up -d --wait db",
     "db:setup-local": "bash scripts/setup-local-db.sh",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx scripts/db-migrate.ts",
     "snapshot:seed": "tsx scripts/build-snapshot-from-seed.ts",
+    "export:snapshot": "tsx --env-file=.env scripts/export-snapshot.ts",
     "test:e2e": "playwright test"
   },
   "dependencies": {
