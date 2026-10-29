@@ -1,7 +1,8 @@
-# Ani Nino
+# Anino ng Ani
 
-A time-and-place explorer for public programs, claims, records, and sources. The UI includes a
-month slider, family and province filters, a map/list view, and a shareable pin detail panel.
+Interactive map of martial-law farm policy in CALABARZON. Laguna is the complete layer. The
+existing app includes a month slider, family and province filters, a map/list view, and a
+shareable pin detail panel.
 
 ## Run locally
 
@@ -9,13 +10,17 @@ Requirements: Node.js and pnpm.
 
 ```bash
 pnpm install
+docker compose up -d      # local Postgres 16
 pnpm snapshot:seed
 pnpm dev
 ```
 
-The repository starts with an empty seed dataset and a matching snapshot. Add the project's
-verified source and pin records under `data/`, then rerun `pnpm snapshot:seed`. This workspace
-does not include a database or project dataset, so its API reads the generated snapshot directly.
+Copy `.env.example` to `.env.local` first (needed from Phase 1 on). The app currently reads its
+verified pin data from the generated snapshot; local Postgres is available for development and
+will be used when the database integration is added.
+
+The repository starts with an empty seed dataset and a matching snapshot. Add verified source and
+pin records under `data/`, then rerun `pnpm snapshot:seed`.
 
 ### Seed files
 
@@ -43,9 +48,23 @@ load map tiles.
 ## Checks
 
 ```bash
-pnpm lint
-pnpm exec tsc --noEmit
-pnpm test
-pnpm build
+pnpm lint && pnpm typecheck && pnpm test && pnpm build
 pnpm test:e2e
 ```
+
+## Deploy
+
+Push to `main`. GitHub Actions runs checks, builds an arm64 image, pushes it to GHCR, joins the
+Tailscale network briefly, and triggers Coolify on the Pi. The app health check is `/api/health`.
+Set `TS_OAUTH_CLIENT_ID`, `TS_OAUTH_SECRET`, `COOLIFY_URL`, `COOLIFY_TOKEN`, and
+`COOLIFY_APP_UUID` in the GitHub repository secrets. Coolify receives only the runtime
+`DATABASE_URL`; keep `DATABASE_URL_MIGRATE` out of the app container.
+
+## Local container
+
+```bash
+docker build -t anino-test .
+docker run --rm -p 3000:3000 anino-test
+```
+
+Open `http://localhost:3000/api/health`; the response should be `{"ok":true}`.

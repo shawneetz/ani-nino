@@ -1,0 +1,20 @@
+# Local development database. Production uses the Postgres instance on the Pi.
+services:
+  db:
+    image: postgres:16
+    container_name: anino-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - anino-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  anino-db-data:
