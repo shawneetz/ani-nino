@@ -1,0 +1,39 @@
+\set ON_ERROR_STOP on
+
+SELECT format('CREATE ROLE anino_owner LOGIN PASSWORD %L', :'owner_pw')
+WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'anino_owner')
+\gexec
+ALTER ROLE anino_owner
+  WITH LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS
+  CONNECTION LIMIT 10 PASSWORD :'owner_pw';
+
+SELECT format('CREATE ROLE anino_app LOGIN PASSWORD %L', :'app_pw')
+WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'anino_app')
+\gexec
+ALTER ROLE anino_app
+  WITH LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS
+  CONNECTION LIMIT 10 PASSWORD :'app_pw'
+  SET default_transaction_read_only = on
+  SET statement_timeout = '5s'
+  SET lock_timeout = '2s';
+
+SELECT 'CREATE DATABASE anino OWNER anino_owner'
+WHERE NOT EXISTS (SELECT 1 FROM pg_database WHERE datname = 'anino')
+\gexec
+ALTER DATABASE anino OWNER TO anino_owner;
+
+\connect anino
+
+REVOKE ALL ON DATABASE anino FROM PUBLIC;
+GRANT CONNECT ON DATABASE anino TO anino_owner, anino_app;
+
+ALTER SCHEMA public OWNER TO anino_owner;
+REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+GRANT USAGE ON SCHEMA public TO anino_app;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO anino_app;
+GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO anino_app;
+
+ALTER DEFAULT PRIVILEGES FOR ROLE anino_owner IN SCHEMA public
+  GRANT SELECT ON TABLES TO anino_app;
+ALTER DEFAULT PRIVILEGES FOR ROLE anino_owner IN SCHEMA public
+  GRANT SELECT ON SEQUENCES TO anino_app;

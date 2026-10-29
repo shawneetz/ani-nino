@@ -20,3 +20,13 @@ test("detail API returns not found for an unknown slug", async ({ request }) => 
   const response = await request.get("/api/pins/not-a-real-pin");
   expect(response.status()).toBe(404);
 });
+
+test("health endpoint stays healthy and reports database availability", async ({ request }) => {
+  const response = await request.get("/api/health");
+  const body = await response.json();
+
+  expect(response.status()).toBe(200);
+  expect(body.ok).toBe(true);
+  expect(["up", "down"]).toContain(body.db);
+  expect(response.headers()["cache-control"]).toContain("no-store");
+});

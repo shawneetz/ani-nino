@@ -14,6 +14,21 @@ jobs:
     defaults:
       run:
         working-directory: nextjs-app
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgres://anino_app:ci-app-pw@localhost:5432/anino
+      DATABASE_URL_MIGRATE: postgres://anino_owner:ci-owner-pw@localhost:5432/anino
     steps:
       - uses: actions/checkout@v4
 
@@ -28,10 +43,31 @@ jobs:
           cache-dependency-path: nextjs-app/pnpm-lock.yaml
 
       - run: pnpm install --frozen-lockfile
+
+      - name: Create database roles and database
+        env:
+          PGPASSWORD: postgres
+        run: >
+          psql -h localhost -U postgres -v ON_ERROR_STOP=1
+          -v owner_pw=ci-owner-pw -v app_pw=ci-app-pw
+          -f db/roles.sql
+
       - run: pnpm lint
       - run: pnpm typecheck
+
+      - name: Verify migrations match schema
+        run: |
+          pnpm db:generate
+          git diff --exit-code -- drizzle
+          test -z "$(git status --porcelain -- drizzle)"
+
       - run: pnpm test
-      - run: pnpm build
+
+      - name: Build without a database
+        run: pnpm build
+        env:
+          DATABASE_URL: ""
+          DATABASE_URL_MIGRATE: ""
 
   deploy:
     needs: check
