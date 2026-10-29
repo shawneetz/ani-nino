@@ -5,12 +5,6 @@ const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
   reactStrictMode: true,
-  // Cache Components and partial prefetching are enabled by this starter project.
-  experimental: {
-    agentFeedback: true,
-  },
-  cacheComponents: true,
-  partialPrefetching: true,
   turbopack: {
     rules: {
       "*.css": {
