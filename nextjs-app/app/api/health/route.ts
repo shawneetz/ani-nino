@@ -1,12 +1,9 @@
-// What this file does: reports that the app is serving data from its local snapshot.
-import { getSnapshotMetadata } from "@/db/queries";
+// Health check used by Docker, Coolify, and uptime monitoring.
+// Phase 0: only proves the server is running.
+// Phase 1: will also check the database connection.
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const snapshot = await getSnapshotMetadata();
-  return Response.json({
-    status: "ok",
-    database: false,
-    dataSource: "snapshot",
-    generatedAt: snapshot.generatedAt,
-  });
+  return Response.json({ ok: true });
 }

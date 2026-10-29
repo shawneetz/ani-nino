@@ -2,6 +2,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
+  poweredByHeader: false,
+  reactStrictMode: true,
   // Cache Components and partial prefetching are enabled by this starter project.
   experimental: {
     agentFeedback: true,

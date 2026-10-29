@@ -1,0 +1,14 @@
+# Not needed inside the image, and some must never be in it.
+node_modules
+.next
+.git
+.github
+.env
+.env.*
+!.env.example
+docker-compose.yml
+Dockerfile
+*.md
+coverage
+test-results
+playwright-report
