@@ -23,6 +23,11 @@ export const SOURCE_KINDS = [
 export const SOURCE_ROLES = ["promise", "record", "context"] as const;
 export const LOCATION_PRECISIONS = ["municipality", "city", "province", "area"] as const;
 export const EVENT_PRECISIONS = ["day", "month", "year"] as const;
+export const CHART_TYPES = ["line", "bar"] as const;
+export const SERIES_KINDS = ["actual", "target"] as const;
+export const QUALIFIERS = ["exact", "approx", "at_most", "at_least"] as const;
+export const GAP_KINDS = ["method", "data_missing", "unverified", "scope"] as const;
+export const GAP_STATUSES = ["open", "resolved"] as const;
 
 export const PROVINCES = [
   "abra", "agusan-del-norte", "agusan-del-sur", "aklan", "albay", "antique",
@@ -52,3 +57,8 @@ export type SourceRole = (typeof SOURCE_ROLES)[number];
 export type Province = (typeof PROVINCES)[number];
 export type LocationPrecision = (typeof LOCATION_PRECISIONS)[number];
 export type EventPrecision = (typeof EVENT_PRECISIONS)[number];
+export type ChartType = (typeof CHART_TYPES)[number];
+export type SeriesKind = (typeof SERIES_KINDS)[number];
+export type Qualifier = (typeof QUALIFIERS)[number];
+export type GapKind = (typeof GAP_KINDS)[number];
+export type GapStatus = (typeof GAP_STATUSES)[number];

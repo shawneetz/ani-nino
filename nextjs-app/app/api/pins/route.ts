@@ -1,25 +1,26 @@
-// What this file does: returns pins filtered by the query string.
 import { getPins } from "@/db/queries";
-import { isValidMonth } from "@/lib/slider";
+import { guarded, jsonError, jsonOk } from "@/lib/api-response";
+import type { PinsResponse } from "@/lib/api-schemas";
+import { parsePinQuery } from "@/lib/pin-query";
 
-function csv(value: string | null): string[] {
-  return value?.split(",").map((item) => item.trim()).filter(Boolean) ?? [];
-}
+export const dynamic = "force-dynamic";
 
-export async function GET(request: Request) {
-  const params = new URL(request.url).searchParams;
-  const rawMonth = params.get("month");
-  // Invalid dates are client errors; do not silently return an unrelated month.
-  if (rawMonth && !isValidMonth(rawMonth)) {
-    return Response.json({ error: "month must use YYYY-MM format" }, { status: 400 });
-  }
+export async function GET(request: Request): Promise<Response> {
+  return guarded(async () => {
+    const parsed = parsePinQuery(new URL(request.url).searchParams);
+    if (!parsed.success) {
+      return jsonError(
+        400,
+        "invalid_query",
+        parsed.error.issues.map((issue) => ({
+          path: issue.path.map(String).join("."),
+          message: issue.message,
+        })),
+      );
+    }
 
-  const pins = await getPins({
-    month: rawMonth ?? undefined,
-    mode: params.get("mode") === "all" ? "all" : "range",
-    families: csv(params.get("family")),
-    provinces: csv(params.get("province")),
-    today: ["1", "true"].includes(params.get("today") ?? ""),
+    const pins = await getPins(parsed.data);
+    const body: PinsResponse = { count: pins.length, filters: parsed.data, pins };
+    return jsonOk(body);
   });
-  return Response.json({ pins });
 }

@@ -1,0 +1,1321 @@
+{
+  "id": "2a3488ac-9f76-467c-bea0-4f7b21242d12",
+  "prevId": "5cbb1a2a-64d6-4f41-a85b-b71242c52331",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.chart_points": {
+      "name": "chart_points",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "series_id": {
+          "name": "series_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "x_label": {
+          "name": "x_label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "x_date": {
+          "name": "x_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "value": {
+          "name": "value",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "qualifier": {
+          "name": "qualifier",
+          "type": "chart_qualifier",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'exact'"
+        },
+        "badge": {
+          "name": "badge",
+          "type": "pin_badge",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "note": {
+          "name": "note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sort_order": {
+          "name": "sort_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "source_id": {
+          "name": "source_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "chart_points_series_id_chart_series_id_fk": {
+          "name": "chart_points_series_id_chart_series_id_fk",
+          "tableFrom": "chart_points",
+          "tableTo": "chart_series",
+          "columnsFrom": [
+            "series_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "chart_points_source_id_sources_id_fk": {
+          "name": "chart_points_source_id_sources_id_fk",
+          "tableFrom": "chart_points",
+          "tableTo": "sources",
+          "columnsFrom": [
+            "source_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.chart_series": {
+      "name": "chart_series",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "chart_id": {
+          "name": "chart_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "series_kind",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sort_order": {
+          "name": "sort_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "chart_series_chart_id_charts_id_fk": {
+          "name": "chart_series_chart_id_charts_id_fk",
+          "tableFrom": "chart_series",
+          "tableTo": "charts",
+          "columnsFrom": [
+            "chart_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.charts": {
+      "name": "charts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "chart_type": {
+          "name": "chart_type",
+          "type": "chart_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "x_label": {
+          "name": "x_label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "y_label": {
+          "name": "y_label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "unit": {
+          "name": "unit",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "caveat": {
+          "name": "caveat",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sort_order": {
+          "name": "sort_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pin_events": {
+      "name": "pin_events",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "pin_id": {
+          "name": "pin_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "event_date": {
+          "name": "event_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "precision": {
+          "name": "precision",
+          "type": "event_precision",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'month'"
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_id": {
+          "name": "source_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sort_order": {
+          "name": "sort_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "pin_events_pin_id_pins_id_fk": {
+          "name": "pin_events_pin_id_pins_id_fk",
+          "tableFrom": "pin_events",
+          "tableTo": "pins",
+          "columnsFrom": [
+            "pin_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "pin_events_source_id_sources_id_fk": {
+          "name": "pin_events_source_id_sources_id_fk",
+          "tableFrom": "pin_events",
+          "tableTo": "sources",
+          "columnsFrom": [
+            "source_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pin_links": {
+      "name": "pin_links",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "today_pin_id": {
+          "name": "today_pin_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "today_layer": {
+          "name": "today_layer",
+          "type": "pin_layer",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'today'"
+        },
+        "past_pin_id": {
+          "name": "past_pin_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "past_layer": {
+          "name": "past_layer",
+          "type": "pin_layer",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'martial_law'"
+        },
+        "interpretation_note": {
+          "name": "interpretation_note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "pin_links_today_pin_layer_fk": {
+          "name": "pin_links_today_pin_layer_fk",
+          "tableFrom": "pin_links",
+          "tableTo": "pins",
+          "columnsFrom": [
+            "today_pin_id",
+            "today_layer"
+          ],
+          "columnsTo": [
+            "id",
+            "layer"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "pin_links_past_pin_layer_fk": {
+          "name": "pin_links_past_pin_layer_fk",
+          "tableFrom": "pin_links",
+          "tableTo": "pins",
+          "columnsFrom": [
+            "past_pin_id",
+            "past_layer"
+          ],
+          "columnsTo": [
+            "id",
+            "layer"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "pin_links_pair_uq": {
+          "name": "pin_links_pair_uq",
+          "nullsNotDistinct": false,
+          "columns": [
+            "today_pin_id",
+            "past_pin_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "pin_links_today_layer": {
+          "name": "pin_links_today_layer",
+          "value": "\"pin_links\".\"today_layer\" = 'today'"
+        },
+        "pin_links_past_layer": {
+          "name": "pin_links_past_layer",
+          "value": "\"pin_links\".\"past_layer\" = 'martial_law'"
+        },
+        "pin_links_note_not_empty": {
+          "name": "pin_links_note_not_empty",
+          "value": "length(trim(\"pin_links\".\"interpretation_note\")) > 0"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.pin_locations": {
+      "name": "pin_locations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "pin_id": {
+          "name": "pin_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "municipality": {
+          "name": "municipality",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "province": {
+          "name": "province",
+          "type": "province",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lat": {
+          "name": "lat",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lng": {
+          "name": "lng",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "precision": {
+          "name": "precision",
+          "type": "location_precision",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'municipality'"
+        },
+        "is_anchor": {
+          "name": "is_anchor",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "sort_order": {
+          "name": "sort_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        }
+      },
+      "indexes": {
+        "pin_locations_one_anchor": {
+          "name": "pin_locations_one_anchor",
+          "columns": [
+            {
+              "expression": "pin_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"pin_locations\".\"is_anchor\"",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "pin_locations_pin_id_pins_id_fk": {
+          "name": "pin_locations_pin_id_pins_id_fk",
+          "tableFrom": "pin_locations",
+          "tableTo": "pins",
+          "columnsFrom": [
+            "pin_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "pin_locations_lat": {
+          "name": "pin_locations_lat",
+          "value": "\"pin_locations\".\"lat\" BETWEEN 4.5 AND 21.5"
+        },
+        "pin_locations_lng": {
+          "name": "pin_locations_lng",
+          "value": "\"pin_locations\".\"lng\" BETWEEN 116 AND 127"
+        },
+        "pin_locations_name_not_empty": {
+          "name": "pin_locations_name_not_empty",
+          "value": "length(trim(\"pin_locations\".\"name\")) > 0"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.pin_sources": {
+      "name": "pin_sources",
+      "schema": "",
+      "columns": {
+        "pin_id": {
+          "name": "pin_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_id": {
+          "name": "source_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "source_role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "citation_note": {
+          "name": "citation_note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "pin_sources_pin_id_pins_id_fk": {
+          "name": "pin_sources_pin_id_pins_id_fk",
+          "tableFrom": "pin_sources",
+          "tableTo": "pins",
+          "columnsFrom": [
+            "pin_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "pin_sources_source_id_sources_id_fk": {
+          "name": "pin_sources_source_id_sources_id_fk",
+          "tableFrom": "pin_sources",
+          "tableTo": "sources",
+          "columnsFrom": [
+            "source_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "pin_sources_pin_id_source_id_role_pk": {
+          "name": "pin_sources_pin_id_source_id_role_pk",
+          "columns": [
+            "pin_id",
+            "source_id",
+            "role"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pins": {
+      "name": "pins",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "layer": {
+          "name": "layer",
+          "type": "pin_layer",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "program": {
+          "name": "program",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "instruments": {
+          "name": "instruments",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "family": {
+          "name": "family",
+          "type": "pin_family",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "secondary_families": {
+          "name": "secondary_families",
+          "type": "pin_family[]",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::pin_family[]"
+        },
+        "start_date": {
+          "name": "start_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "end_date": {
+          "name": "end_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date_label": {
+          "name": "date_label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "promise": {
+          "name": "promise",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "record": {
+          "name": "record",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "badge": {
+          "name": "badge",
+          "type": "pin_badge",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "pin_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "open_question": {
+          "name": "open_question",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "verified_on": {
+          "name": "verified_on",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "verification_note": {
+          "name": "verification_note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "pins_id_layer_uq": {
+          "name": "pins_id_layer_uq",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "layer"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "pins_id_slug": {
+          "name": "pins_id_slug",
+          "value": "\"pins\".\"id\" ~ '^[a-z0-9]+(-[a-z0-9]+)*$'"
+        },
+        "pins_start_first_of_month": {
+          "name": "pins_start_first_of_month",
+          "value": "EXTRACT(DAY FROM \"pins\".\"start_date\") = 1"
+        },
+        "pins_end_first_of_month": {
+          "name": "pins_end_first_of_month",
+          "value": "\"pins\".\"end_date\" IS NULL OR EXTRACT(DAY FROM \"pins\".\"end_date\") = 1"
+        },
+        "pins_end_after_start": {
+          "name": "pins_end_after_start",
+          "value": "\"pins\".\"end_date\" IS NULL OR \"pins\".\"end_date\" >= \"pins\".\"start_date\""
+        },
+        "pins_martial_law_window": {
+          "name": "pins_martial_law_window",
+          "value": "\"pins\".\"layer\" <> 'martial_law' OR (\"pins\".\"start_date\" >= DATE '1972-09-01' AND \"pins\".\"start_date\" <= DATE '1986-02-01')"
+        },
+        "pins_today_after_martial_law": {
+          "name": "pins_today_after_martial_law",
+          "value": "\"pins\".\"layer\" <> 'today' OR \"pins\".\"start_date\" >= DATE '1986-03-01'"
+        },
+        "pins_lead_needs_question": {
+          "name": "pins_lead_needs_question",
+          "value": "\"pins\".\"status\" <> 'lead' OR \"pins\".\"open_question\" IS NOT NULL"
+        },
+        "pins_verified_complete": {
+          "name": "pins_verified_complete",
+          "value": "\"pins\".\"status\" <> 'verified' OR (\"pins\".\"verified_on\" IS NOT NULL AND \"pins\".\"record\" IS NOT NULL AND \"pins\".\"badge\" IS NOT NULL)"
+        },
+        "pins_primary_not_in_secondary": {
+          "name": "pins_primary_not_in_secondary",
+          "value": "NOT (\"pins\".\"family\" = ANY(\"pins\".\"secondary_families\"))"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.research_gaps": {
+      "name": "research_gaps",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "gap_kind",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pin_id": {
+          "name": "pin_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "gap_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'open'"
+        },
+        "sort_order": {
+          "name": "sort_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "research_gaps_pin_id_pins_id_fk": {
+          "name": "research_gaps_pin_id_pins_id_fk",
+          "tableFrom": "research_gaps",
+          "tableTo": "pins",
+          "columnsFrom": [
+            "pin_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "research_gaps_id_slug": {
+          "name": "research_gaps_id_slug",
+          "value": "\"research_gaps\".\"id\" ~ '^[a-z0-9]+(-[a-z0-9]+)*$'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.seed_runs": {
+      "name": "seed_runs",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "git_sha": {
+          "name": "git_sha",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seeded_at": {
+          "name": "seeded_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.sources": {
+      "name": "sources",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "publisher": {
+          "name": "publisher",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "author": {
+          "name": "author",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kind": {
+          "name": "kind",
+          "type": "source_kind",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "archived_url": {
+          "name": "archived_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "published_year": {
+          "name": "published_year",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "accessed_on": {
+          "name": "accessed_on",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "note": {
+          "name": "note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "sources_id_slug": {
+          "name": "sources_id_slug",
+          "value": "\"sources\".\"id\" ~ '^[a-z0-9]+(-[a-z0-9]+)*$'"
+        },
+        "sources_url_needs_accessed": {
+          "name": "sources_url_needs_accessed",
+          "value": "(\"sources\".\"url\" IS NULL AND \"sources\".\"archived_url\" IS NULL) OR \"sources\".\"accessed_on\" IS NOT NULL"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.videos": {
+      "name": "videos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "pin_id": {
+          "name": "pin_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "youtube_id": {
+          "name": "youtube_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "channel": {
+          "name": "channel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "credit_line": {
+          "name": "credit_line",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "start_seconds": {
+          "name": "start_seconds",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sort_order": {
+          "name": "sort_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "note": {
+          "name": "note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "videos_pin_id_pins_id_fk": {
+          "name": "videos_pin_id_pins_id_fk",
+          "tableFrom": "videos",
+          "tableTo": "pins",
+          "columnsFrom": [
+            "pin_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "videos_youtube_id_uq": {
+          "name": "videos_youtube_id_uq",
+          "nullsNotDistinct": false,
+          "columns": [
+            "youtube_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "videos_id_slug": {
+          "name": "videos_id_slug",
+          "value": "\"videos\".\"id\" ~ '^[a-z0-9]+(-[a-z0-9]+)*$'"
+        },
+        "videos_youtube_id_format": {
+          "name": "videos_youtube_id_format",
+          "value": "\"videos\".\"youtube_id\" ~ '^[A-Za-z0-9_-]{11}$'"
+        }
+      },
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.chart_type": {
+      "name": "chart_type",
+      "schema": "public",
+      "values": [
+        "line",
+        "bar"
+      ]
+    },
+    "public.event_precision": {
+      "name": "event_precision",
+      "schema": "public",
+      "values": [
+        "day",
+        "month",
+        "year"
+      ]
+    },
+    "public.gap_kind": {
+      "name": "gap_kind",
+      "schema": "public",
+      "values": [
+        "method",
+        "data_missing",
+        "unverified",
+        "scope"
+      ]
+    },
+    "public.gap_status": {
+      "name": "gap_status",
+      "schema": "public",
+      "values": [
+        "open",
+        "resolved"
+      ]
+    },
+    "public.location_precision": {
+      "name": "location_precision",
+      "schema": "public",
+      "values": [
+        "municipality",
+        "city",
+        "province",
+        "area"
+      ]
+    },
+    "public.pin_badge": {
+      "name": "pin_badge",
+      "schema": "public",
+      "values": [
+        "law_or_decree",
+        "court_record",
+        "government_record",
+        "academic_research",
+        "advocacy_report",
+        "news_report"
+      ]
+    },
+    "public.pin_family": {
+      "name": "pin_family",
+      "schema": "public",
+      "values": [
+        "land_reform",
+        "export_tax_monopoly",
+        "infrastructure",
+        "displacement",
+        "labor",
+        "public_services"
+      ]
+    },
+    "public.pin_layer": {
+      "name": "pin_layer",
+      "schema": "public",
+      "values": [
+        "martial_law",
+        "today"
+      ]
+    },
+    "public.pin_status": {
+      "name": "pin_status",
+      "schema": "public",
+      "values": [
+        "lead",
+        "verified"
+      ]
+    },
+    "public.province": {
+      "name": "province",
+      "schema": "public",
+      "values": [
+        "abra",
+        "agusan-del-norte",
+        "agusan-del-sur",
+        "aklan",
+        "albay",
+        "antique",
+        "apayao",
+        "aurora",
+        "basilan",
+        "bataan",
+        "batanes",
+        "batangas",
+        "benguet",
+        "biliran",
+        "bohol",
+        "bukidnon",
+        "bulacan",
+        "cagayan",
+        "camarines-norte",
+        "camarines-sur",
+        "camiguin",
+        "capiz",
+        "catanduanes",
+        "cavite",
+        "cebu",
+        "cotabato",
+        "davao-de-oro",
+        "davao-del-norte",
+        "davao-del-sur",
+        "davao-occidental",
+        "davao-oriental",
+        "dinagat-islands",
+        "eastern-samar",
+        "guimaras",
+        "ifugao",
+        "ilocos-norte",
+        "ilocos-sur",
+        "iloilo",
+        "isabela",
+        "kalinga",
+        "la-union",
+        "laguna",
+        "lanao-del-norte",
+        "lanao-del-sur",
+        "leyte",
+        "maguindanao-del-norte",
+        "maguindanao-del-sur",
+        "marinduque",
+        "masbate",
+        "misamis-occidental",
+        "misamis-oriental",
+        "mountain-province",
+        "negros-occidental",
+        "negros-oriental",
+        "northern-samar",
+        "nueva-ecija",
+        "nueva-vizcaya",
+        "occidental-mindoro",
+        "oriental-mindoro",
+        "palawan",
+        "pampanga",
+        "pangasinan",
+        "quezon",
+        "quirino",
+        "rizal",
+        "romblon",
+        "samar",
+        "sarangani",
+        "siquijor",
+        "sorsogon",
+        "south-cotabato",
+        "southern-leyte",
+        "sultan-kudarat",
+        "sulu",
+        "surigao-del-norte",
+        "surigao-del-sur",
+        "tarlac",
+        "tawi-tawi",
+        "zambales",
+        "zamboanga-del-norte",
+        "zamboanga-del-sur",
+        "zamboanga-sibugay",
+        "metro-manila"
+      ]
+    },
+    "public.chart_qualifier": {
+      "name": "chart_qualifier",
+      "schema": "public",
+      "values": [
+        "exact",
+        "approx",
+        "at_most",
+        "at_least"
+      ]
+    },
+    "public.series_kind": {
+      "name": "series_kind",
+      "schema": "public",
+      "values": [
+        "actual",
+        "target"
+      ]
+    },
+    "public.source_kind": {
+      "name": "source_kind",
+      "schema": "public",
+      "values": [
+        "law_or_decree",
+        "court_decision",
+        "government_release",
+        "period_publication",
+        "archive",
+        "academic",
+        "news",
+        "advocacy_publication",
+        "video"
+      ]
+    },
+    "public.source_role": {
+      "name": "source_role",
+      "schema": "public",
+      "values": [
+        "promise",
+        "record",
+        "context"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

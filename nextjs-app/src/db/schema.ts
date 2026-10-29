@@ -17,10 +17,15 @@ import {
 } from "drizzle-orm/pg-core";
 import {
   BADGES,
+  CHART_TYPES,
   EVENT_PRECISIONS,
+  GAP_KINDS,
+  GAP_STATUSES,
   LAYERS,
   LOCATION_PRECISIONS,
   PROVINCES,
+  QUALIFIERS,
+  SERIES_KINDS,
   SOURCE_KINDS,
   SOURCE_ROLES,
   STATUSES,
@@ -41,6 +46,11 @@ export const sourceRole = pgEnum("source_role", [...SOURCE_ROLES]);
 export const locationPrecision = pgEnum("location_precision", [...LOCATION_PRECISIONS]);
 export const eventPrecision = pgEnum("event_precision", [...EVENT_PRECISIONS]);
 export const province = pgEnum("province", [...PROVINCES]);
+export const chartType = pgEnum("chart_type", [...CHART_TYPES]);
+export const seriesKind = pgEnum("series_kind", [...SERIES_KINDS]);
+export const qualifier = pgEnum("chart_qualifier", [...QUALIFIERS]);
+export const gapKind = pgEnum("gap_kind", [...GAP_KINDS]);
+export const gapStatus = pgEnum("gap_status", [...GAP_STATUSES]);
 
 export const pins = pgTable(
   "pins",
@@ -217,6 +227,8 @@ export const videos = pgTable(
     title: text("title").notNull(),
     channel: text("channel").notNull(),
     creditLine: text("credit_line").notNull(),
+    startSeconds: integer("start_seconds"),
+    sortOrder: integer("sort_order").notNull().default(0),
     url: text("url"),
     note: text("note"),
   },
@@ -224,6 +236,67 @@ export const videos = pgTable(
     check("videos_id_slug", sql`${table.id} ~ '^[a-z0-9]+(-[a-z0-9]+)*$'`),
     check("videos_youtube_id_format", sql`${table.youtubeId} ~ '^[A-Za-z0-9_-]{11}$'`),
     unique("videos_youtube_id_uq").on(table.youtubeId),
+  ],
+);
+
+export const charts = pgTable("charts", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description"),
+  chartType: chartType("chart_type").notNull(),
+  xLabel: text("x_label"),
+  yLabel: text("y_label"),
+  unit: text("unit"),
+  caveat: text("caveat"),
+  sortOrder: integer("sort_order").notNull().default(0),
+});
+
+export const chartSeries = pgTable(
+  "chart_series",
+  {
+    id: serial("id").primaryKey(),
+    chartId: text("chart_id")
+      .notNull()
+      .references(() => charts.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    kind: seriesKind("kind").notNull(),
+    sortOrder: integer("sort_order").notNull().default(0),
+  },
+);
+
+export const chartPoints = pgTable(
+  "chart_points",
+  {
+    id: serial("id").primaryKey(),
+    seriesId: integer("series_id")
+      .notNull()
+      .references(() => chartSeries.id, { onDelete: "cascade" }),
+    xLabel: text("x_label").notNull(),
+    xDate: date("x_date", { mode: "string" }),
+    value: doublePrecision("value").notNull(),
+    qualifier: qualifier("qualifier").notNull().default("exact"),
+    badge: pinBadge("badge").notNull(),
+    note: text("note"),
+    sortOrder: integer("sort_order").notNull().default(0),
+    sourceId: text("source_id")
+      .notNull()
+      .references(() => sources.id, { onDelete: "restrict" }),
+  },
+);
+
+export const researchGaps = pgTable(
+  "research_gaps",
+  {
+    id: text("id").primaryKey(),
+    kind: gapKind("kind").notNull(),
+    title: text("title").notNull(),
+    description: text("description").notNull(),
+    pinId: text("pin_id").references(() => pins.id, { onDelete: "set null" }),
+    status: gapStatus("status").notNull().default("open"),
+    sortOrder: integer("sort_order").notNull().default(0),
+  },
+  (table) => [
+    check("research_gaps_id_slug", sql`${table.id} ~ '^[a-z0-9]+(-[a-z0-9]+)*$'`),
   ],
 );
 

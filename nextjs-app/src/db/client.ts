@@ -27,6 +27,13 @@ export function getDb() {
   return drizzle(getPool(), { schema });
 }
 
+export async function closePool(): Promise<void> {
+  const pool = globalForDb.__aninoPool;
+  if (!pool) return;
+  delete globalForDb.__aninoPool;
+  await pool.end();
+}
+
 export type DbStatus = { up: true; latencyMs: number } | { up: false };
 
 export async function checkDb(timeoutMs = 3_000): Promise<DbStatus> {

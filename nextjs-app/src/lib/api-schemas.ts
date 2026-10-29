@@ -2,10 +2,15 @@
 import { z } from "zod";
 import {
   BADGES,
+  CHART_TYPES,
   EVENT_PRECISIONS,
+  GAP_KINDS,
+  GAP_STATUSES,
   LAYERS,
   LOCATION_PRECISIONS,
   PROVINCES,
+  QUALIFIERS,
+  SERIES_KINDS,
   SOURCE_KINDS,
   SOURCE_ROLES,
   STATUSES,
@@ -18,6 +23,7 @@ export const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const familySchema = z.enum(Object.keys(FAMILIES) as [keyof typeof FAMILIES, ...(keyof typeof FAMILIES)[]]);
 const sourceKindSchema = z.enum(SOURCE_KINDS);
 const sourceRoleSchema = z.enum(SOURCE_ROLES);
+const badgeSchema = z.enum(BADGES);
 
 export const locationSchema = z.object({
   id: z.number().int(),
@@ -94,7 +100,13 @@ const pinLinkSchema = z.object({
 
 const videoSchema = z.object({
   id: z.string(),
+  pinId: z.string().nullable(),
+  youtubeId: z.string(),
   title: z.string(),
+  channel: z.string(),
+  creditLine: z.string(),
+  startSeconds: z.number().int().nullable(),
+  sortOrder: z.number().int(),
   url: z.url().nullable(),
   note: z.string().nullable(),
 });
@@ -106,37 +118,104 @@ export const pinDetailSchema = pinSummarySchema.extend({
   videos: z.array(videoSchema),
 });
 
-const sourceGroupSchema = z.object({
-  kind: sourceKindSchema,
-  sources: z.array(sourceSchema),
+export const chartPointSchema = z.object({
+  id: z.number().int(),
+  xLabel: z.string(),
+  xDate: z.iso.date().nullable(),
+  value: z.number(),
+  qualifier: z.enum(QUALIFIERS),
+  badge: badgeSchema,
+  note: z.string().nullable(),
+  sortOrder: z.number().int(),
+  source: z.object({
+    id: z.string(),
+    title: z.string(),
+    publisher: z.string(),
+    url: z.url().nullable(),
+  }),
+});
+
+export const chartSeriesSchema = z.object({
+  id: z.number().int(),
+  name: z.string(),
+  kind: z.enum(SERIES_KINDS),
+  sortOrder: z.number().int(),
+  points: z.array(chartPointSchema),
+});
+
+export const chartSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  description: z.string().nullable(),
+  chartType: z.enum(CHART_TYPES),
+  xLabel: z.string().nullable(),
+  yLabel: z.string().nullable(),
+  unit: z.string().nullable(),
+  caveat: z.string().nullable(),
+  sortOrder: z.number().int(),
+  series: z.array(chartSeriesSchema),
+});
+
+export const chartsResponseSchema = z.object({ charts: z.array(chartSchema) });
+
+export const gapSchema = z.object({
+  id: z.string(),
+  kind: z.enum(GAP_KINDS),
+  title: z.string(),
+  description: z.string(),
+  pinId: z.string().nullable(),
+  status: z.enum(GAP_STATUSES),
+  sortOrder: z.number().int(),
+});
+
+export const methodsSchema = z.object({
+  sourcesByKind: z.array(z.object({ kind: sourceKindSchema, sources: z.array(sourceSchema) })),
+  gaps: z.array(gapSchema),
+  leadPins: z.array(
+    z.object({
+      id: z.string().regex(SLUG_RE),
+      title: z.string(),
+      layer: z.enum(LAYERS),
+      openQuestion: z.string().nullable(),
+    }),
+  ),
+  counts: z.object({
+    pins: z.number().int().nonnegative(),
+    sources: z.number().int().nonnegative(),
+    byBadge: z.record(z.string(), z.number().int().nonnegative()),
+    byStatus: z.record(z.string(), z.number().int().nonnegative()),
+  }),
+});
+
+export const pinsResponseSchema = z.object({
+  count: z.number().int(),
+  filters: z.object({
+    month: z.string().optional(),
+    mode: z.enum(["range", "cumulative"]),
+    families: z.array(familySchema),
+    provinces: z.array(z.enum(PROVINCES)),
+    today: z.boolean(),
+  }),
+  pins: z.array(pinSummarySchema),
+});
+
+export const errorResponseSchema = z.object({
+  error: z.string(),
+  issues: z.array(z.object({ path: z.string(), message: z.string() })).optional(),
 });
 
 export const snapshotSchema = z.object({
   generatedAt: z.iso.datetime(),
   pins: z.array(pinSummarySchema),
   details: z.record(z.string(), pinDetailSchema),
-  charts: z.array(z.unknown()),
-  methods: z.object({
-    sourcesByKind: z.array(sourceGroupSchema),
-    gaps: z.array(z.unknown()),
-    leadPins: z.array(
-      z.object({
-        id: z.string().regex(SLUG_RE),
-        title: z.string(),
-        layer: z.enum(LAYERS),
-        openQuestion: z.string().nullable(),
-      }),
-    ),
-    counts: z.object({
-      pins: z.number().int().nonnegative(),
-      sources: z.number().int().nonnegative(),
-      byBadge: z.record(z.string(), z.number().int().nonnegative()),
-      byStatus: z.record(z.string(), z.number().int().nonnegative()),
-    }),
-  }),
+  charts: z.array(chartSchema),
+  methods: methodsSchema,
 });
 
 export type PinSummary = z.infer<typeof pinSummarySchema>;
 export type PinDetail = z.infer<typeof pinDetailSchema>;
 export type Source = z.infer<typeof sourceSchema>;
+export type Chart = z.infer<typeof chartSchema>;
+export type Methods = z.infer<typeof methodsSchema>;
+export type PinsResponse = z.infer<typeof pinsResponseSchema>;
 export type Snapshot = z.infer<typeof snapshotSchema>;
