@@ -5,6 +5,18 @@
 export const FIRST_YEAR = 1972;
 export const LAST_YEAR = 1986;
 
+// Window allowed for "today" programs (the echo layer).
+export const TODAY_FIRST_YEAR = 2000;
+export const TODAY_LAST_YEAR = 2026;
+
+// Which layer a program belongs to. Default is the martial-law layer.
+export const ERAS = {
+  martial_law: { label: "Martial law" },
+  today: { label: "Today" },
+} as const;
+export type Era = keyof typeof ERAS;
+export const ERA_KEYS = Object.keys(ERAS) as [Era, ...Era[]];
+
 export const TOPICS = {
   land: { label: "Land", color: "#b45309" },
   support: { label: "Support", color: "#1d4ed8" },

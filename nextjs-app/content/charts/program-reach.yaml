@@ -1,0 +1,7 @@
+# What this file does: one chart. Add points only with a real source link and access date.
+id: program-reach
+title: How many farmers or how much land each program reached
+description: Share of the target group or land that official figures say was covered.
+unit: percent
+caveat: Government counts show what was counted, not who was left out.
+points: []

@@ -93,6 +93,17 @@ export async function loadContent(directory: string): Promise<Content> {
     charts.push(chart);
   }
 
+  // A today program may only echo a real martial-law program.
+  for (const program of programs) {
+    if (!program.echoOf) continue;
+    const target = programs.find((item) => item.slug === program.echoOf);
+    if (!target) {
+      issues.push(`programs/${program.slug}.yaml: echoOf points to unknown program "${program.echoOf}"`);
+    } else if (target.era === "today") {
+      issues.push(`programs/${program.slug}.yaml: echoOf must point to a martial-law program`);
+    }
+  }
+
   const gapsFile = path.join(directory, "gaps.yaml");
   const gaps = (await parseFile(gapsFile, gapSchema.array(), issues)) ?? [];
   const slugs = new Set(programs.map((program) => program.slug));
