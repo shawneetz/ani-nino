@@ -1,6 +1,8 @@
 /* What this file does: sets the app's colors, fonts, and map styles. */
 @import "tailwindcss";
+/* MOVED TO PinMap.tsx
 @import "maplibre-gl/dist/maplibre-gl.css";
+*/
 
 :root {
   color-scheme: light;
