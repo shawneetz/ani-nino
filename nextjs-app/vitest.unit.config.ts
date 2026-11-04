@@ -1,21 +1,17 @@
-// What this file does: runs only the tests that need no database.
-import path from "node:path";
+// What this file does: configures the unit tests for the static content layer.
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   resolve: {
-    alias: { "@": path.resolve(path.dirname(fileURLToPath(import.meta.url)), "src") },
+    alias: {
+      // "@/lib/x" resolves to "src/lib/x", matching tsconfig.json.
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
   },
   test: {
-    include: [
-      "src/db/queries-fallback.test.ts",
-      "src/components/video-embed.test.tsx",
-      "src/lib/enums.test.ts",
-      "src/lib/filter.test.ts",
-      "src/lib/pin-query.test.ts",
-      "src/lib/seed-validate.test.ts",
-      "tests/api/routes.test.ts",
-    ],
+    environment: "node",
+    // Browser tests in e2e/ run separately with Playwright.
+    include: ["src/**/*.test.ts", "scripts/**/*.test.ts"],
   },
 });
