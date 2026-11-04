@@ -1,24 +1,22 @@
-// What this file does: displays visible pins on a MapLibre map of the Philippines.
+// What this file does: displays the visible pins on a MapLibre map of CALABARZON.
+// Marker styles: filled = verified, hollow ring = lead, dashed border = approximate place.
+// Map tiles come from OpenFreeMap (free, no API key).
+// New: if the map style fails to load, a clear message is shown instead of
+// an endless "Loading map…".
 "use client";
+
+// ADDED: MAPLIBRE CSS IMPORTED HERE (MOVED FROM globals.css) SO MARKERS GET POSITIONED
+import "maplibre-gl/dist/maplibre-gl.css";
 
 import { useEffect, useRef, useState } from "react";
 import * as maplibregl from "maplibre-gl";
-import type { Map as MapLibreMap, Marker, StyleSpecification } from "maplibre-gl";
+import type { Map as MapLibreMap, Marker } from "maplibre-gl";
+import { APPROXIMATE_PRECISIONS } from "@/components/pin-detail/detail-labels";
 import type { ExplorerPin } from "@/lib/map-types";
 
-const mapStyle: StyleSpecification = {
-  version: 8,
-  sources: {
-    // OpenStreetMap provides the map tiles without an app-specific key.
-    openstreetmap: {
-      type: "raster",
-      tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
-      tileSize: 256,
-      attribution: "© OpenStreetMap contributors",
-    },
-  },
-  layers: [{ id: "osm-tiles", type: "raster", source: "openstreetmap" }],
-};
+// OpenFreeMap style URL. It includes its own attribution.
+const MAP_STYLE = "https://tiles.openfreemap.org/styles/positron";
+const CALABARZON_CENTER: [number, number] = [121.2, 14.05];
 
 interface Props {
   pins: ExplorerPin[];
@@ -27,29 +25,80 @@ interface Props {
   onSelectPin: (pinId: string | null) => void;
 }
 
+type Location = ExplorerPin["locations"][number];
+
+// Builds one marker button. Style rules:
+// - lead: white fill with a colored ring; verified: colored fill with a white ring
+// - approximate place (province or area): dashed ring, so it does not look exact
+function buildMarker(pin: ExplorerPin, location: Location, color: string, selected: boolean) {
+  const lead = pin.status === "lead";
+  const approximate = APPROXIMATE_PRECISIONS.includes(location.precision);
+  const ringColor = lead ? color : approximate ? "#171717" : "white";
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.setAttribute("aria-label", pin.title);
+  button.title = `${pin.title} — ${location.name}`;
+  button.style.cssText = [
+    "width:20px",
+    "height:20px",
+    "border-radius:50%",
+    `border:3px ${approximate ? "dashed" : "solid"} ${ringColor}`,
+    `background:${lead ? "white" : color}`,
+    `box-shadow:0 1px 5px #0008${selected ? ",0 0 0 4px #c2410c" : ""}`,
+    "cursor:pointer",
+    "padding:0",
+  ].join(";");
+  return button;
+}
+
 export function PinMap({ pins, familyColors, selectedPinId, onSelectPin }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const markersRef = useRef<Marker[]>([]);
   const [mapReady, setMapReady] = useState(false);
+  const [mapFailed, setMapFailed] = useState(false);
 
+  // Keep the newest callback and pins in refs. This lets the map be created ONCE,
+  // instead of being rebuilt every time the URL (and so the callback) changes.
+  const onSelectRef = useRef(onSelectPin);
+  const pinsRef = useRef(pins);
+  useEffect(() => {
+    onSelectRef.current = onSelectPin;
+    pinsRef.current = pins;
+  });
+
+  // Create the map once, in the browser only (Next.js cannot render it on the server).
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Create the map only in the browser; Next.js cannot render it on the server.
     const map = new maplibregl.Map({
       container: containerRef.current,
-      style: mapStyle,
-      center: [122.3, 12.4],
-      zoom: 5.2,
-      minZoom: 4,
+      style: MAP_STYLE,
+      center: CALABARZON_CENTER,
+      zoom: 8.2,
+      minZoom: 6,
       maxZoom: 15,
       cooperativeGestures: true,
     });
     mapRef.current = map;
-    const onLoad = () => setMapReady(true);
-    const onMapClick = () => onSelectPin(null);
+
+    let loaded = false;
+    const onLoad = () => {
+      loaded = true;
+      setMapReady(true);
+    };
+    // Errors before the first load (bad style URL, blocked network) mean no map.
+    // Later tile errors are ignored so one missing tile does not hide the map.
+    const onError = (event: maplibregl.ErrorEvent) => {
+      console.error("[map]", event.error?.message ?? event);
+      if (!loaded) setMapFailed(true);
+    };
+    const onMapClick = () => onSelectRef.current(null);
     map.on("load", onLoad);
+    // ADDED: MARK READY AS SOON AS THE STYLE LOADS; MARKERS DON'T NEED TILES
+    map.on("style.load", onLoad);
+    map.on("error", onError);
     map.on("click", onMapClick);
 
     const resizeObserver = new ResizeObserver(() => map.resize());
@@ -58,14 +107,18 @@ export function PinMap({ pins, familyColors, selectedPinId, onSelectPin }: Props
     return () => {
       resizeObserver.disconnect();
       map.off("load", onLoad);
+      // ADDED
+      map.off("style.load", onLoad);
+      map.off("error", onError);
       map.off("click", onMapClick);
       markersRef.current.forEach((marker) => marker.remove());
       markersRef.current = [];
       map.remove();
       mapRef.current = null;
     };
-  }, [onSelectPin]);
+  }, []);
 
+  // Redraw the markers whenever the visible pins or the selection change.
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !mapReady) return;
@@ -73,35 +126,29 @@ export function PinMap({ pins, familyColors, selectedPinId, onSelectPin }: Props
     markersRef.current.forEach((marker) => marker.remove());
     markersRef.current = pins.flatMap((pin) =>
       pin.locations.map((location) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.setAttribute("aria-label", pin.title);
-        button.title = `${pin.title} — ${location.name}`;
-        button.style.cssText = [
-          "width:18px",
-          "height:18px",
-          "border:2px solid white",
-          "border-radius:50%",
-          `background:${familyColors[pin.family] ?? "#6b7280"}`,
-          `box-shadow:0 1px 5px #0008${pin.id === selectedPinId ? ",0 0 0 4px #c2410c" : ""}`,
-          "cursor:pointer",
-        ].join(";");
+        const color = familyColors[pin.family] ?? "#6b7280";
+        const button = buildMarker(pin, location, color, pin.id === selectedPinId);
         button.addEventListener("click", (event) => {
+          // Stop the click from reaching the map, which would close the panel.
           event.stopPropagation();
-          onSelectPin(pin.id);
+          onSelectRef.current(pin.id);
         });
         return new maplibregl.Marker({ element: button })
           .setLngLat([location.lng, location.lat])
           .addTo(map);
       }),
     );
+  }, [familyColors, mapReady, pins, selectedPinId]);
 
-    if (selectedPinId) {
-      const selected = pins.find((pin) => pin.id === selectedPinId);
-      const location = selected?.locations.find((item) => item.isAnchor) ?? selected?.locations[0];
-      if (location) map.flyTo({ center: [location.lng, location.lat], essential: true });
-    }
-  }, [familyColors, mapReady, onSelectPin, pins, selectedPinId]);
+  // Fly to the selected pin only when the selection changes
+  // (not every time the slider moves).
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady || !selectedPinId) return;
+    const selected = pinsRef.current.find((pin) => pin.id === selectedPinId);
+    const location = selected?.locations.find((item) => item.isAnchor) ?? selected?.locations[0];
+    if (location) map.flyTo({ center: [location.lng, location.lat], essential: true });
+  }, [mapReady, selectedPinId]);
 
   return (
     <div
@@ -109,12 +156,17 @@ export function PinMap({ pins, familyColors, selectedPinId, onSelectPin }: Props
       data-map-ready={String(mapReady)}
       data-pin-count={pins.length}
       aria-label="Map of selected pins"
-      className="relative h-[50vh] min-h-[360px] overflow-hidden rounded-xl border border-neutral-300 bg-neutral-100 lg:h-[70vh]"
+      className="relative h-[50vh] min-h-[320px] overflow-hidden rounded-xl border border-neutral-300 bg-neutral-100 lg:h-[70vh]"
     >
       <div ref={containerRef} className="absolute inset-0" />
-      {!mapReady && (
+      {!mapReady && !mapFailed && (
         <p className="absolute left-3 top-3 rounded bg-white/90 px-3 py-2 text-sm text-neutral-700">
           Loading map…
+        </p>
+      )}
+      {mapFailed && !mapReady && (
+        <p className="absolute left-3 top-3 right-3 rounded bg-white/95 px-3 py-2 text-sm text-neutral-800">
+          The map could not load. The list of pins below still works.
         </p>
       )}
       {mapReady && pins.length === 0 && (

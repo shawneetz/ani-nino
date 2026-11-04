@@ -1,14 +1,23 @@
-// What this file does: lists allowed layer, status, source, and location values.
+// What this file does: lists every allowed value for the fixed vocabularies.
+// The database enums, Zod schemas and UI labels all import from here,
+// so they cannot drift apart.
+
+// Which layer a pin belongs to.
 export const LAYERS = ["martial_law", "today"] as const;
+
+// A pin is either checked against its sources (verified) or still open (lead).
 export const STATUSES = ["lead", "verified"] as const;
+
+// Evidence class of a CLAIM (the pin's record, or a chart point).
+// It describes the claim, not the outlet that reported it.
 export const BADGES = [
-  "law_or_decree",
-  "court_record",
-  "government_record",
-  "academic_research",
+  "official",
+  "independent_record",
   "advocacy_report",
-  "news_report",
+  "supporters_claim",
 ] as const;
+
+// What kind of outlet a source is. Different from the badge.
 export const SOURCE_KINDS = [
   "law_or_decree",
   "court_decision",
@@ -20,34 +29,21 @@ export const SOURCE_KINDS = [
   "advocacy_publication",
   "video",
 ] as const;
+
+// Does a source back the promise, the record, or just give background?
 export const SOURCE_ROLES = ["promise", "record", "context"] as const;
+
 export const LOCATION_PRECISIONS = ["municipality", "city", "province", "area"] as const;
 export const EVENT_PRECISIONS = ["day", "month", "year"] as const;
 export const CHART_TYPES = ["line", "bar"] as const;
 export const SERIES_KINDS = ["actual", "target"] as const;
+// "at_most" is used for values like "under 14%".
 export const QUALIFIERS = ["exact", "approx", "at_most", "at_least"] as const;
 export const GAP_KINDS = ["method", "data_missing", "unverified", "scope"] as const;
 export const GAP_STATUSES = ["open", "resolved"] as const;
 
-export const PROVINCES = [
-  "abra", "agusan-del-norte", "agusan-del-sur", "aklan", "albay", "antique",
-  "apayao", "aurora", "basilan", "bataan", "batanes", "batangas", "benguet",
-  "biliran", "bohol", "bukidnon", "bulacan", "cagayan", "camarines-norte",
-  "camarines-sur", "camiguin", "capiz", "catanduanes", "cavite", "cebu",
-  "cotabato", "davao-de-oro", "davao-del-norte", "davao-del-sur",
-  "davao-occidental", "davao-oriental", "dinagat-islands", "eastern-samar",
-  "guimaras", "ifugao", "ilocos-norte", "ilocos-sur", "iloilo", "isabela",
-  "kalinga", "la-union", "laguna", "lanao-del-norte", "lanao-del-sur",
-  "leyte", "maguindanao-del-norte", "maguindanao-del-sur", "marinduque",
-  "masbate", "misamis-occidental", "misamis-oriental", "mountain-province",
-  "negros-occidental", "negros-oriental", "northern-samar", "nueva-ecija",
-  "nueva-vizcaya", "occidental-mindoro", "oriental-mindoro", "palawan",
-  "pampanga", "pangasinan", "quezon", "quirino", "rizal", "romblon",
-  "samar", "sarangani", "siquijor", "sorsogon", "south-cotabato",
-  "southern-leyte", "sultan-kudarat", "sulu", "surigao-del-norte",
-  "surigao-del-sur", "tarlac", "tawi-tawi", "zambales", "zamboanga-del-norte",
-  "zamboanga-del-sur", "zamboanga-sibugay", "metro-manila",
-] as const;
+// The five CALABARZON provinces.
+export const PROVINCES = ["cavite", "laguna", "batangas", "rizal", "quezon"] as const;
 
 export type Layer = (typeof LAYERS)[number];
 export type Status = (typeof STATUSES)[number];

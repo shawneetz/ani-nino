@@ -1,3 +1,4 @@
+// What this file does: tests how the /api/pins query string is read and validated.
 import { describe, expect, it } from "vitest";
 import { parsePinQuery } from "./pin-query";
 
@@ -15,9 +16,9 @@ describe("parsePinQuery", () => {
   });
 
   it("accepts repeated and comma-separated filters", () => {
-    expect(parse("family=land_reform&family=labor").data?.families).toEqual([
+    expect(parse("family=land_reform&family=organizing").data?.families).toEqual([
       "land_reform",
-      "labor",
+      "organizing",
     ]);
     expect(parse("province=laguna,quezon").data?.provinces).toEqual(["laguna", "quezon"]);
   });
