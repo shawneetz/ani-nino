@@ -1,0 +1,19 @@
+# What this file does: records the Hacienda Yulo land-reform program page.
+slug: laguna-hacienda-yulo
+title: Hacienda Yulo and land reform in Laguna
+when: 1972 onward
+topic: land
+status: checking
+startYear: 1972
+endYear: null
+places:
+  - { name: Canlubang, province: laguna, lat: 14.1814, lng: 121.0569, approximate: true }
+  - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
+promised: Land reform was meant to transfer covered rice and corn land to the tenants who tilled it.
+happened: The land history around Hacienda Yulo and the people affected by it still needs source-by-source checking.
+question: Find records on the estate, the land covered, and what happened to tenants before 1986.
+sources:
+  - title: Presidential Decree No. 27
+    publisher: Official Gazette
+    voice: official
+    backs: context

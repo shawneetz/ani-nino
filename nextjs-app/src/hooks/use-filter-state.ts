@@ -1,75 +1,33 @@
-// What this file does: reads filter settings from the URL and updates them.
+// What this file does: keeps the filters in the URL so shared links reproduce
+// the same view and browser navigation works.
 "use client";
 
-import { useCallback, useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { PROVINCES } from "@/lib/enums";
-import type { Province } from "@/lib/enums";
-import { DEFAULT_MONTH, isValidMonth } from "@/lib/slider";
-import { FAMILIES, type Family } from "@/lib/vocab";
+import { useCallback, useMemo } from "react";
+import { EMPTY_FILTERS, parseFilters, toQueryString, type Filters } from "@/lib/filter";
+import type { Province, Topic } from "@/lib/vocab";
 
-function values<T extends string>(raw: string | null, allowed: readonly T[]): T[] {
-  return raw?.split(",").filter((value): value is T => allowed.includes(value as T)) ?? [];
+function toggle<T>(list: T[], value: T): T[] {
+  return list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
 }
 
 export function useFilterState() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const key = searchParams.toString();
+  const filters = useMemo(() => parseFilters(new URLSearchParams(key)), [key]);
 
-  const state = useMemo(() => {
-    const monthParam = searchParams.get("month");
-    return {
-      month: monthParam && isValidMonth(monthParam) ? monthParam : DEFAULT_MONTH,
-      today: ["1", "true"].includes(searchParams.get("today") ?? ""),
-      families: values(searchParams.get("family"), Object.keys(FAMILIES) as Family[]),
-      provinces: values(searchParams.get("province"), PROVINCES),
-    };
-  }, [searchParams]);
+  const apply = useCallback((next: Filters) => {
+    const qs = toQueryString(next);
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  }, [router, pathname]);
 
-  const update = useCallback(
-    (key: string, value: string | null) => {
-      // Keep other filters and the selected pin when one setting changes.
-      const next = new URLSearchParams(searchParams.toString());
-      if (value) next.set(key, value);
-      else next.delete(key);
-      const query = next.toString().replace(/%2C/g, ",");
-      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
-    },
-    [pathname, router, searchParams],
-  );
-
-  const setMonth = useCallback(
-    (month: string) => update("month", month === DEFAULT_MONTH ? null : month),
-    [update],
-  );
-  const setToday = useCallback((today: boolean) => update("today", today ? "1" : null), [update]);
-  const toggleFamily = useCallback(
-    (family: Family) => {
-      const next = state.families.includes(family)
-        ? state.families.filter((item) => item !== family)
-        : [...state.families, family];
-      update("family", next.length ? next.join(",") : null);
-    },
-    [state.families, update],
-  );
-  const toggleProvince = useCallback(
-    (province: Province) => {
-      const next = state.provinces.includes(province)
-        ? state.provinces.filter((item) => item !== province)
-        : [...state.provinces, province];
-      update("province", next.length ? next.join(",") : null);
-    },
-    [state.provinces, update],
-  );
-  const clearFilters = useCallback(() => {
-    const next = new URLSearchParams(searchParams.toString());
-    next.delete("family");
-    next.delete("province");
-    next.delete("today");
-    const query = next.toString().replace(/%2C/g, ",");
-    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
-  }, [pathname, router, searchParams]);
-
-  return { state, setMonth, setToday, toggleFamily, toggleProvince, clearFilters };
+  return {
+    filters,
+    setYear: (year: number | null) => apply({ ...filters, year }),
+    toggleTopic: (topic: Topic) => apply({ ...filters, topics: toggle(filters.topics, topic) }),
+    toggleProvince: (province: Province) => apply({ ...filters, provinces: toggle(filters.provinces, province) }),
+    clearAll: () => apply(EMPTY_FILTERS),
+  };
 }

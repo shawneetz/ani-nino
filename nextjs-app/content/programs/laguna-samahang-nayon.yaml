@@ -1,0 +1,18 @@
+slug: laguna-samahang-nayon
+title: Samahang Nayon farmer associations in Laguna
+when: 1973 onward
+topic: groups
+status: checking
+startYear: 1973
+endYear: null
+places:
+  - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
+  - { name: Victoria, province: laguna, lat: 14.225, lng: 121.325, approximate: true }
+promised: Each village would form a Samahang Nayon, a farmers' association meant to pool savings, credit and marketing.
+happened: How many associations existed in Laguna, and how they worked for farmers, is still being checked.
+question: Was membership required to receive land certificates? Find Laguna counts and a study of how the associations worked.
+sources:
+  - title: Presidential Decree No. 175
+    publisher: Official Gazette
+    voice: official
+    backs: promise

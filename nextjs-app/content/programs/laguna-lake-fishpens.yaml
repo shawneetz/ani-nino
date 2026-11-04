@@ -1,0 +1,19 @@
+slug: laguna-lake-fishpens
+title: Laguna de Bay fishpens
+when: 1975 onward
+topic: displacement
+status: checking
+startYear: 1975
+endYear: null
+places:
+  - { name: Santa Cruz lakeshore, province: laguna, lat: 14.2811, lng: 121.4144, approximate: true }
+  - { name: Bay lakeshore, province: laguna, lat: 14.1833, lng: 121.2833, approximate: true }
+  - { name: Calamba lakeshore, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
+promised: The Laguna Lake Development Authority was given wider powers over the lake so it could be developed for fish, water and other uses.
+happened: Fishpens spread across the lake during the 1970s. How permits and pen locations affected small fisherfolk is still being checked.
+question: Find permit records and an account from fisherfolk or a study on who lost access to the lake.
+sources:
+  - title: Presidential Decree No. 813
+    publisher: Official Gazette
+    voice: official
+    backs: promise

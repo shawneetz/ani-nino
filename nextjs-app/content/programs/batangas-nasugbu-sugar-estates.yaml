@@ -1,0 +1,18 @@
+slug: batangas-nasugbu-sugar-estates
+title: Sugar estates in Nasugbu and PD 27
+when: 1972 onward
+topic: land
+status: checking
+startYear: 1972
+endYear: null
+places:
+  - { name: Nasugbu, province: batangas, lat: 14.0722, lng: 120.6319, approximate: true }
+  - { name: Tuy, province: batangas, lat: 14.0192, lng: 120.7289, approximate: true }
+promised: PD 27 covered tenants on private rice and corn lands.
+happened: Sugar lands were not on that list, so tenants on sugar estates in areas like Nasugbu fell outside it. What this meant for Nasugbu farmers is still being checked.
+question: Which Nasugbu estates were sugar, and what land reform reached their tenants before 1986? Find a study or record.
+sources:
+  - title: Presidential Decree No. 27
+    publisher: Official Gazette
+    voice: official
+    backs: promise
