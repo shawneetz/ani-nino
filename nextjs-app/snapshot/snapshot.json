@@ -1,17 +1,354 @@
 {
-  "generatedAt": "2026-10-25T07:29:46.957Z",
-  "pins": [],
-  "details": {},
+  "generatedAt": "2026-11-04T08:45:45.482Z",
+  "pins": [
+    {
+      "id": "laguna-hacienda-yulo-exemption",
+      "layer": "martial_law",
+      "title": "Hacienda Yulo exempted from PD 27",
+      "program": "Operation Land Transfer",
+      "instruments": [
+        "PD 27"
+      ],
+      "family": "land_reform",
+      "secondaryFamilies": [
+        "export_tax_monopoly"
+      ],
+      "startDate": "1972-10-01",
+      "endDate": null,
+      "dateLabel": "1972 onward (exact date to confirm)",
+      "promise": "PD 27 declared tenant-farmers of private rice and corn lands owners of the land they till.",
+      "record": "Advocacy reporting says the 7,100-hectare sugar estate was exempted through closeness to the government, and its farmers became farmworkers.",
+      "badge": "advocacy_report",
+      "status": "lead",
+      "openQuestion": "Find the exemption date and legal basis; look for a court or DAR record.",
+      "verifiedOn": null,
+      "verificationNote": null,
+      "locations": [
+        {
+          "id": 1,
+          "name": "Calamba",
+          "municipality": "Calamba",
+          "province": "laguna",
+          "lat": 14.2117,
+          "lng": 121.1653,
+          "precision": "municipality",
+          "isAnchor": true,
+          "sortOrder": 0
+        },
+        {
+          "id": 2,
+          "name": "Cabuyao",
+          "municipality": "Cabuyao",
+          "province": "laguna",
+          "lat": 14.2724,
+          "lng": 121.125,
+          "precision": "municipality",
+          "isAnchor": false,
+          "sortOrder": 1
+        },
+        {
+          "id": 3,
+          "name": "Santa Rosa",
+          "municipality": "Santa Rosa",
+          "province": "laguna",
+          "lat": 14.3122,
+          "lng": 121.1114,
+          "precision": "municipality",
+          "isAnchor": false,
+          "sortOrder": 2
+        }
+      ]
+    },
+    {
+      "id": "laguna-hacienda-yulo-evictions",
+      "layer": "today",
+      "title": "Hacienda Yulo evictions",
+      "program": null,
+      "instruments": [],
+      "family": "land_reform",
+      "secondaryFamilies": [],
+      "startDate": "2010-01-01",
+      "endDate": "2021-01-01",
+      "dateLabel": "2010 to 2021",
+      "promise": null,
+      "record": "Advocacy reporting describes evictions in 2010, a hunger-strike warning in July 2010 and an arson incident in January 2021.",
+      "badge": "advocacy_report",
+      "status": "lead",
+      "openQuestion": "Confirm each date against its source before verifying.",
+      "verifiedOn": null,
+      "verificationNote": null,
+      "locations": [
+        {
+          "id": 4,
+          "name": "Calamba",
+          "municipality": "Calamba",
+          "province": "laguna",
+          "lat": 14.2117,
+          "lng": 121.1653,
+          "precision": "municipality",
+          "isAnchor": true,
+          "sortOrder": 0
+        }
+      ]
+    }
+  ],
+  "details": {
+    "laguna-hacienda-yulo-exemption": {
+      "id": "laguna-hacienda-yulo-exemption",
+      "layer": "martial_law",
+      "title": "Hacienda Yulo exempted from PD 27",
+      "program": "Operation Land Transfer",
+      "instruments": [
+        "PD 27"
+      ],
+      "family": "land_reform",
+      "secondaryFamilies": [
+        "export_tax_monopoly"
+      ],
+      "startDate": "1972-10-01",
+      "endDate": null,
+      "dateLabel": "1972 onward (exact date to confirm)",
+      "promise": "PD 27 declared tenant-farmers of private rice and corn lands owners of the land they till.",
+      "record": "Advocacy reporting says the 7,100-hectare sugar estate was exempted through closeness to the government, and its farmers became farmworkers.",
+      "badge": "advocacy_report",
+      "status": "lead",
+      "openQuestion": "Find the exemption date and legal basis; look for a court or DAR record.",
+      "verifiedOn": null,
+      "verificationNote": null,
+      "locations": [
+        {
+          "id": 1,
+          "name": "Calamba",
+          "municipality": "Calamba",
+          "province": "laguna",
+          "lat": 14.2117,
+          "lng": 121.1653,
+          "precision": "municipality",
+          "isAnchor": true,
+          "sortOrder": 0
+        },
+        {
+          "id": 2,
+          "name": "Cabuyao",
+          "municipality": "Cabuyao",
+          "province": "laguna",
+          "lat": 14.2724,
+          "lng": 121.125,
+          "precision": "municipality",
+          "isAnchor": false,
+          "sortOrder": 1
+        },
+        {
+          "id": 3,
+          "name": "Santa Rosa",
+          "municipality": "Santa Rosa",
+          "province": "laguna",
+          "lat": 14.3122,
+          "lng": 121.1114,
+          "precision": "municipality",
+          "isAnchor": false,
+          "sortOrder": 2
+        }
+      ],
+      "sources": [
+        {
+          "id": "pd-27",
+          "title": "Presidential Decree No. 27",
+          "publisher": "Official Gazette",
+          "author": null,
+          "kind": "law_or_decree",
+          "url": null,
+          "archivedUrl": null,
+          "publishedYear": 1972,
+          "accessedOn": null,
+          "note": null,
+          "role": "promise",
+          "citationNote": null
+        },
+        {
+          "id": "bulatlat-hacienda-yulo",
+          "title": "Hacienda Yulo",
+          "publisher": "Bulatlat",
+          "author": null,
+          "kind": "advocacy_publication",
+          "url": null,
+          "archivedUrl": null,
+          "publishedYear": null,
+          "accessedOn": null,
+          "note": "Add the URL and accessedOn date when you confirm the article.",
+          "role": "record",
+          "citationNote": null
+        }
+      ],
+      "events": [],
+      "links": [
+        {
+          "interpretationNote": "The estate's farmers lost tenant status in the 1970s; evictions and a 2021 arson incident follow the same land.",
+          "linkedPin": {
+            "id": "laguna-hacienda-yulo-evictions",
+            "title": "Hacienda Yulo evictions",
+            "layer": "today",
+            "dateLabel": "2010 to 2021",
+            "family": "land_reform"
+          }
+        }
+      ],
+      "videos": []
+    },
+    "laguna-hacienda-yulo-evictions": {
+      "id": "laguna-hacienda-yulo-evictions",
+      "layer": "today",
+      "title": "Hacienda Yulo evictions",
+      "program": null,
+      "instruments": [],
+      "family": "land_reform",
+      "secondaryFamilies": [],
+      "startDate": "2010-01-01",
+      "endDate": "2021-01-01",
+      "dateLabel": "2010 to 2021",
+      "promise": null,
+      "record": "Advocacy reporting describes evictions in 2010, a hunger-strike warning in July 2010 and an arson incident in January 2021.",
+      "badge": "advocacy_report",
+      "status": "lead",
+      "openQuestion": "Confirm each date against its source before verifying.",
+      "verifiedOn": null,
+      "verificationNote": null,
+      "locations": [
+        {
+          "id": 4,
+          "name": "Calamba",
+          "municipality": "Calamba",
+          "province": "laguna",
+          "lat": 14.2117,
+          "lng": 121.1653,
+          "precision": "municipality",
+          "isAnchor": true,
+          "sortOrder": 0
+        }
+      ],
+      "sources": [
+        {
+          "id": "bulatlat-yulo-hunger-strike-2010",
+          "title": "Hacienda Yulo hunger strike warning",
+          "publisher": "Bulatlat",
+          "author": null,
+          "kind": "advocacy_publication",
+          "url": null,
+          "archivedUrl": null,
+          "publishedYear": 2010,
+          "accessedOn": null,
+          "note": "Add the URL and accessedOn date when you confirm the article.",
+          "role": "record",
+          "citationNote": null
+        }
+      ],
+      "events": [
+        {
+          "id": 1,
+          "eventDate": "2010-07-01",
+          "precision": "month",
+          "description": "Hunger-strike warning.",
+          "sourceId": "bulatlat-yulo-hunger-strike-2010",
+          "sortOrder": 0
+        },
+        {
+          "id": 2,
+          "eventDate": "2021-01-01",
+          "precision": "month",
+          "description": "Arson incident.",
+          "sourceId": null,
+          "sortOrder": 1
+        }
+      ],
+      "links": [
+        {
+          "interpretationNote": "The estate's farmers lost tenant status in the 1970s; evictions and a 2021 arson incident follow the same land.",
+          "linkedPin": {
+            "id": "laguna-hacienda-yulo-exemption",
+            "title": "Hacienda Yulo exempted from PD 27",
+            "layer": "martial_law",
+            "dateLabel": "1972 onward (exact date to confirm)",
+            "family": "land_reform"
+          }
+        }
+      ],
+      "videos": []
+    }
+  },
   "charts": [],
   "methods": {
-    "sourcesByKind": [],
+    "sourcesByKind": [
+      {
+        "kind": "law_or_decree",
+        "sources": [
+          {
+            "id": "pd-27",
+            "title": "Presidential Decree No. 27",
+            "publisher": "Official Gazette",
+            "author": null,
+            "kind": "law_or_decree",
+            "url": null,
+            "archivedUrl": null,
+            "publishedYear": 1972,
+            "accessedOn": null,
+            "note": null
+          }
+        ]
+      },
+      {
+        "kind": "advocacy_publication",
+        "sources": [
+          {
+            "id": "bulatlat-hacienda-yulo",
+            "title": "Hacienda Yulo",
+            "publisher": "Bulatlat",
+            "author": null,
+            "kind": "advocacy_publication",
+            "url": null,
+            "archivedUrl": null,
+            "publishedYear": null,
+            "accessedOn": null,
+            "note": "Add the URL and accessedOn date when you confirm the article."
+          },
+          {
+            "id": "bulatlat-yulo-hunger-strike-2010",
+            "title": "Hacienda Yulo hunger strike warning",
+            "publisher": "Bulatlat",
+            "author": null,
+            "kind": "advocacy_publication",
+            "url": null,
+            "archivedUrl": null,
+            "publishedYear": 2010,
+            "accessedOn": null,
+            "note": "Add the URL and accessedOn date when you confirm the article."
+          }
+        ]
+      }
+    ],
     "gaps": [],
-    "leadPins": [],
+    "leadPins": [
+      {
+        "id": "laguna-hacienda-yulo-exemption",
+        "title": "Hacienda Yulo exempted from PD 27",
+        "layer": "martial_law",
+        "openQuestion": "Find the exemption date and legal basis; look for a court or DAR record."
+      },
+      {
+        "id": "laguna-hacienda-yulo-evictions",
+        "title": "Hacienda Yulo evictions",
+        "layer": "today",
+        "openQuestion": "Confirm each date against its source before verifying."
+      }
+    ],
     "counts": {
-      "pins": 0,
-      "sources": 0,
-      "byBadge": {},
-      "byStatus": {}
+      "pins": 2,
+      "sources": 3,
+      "byBadge": {
+        "advocacy_report": 2
+      },
+      "byStatus": {
+        "lead": 2
+      }
     }
   }
 }
