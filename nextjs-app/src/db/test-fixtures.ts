@@ -1,14 +1,20 @@
+// What this file does: inserts and removes a small set of example rows
+// (two pins, sources, a chart, a video) used by the query tests.
 import { inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
+import { assertLocalDb } from "./assert-local";
 import * as schema from "./schema";
 
+// The owner connection used to write test rows. Refuses Supabase.
 export function requireTestDbUrl(): string {
   const url = process.env.DATABASE_URL_MIGRATE;
   if (!url) throw new Error("DATABASE_URL_MIGRATE is required for database integration tests");
+  assertLocalDb(url, "DATABASE_URL_MIGRATE");
   return url;
 }
 
+// All ids share a prefix so they are easy to find and delete.
 export function fixtureIds(prefix: string) {
   return {
     past: `${prefix}-past`,
@@ -175,7 +181,7 @@ export async function insertFixtures(prefix: string) {
         seriesId: actual.id,
         xLabel: "Apr 1973",
         value: 12_000,
-        badge: "government_record",
+        badge: "official",
         sourceId: ids.promiseSource,
         sortOrder: 0,
       },
@@ -184,7 +190,7 @@ export async function insertFixtures(prefix: string) {
         xLabel: "Jan 1976",
         value: 210_054,
         qualifier: "at_most",
-        badge: "government_record",
+        badge: "official",
         sourceId: ids.promiseSource,
         sortOrder: 1,
       },
@@ -192,7 +198,7 @@ export async function insertFixtures(prefix: string) {
         seriesId: goal.id,
         xLabel: "Goal",
         value: 914_914,
-        badge: "government_record",
+        badge: "official",
         sourceId: ids.promiseSource,
         sortOrder: 0,
       },

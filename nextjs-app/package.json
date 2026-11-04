@@ -16,8 +16,12 @@
     "db:setup-local": "bash scripts/setup-local-db.sh",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx scripts/db-migrate.ts",
+    "db:migrate:prod": "tsx --env-file=.env.supabase scripts/db-migrate.ts",
+    "db:validate": "tsx scripts/db-validate.ts",
+    "db:seed": "tsx --env-file=.env.supabase scripts/db-seed.ts",
     "snapshot:seed": "tsx scripts/build-snapshot-from-seed.ts",
-    "export:snapshot": "tsx --env-file=.env scripts/export-snapshot.ts",
+    "export:snapshot": "tsx --env-file=.env.supabase scripts/export-snapshot.ts",
+    "content:publish": "pnpm db:validate && pnpm db:seed && pnpm export:snapshot",
     "test:e2e": "playwright test"
   },
   "dependencies": {
