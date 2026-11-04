@@ -1,7 +1,39 @@
 // What this file does: keeps every label, color and definition in one place.
 // The legend, filters, detail panel and methods page all read from here,
 // so the wording can never differ between screens.
-import type { BadgeKind, Province, SourceKind, Status } from "./enums";
+import { PROVINCES, type BadgeKind, type Province, type SourceKind, type Status } from "./enums";
+export { PROVINCES };
+export type { Province };
+
+// Vocabulary for the program explorer batch. These values are intentionally
+// separate from the legacy pin vocabulary above until the content is added.
+export const FIRST_YEAR = 1972;
+export const LAST_YEAR = 1986;
+
+export const TOPICS = {
+  land: { label: "Land", color: "#b45309" },
+  support: { label: "Support", color: "#1d4ed8" },
+  groups: { label: "Groups", color: "#15803d" },
+  markets: { label: "Markets", color: "#0d9488" },
+  displacement: { label: "Displacement", color: "#be123c" },
+} as const;
+export const TOPIC_KEYS = Object.keys(TOPICS) as (keyof typeof TOPICS)[];
+export type Topic = keyof typeof TOPICS;
+
+export const VOICES = {
+  official: { label: "Government", blurb: "Government documents or figures." },
+  independent: { label: "Court/archive/study", blurb: "Independent records or research." },
+  advocacy: { label: "Advocacy group", blurb: "Reporting by an advocacy group." },
+  supporter: { label: "Program supporters", blurb: "Claims made by program supporters." },
+} as const;
+export type Voice = keyof typeof VOICES;
+
+export const PROGRAM_STATUSES = {
+  confirmed: "Confirmed",
+  checking: "Still checking",
+} as const;
+export type ProgramStatus = keyof typeof PROGRAM_STATUSES;
+export const PROVINCE_KEYS = ["cavite", "laguna", "batangas", "rizal", "quezon"] as const;
 
 // The six program families. The key is stored in the database;
 // the label and color are only for display.
