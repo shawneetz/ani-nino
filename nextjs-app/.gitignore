@@ -51,4 +51,3 @@ next-env.d.ts
 /coverage/
 
 anino-todos.md
-public/maplibre-gl-csp-worker.js
