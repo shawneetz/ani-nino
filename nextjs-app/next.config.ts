@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
   reactStrictMode: true,
+  // The server actions read content/*.yaml at run time (to check a proposal's
+  // program or gap). This makes sure those files are shipped with the server code.
+  outputFileTracingIncludes: {
+    "/**/*": ["./content/**/*"],
+  },
 };
 
 export default nextConfig;
