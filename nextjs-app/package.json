@@ -9,6 +9,7 @@
     "start": "node .next/standalone/server.js",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
+    "content:check": "tsx scripts/check-content.ts",
     "test": "vitest run --config vitest.unit.config.ts",
     "test:unit": "vitest run --config vitest.unit.config.ts",
     "test:watch": "vitest --config vitest.unit.config.ts",
@@ -19,6 +20,8 @@
     "next": "^15.5.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "recharts": "^3.2.0",
+    "yaml": "^2.8.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {

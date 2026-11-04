@@ -1,0 +1,19 @@
+# What this file does: one program page. Edit on GitHub to improve it.
+slug: laguna-operation-land-transfer
+title: Operation Land Transfer in Laguna
+when: 1972 onward
+topic: land
+status: checking
+startYear: 1972
+endYear: null
+places:
+  - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
+  - { name: Santa Cruz, province: laguna, lat: 14.2811, lng: 121.4144, approximate: true }
+promised: PD 27 declared tenant-farmers of private rice and corn lands owners of the land they till.
+happened: Tenants were meant to receive land through a process that began with a Certificate of Land Transfer. How many Laguna tenants actually received land is still being checked.
+question: Find Laguna figures for tenants covered, certificates issued and titles actually awarded, from DAR records or a study. Confirm which Laguna towns were covered.
+sources:
+  - title: Presidential Decree No. 27
+    publisher: Official Gazette
+    voice: official
+    backs: promise
