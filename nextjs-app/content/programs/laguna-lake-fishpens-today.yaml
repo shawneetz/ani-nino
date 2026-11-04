@@ -1,0 +1,24 @@
+# What this file does: the "today" echo of the Laguna de Bay fishpens program.
+slug: laguna-lake-fishpens-today
+title: Laguna de Bay fishpens today
+when: 2016 to 2022
+topic: displacement
+era: today
+echoOf: laguna-lake-fishpens
+status: checking
+startYear: 2016
+endYear: 2022
+places:
+  - { name: Santa Cruz lakeshore, province: laguna, lat: 14.2811, lng: 121.4144, approximate: true }
+  - { name: Bay lakeshore, province: laguna, lat: 14.1833, lng: 121.2833, approximate: true }
+happened: A 2016 pledge to dismantle big fishpens was followed by a 2017 picket and the arrests of four fishers in September 2022. Fisherfolk say about 60% of the lake is under big pens when only 10% is allowed.
+question: Find out who made the 60% claim and find an official lake-authority figure to compare it with.
+sources:
+  - title: "Philstar: Laguna de Bay fishpens"
+    publisher: Philstar
+    voice: independent
+    backs: happened
+  - title: "Bulatlat: fisherfolk arrests (2022)"
+    publisher: Bulatlat
+    voice: advocacy
+    backs: happened

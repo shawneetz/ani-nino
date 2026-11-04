@@ -1,5 +1,5 @@
-// What this file does: renders one program page with evidence context and
-// GitHub contribution links.
+// What this file does: renders one program page with evidence context, the
+// link between past and present, and GitHub contribution links.
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -36,6 +36,9 @@ export default async function ProgramPage({ params }: Props) {
   const topic = TOPICS[program.topic];
   const voices = uniqueVoices(program.sources);
   const balanceNote = partisanNote(program.sources);
+  // Past/present links: the older program this one echoes, and today's echoes of this one.
+  const origin = program.echoOf ? all.find((item) => item.slug === program.echoOf) : null;
+  const echoes = all.filter((item) => item.echoOf === program.slug);
 
   return (
     <main id="main" className="mx-auto max-w-3xl space-y-8 px-4 py-6">
@@ -45,6 +48,7 @@ export default async function ProgramPage({ params }: Props) {
         <div className="flex flex-wrap gap-3 text-sm text-stone-600">
           <span>{program.when} ({yearRange(program)})</span>
           <span style={{ color: topic.color }}>{topic.label}</span>
+          {program.era === "today" && <span className="font-medium text-amber-800">Today</span>}
           <StatusTag status={program.status} />
           {program.checkedOn && <span>Checked on {program.checkedOn}</span>}
         </div>
@@ -72,6 +76,23 @@ export default async function ProgramPage({ params }: Props) {
         <section className="space-y-2">
           <h2 className="text-lg font-semibold">What came after</h2>
           <ul className="space-y-2">{program.since.map((item) => <li key={`${item.year}-${item.text}`}><strong>{item.year}:</strong> {item.text} <span className="text-sm text-stone-600">(Source: {item.source.title})</span></li>)}</ul>
+        </section>
+      )}
+
+      {/* Today program -> the martial-law program it echoes. */}
+      {origin && (
+        <section className="space-y-2">
+          <h2 className="text-lg font-semibold">Echoes an older program</h2>
+          <p>This connects to <Link href={`/programs/${origin.slug}`} className="underline underline-offset-2">{origin.title}</Link>. The link is my interpretation, not an established finding.</p>
+        </section>
+      )}
+
+      {/* Martial-law program -> today programs that echo it. */}
+      {echoes.length > 0 && (
+        <section className="space-y-2">
+          <h2 className="text-lg font-semibold">Echoed today</h2>
+          <ul className="list-disc space-y-1 pl-5">{echoes.map((item) => <li key={item.slug}><Link href={`/programs/${item.slug}`} className="underline underline-offset-2">{item.title}</Link></li>)}</ul>
+          <p className="text-sm text-stone-600">These links are my interpretation, not established findings.</p>
         </section>
       )}
 

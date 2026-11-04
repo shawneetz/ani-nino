@@ -7,13 +7,17 @@ import {
   LAST_YEAR,
   PROGRAM_STATUS_KEYS,
   PROVINCE_KEYS,
+  TODAY_FIRST_YEAR,
+  TODAY_LAST_YEAR,
+  ERA_KEYS,
   TOPIC_KEYS,
   VOICE_KEYS,
 } from "./vocab";
 
 const text = z.string().trim().min(1);
 const isoDate = z.iso.date();
-const yearInWindow = z.number().int().min(FIRST_YEAR).max(LAST_YEAR);
+// Widest allowed year. The era rules below narrow it per program.
+const anyYear = z.number().int().min(FIRST_YEAR).max(TODAY_LAST_YEAR);
 const url = z.url({ protocol: /^https?$/ });
 
 export const sourceSchema = z.strictObject({
@@ -54,9 +58,13 @@ export const programSchema = z
     title: text,
     when: text,
     topic: z.enum(TOPIC_KEYS),
+    // "martial_law" is the main layer. "today" is the echo layer.
+    era: z.enum(ERA_KEYS).default("martial_law"),
+    // Only for today programs: the slug of the martial-law program it echoes.
+    echoOf: z.string().optional(),
     status: z.enum(PROGRAM_STATUS_KEYS),
-    startYear: yearInWindow,
-    endYear: yearInWindow.nullish(),
+    startYear: anyYear,
+    endYear: anyYear.nullish(),
     places: z.array(placeSchema).min(1),
     promised: text.optional(),
     happened: text,
@@ -73,6 +81,18 @@ export const programSchema = z
 
     if (program.endYear != null && program.endYear < program.startYear) {
       fail("endYear is before startYear", "endYear");
+    }
+    // Each era has its own year window.
+    if (program.era === "martial_law") {
+      if (program.startYear > LAST_YEAR) fail(`a martial-law program must start by ${LAST_YEAR}`, "startYear");
+      if (program.endYear != null && program.endYear > LAST_YEAR) {
+        fail(`a martial-law program must end by ${LAST_YEAR} (use endYear: null for ongoing)`, "endYear");
+      }
+    } else if (program.startYear < TODAY_FIRST_YEAR) {
+      fail(`a today program must start in ${TODAY_FIRST_YEAR} or later`, "startYear");
+    }
+    if (program.echoOf && program.era !== "today") {
+      fail("only a today program can have echoOf", "echoOf");
     }
     if (program.status === "checking" && !program.question) {
       fail("a program that is still being checked needs a question", "question");

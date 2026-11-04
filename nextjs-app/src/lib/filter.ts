@@ -5,6 +5,7 @@ import {
   LAST_YEAR,
   PROVINCE_KEYS,
   TOPIC_KEYS,
+  type Era,
   type Province,
   type Topic,
 } from "./vocab";
@@ -13,11 +14,13 @@ export type Filterable = {
   startYear: number;
   endYear?: number | null;
   topic: Topic;
+  era?: Era; // missing means "martial_law"
   places: { province: Province }[];
 };
 
-export type Filters = { year: number | null; topics: Topic[]; provinces: Province[] };
-export const EMPTY_FILTERS: Filters = { year: null, topics: [], provinces: [] };
+// "today" is the switch that adds the echo layer to the map.
+export type Filters = { year: number | null; topics: Topic[]; provinces: Province[]; today: boolean };
+export const EMPTY_FILTERS: Filters = { year: null, topics: [], provinces: [], today: false };
 
 export function isActiveInYear(p: Filterable, year: number): boolean {
   return p.startYear <= year && year <= (p.endYear ?? LAST_YEAR);
@@ -26,7 +29,11 @@ export function isActiveInYear(p: Filterable, year: number): boolean {
 // The one filter used everywhere. Empty topic/province lists mean no restriction.
 export function visiblePrograms<T extends Filterable>(programs: T[], f: Filters): T[] {
   return programs.filter((p) => {
-    if (f.year !== null && !isActiveInYear(p, f.year)) return false;
+    const isToday = p.era === "today";
+    // Today programs only appear when the switch is on.
+    if (isToday && !f.today) return false;
+    // The year slider covers martial law only, so it never hides today programs.
+    if (!isToday && f.year !== null && !isActiveInYear(p, f.year)) return false;
     if (f.topics.length > 0 && !f.topics.includes(p.topic)) return false;
     if (f.provinces.length > 0 && !p.places.some((place) => f.provinces.includes(place.province))) {
       return false;
@@ -62,6 +69,7 @@ export function parseFilters(params: URLSearchParams): Filters {
     year,
     topics: pickKeys(params.get("topic"), TOPIC_KEYS),
     provinces: pickKeys(params.get("province"), PROVINCE_KEYS),
+    today: params.get("today") === "1",
   };
 }
 
@@ -70,5 +78,6 @@ export function toQueryString(f: Filters): string {
   if (f.year !== null) params.set("year", String(f.year));
   if (f.topics.length > 0) params.set("topic", f.topics.join(","));
   if (f.provinces.length > 0) params.set("province", f.provinces.join(","));
+  if (f.today) params.set("today", "1");
   return params.toString().replace(/%2C/g, ",");
 }

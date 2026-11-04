@@ -1,0 +1,21 @@
+# What this file does: the "today" echo of Hacienda Yulo. Facts come from
+# advocacy reporting (Bulatlat), so the label is "advocacy" and the status is "checking".
+slug: laguna-hacienda-yulo-today
+title: Hacienda Yulo evictions and disputes today
+when: 2010 to 2021
+topic: land
+era: today
+echoOf: laguna-hacienda-yulo
+status: checking
+startYear: 2010
+endYear: 2021
+places:
+  - { name: Canlubang, province: laguna, lat: 14.1814, lng: 121.0569, approximate: true }
+  - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
+happened: Advocacy reports describe evictions in 2010, a hunger-strike warning in July 2010 and an arson incident in January 2021 on the estate.
+question: Confirm each date against the Bulatlat reports and find a court or DAR record for each event.
+sources:
+  - title: "Bulatlat: Hacienda Yulo hunger strike warning (2010)"
+    publisher: Bulatlat
+    voice: advocacy
+    backs: happened
