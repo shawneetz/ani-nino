@@ -12,7 +12,7 @@ export function getPool(): Pool {
     const pool = new Pool({
       connectionString,
       max: 5,
-      connectionTimeoutMillis: 2_000,
+      connectionTimeoutMillis: 5_000,
       idleTimeoutMillis: 30_000,
     });
     pool.on("error", (error) => {
