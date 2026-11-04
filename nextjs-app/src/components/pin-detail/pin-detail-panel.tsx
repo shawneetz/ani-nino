@@ -1,10 +1,13 @@
-// What this file does: displays pin claims, sources, locations, and timeline details.
+// What this file does: displays pin claims, sources, locations, timeline and videos.
+// The only change from before: a "Video" section that shows each video the pin has
+// (click to load, credit always visible).
 "use client";
 
 import { useEffect, useId, useMemo, useRef, type ReactNode } from "react";
 import type { PinDetail } from "@/lib/api-schemas";
 import { Badge } from "@/components/badge";
 import { StatusTag } from "@/components/status-tag";
+import { VideoEmbed } from "@/components/video-embed";
 import { FAMILIES, PROVINCE_LABELS } from "@/lib/vocab";
 import { APPROXIMATE_PRECISIONS, formatDate, LAYER_LABELS } from "./detail-labels";
 import { LinkedPins } from "./linked-pins";
@@ -22,6 +25,7 @@ interface FrameProps {
   children: ReactNode;
 }
 
+// The shared panel shell: a bottom sheet on phones, a side panel on desktop.
 function Frame({ titleId, title, focusKey, busy = false, meta, onClose, children }: FrameProps) {
   const headingRef = useRef<HTMLHeadingElement>(null);
 
@@ -75,6 +79,7 @@ function Frame({ titleId, title, focusKey, busy = false, meta, onClose, children
   );
 }
 
+// Used for "loading", "not found" and "error" states.
 export function PinDetailMessage({
   title,
   message,
@@ -163,6 +168,14 @@ export function PinDetailPanel({
       </Section>
       {pin.events.length > 0 && (
         <Section title="Timeline"><PinTimeline events={pin.events} sourceTitles={sourceTitles} /></Section>
+      )}
+      {/* New: videos belong to a pin and load only after a click. */}
+      {pin.videos.length > 0 && (
+        <Section title="Video">
+          {pin.videos.map((video) => (
+            <VideoEmbed key={video.id} video={video} />
+          ))}
+        </Section>
       )}
       <LinkedPins layer={pin.layer} links={pin.links} onSelect={onSelectLinked} />
       {hasContextSources && (

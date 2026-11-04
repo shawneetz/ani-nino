@@ -1,10 +1,12 @@
 // What this file does: connects filters, the map, the pin list, and URL selection.
+// The only change from before: the placeholder heading is replaced by IntroStrip.
 "use client";
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Badge } from "@/components/badge";
 import { FilterControls } from "@/components/filter-controls";
+import { IntroStrip } from "@/components/intro-strip";
 import { Legend } from "@/components/legend";
 import { MonthSlider } from "@/components/MonthSlider";
 import { PinDetailHost } from "@/components/pin-detail/pin-detail-host";
@@ -16,6 +18,7 @@ import { revealPatch } from "@/lib/pin-nav";
 import { DEFAULT_MONTH, isValidMonth } from "@/lib/slider";
 import { visiblePinsForUi } from "@/lib/visible-for-ui";
 
+// The map only runs in the browser, so it is loaded without server rendering.
 const PinMap = dynamic(() => import("@/components/PinMap").then((module) => module.PinMap), {
   ssr: false,
   loading: () => <div className="h-[50vh] min-h-[360px] animate-pulse rounded-xl bg-neutral-200 lg:h-[70vh]" />,
@@ -67,6 +70,7 @@ export function Explorer({
     [],
   );
 
+  // One shared filter decides what the map, list and slider count show.
   const visible = useMemo(
     () =>
       visiblePinsForUi(pins, {
@@ -106,12 +110,7 @@ export function Explorer({
 
   return (
     <div className={`mx-auto max-w-7xl space-y-4 px-4 py-6 transition-[padding] ${slug ? "lg:pr-[29rem]" : ""}`}>
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-neutral-950">A map of promises and records</h1>
-        <p className="mt-1 max-w-3xl text-sm text-neutral-700">
-          Explore public programs across time and place, and follow the sources behind each claim.
-        </p>
-      </div>
+      <IntroStrip />
       <FilterControls />
       <MonthSlider month={month} onChange={handleMonthChange} visibleCount={visible.length} />
       {state.today && <p className="text-sm text-neutral-700">Today pins stay on the map whatever month is selected.</p>}
