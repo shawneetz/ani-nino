@@ -55,7 +55,10 @@ async function fromDbOrSnapshot<T>(
       dbRetryAt = Date.now() + DB_RETRY_DELAY_MS;
       console.warn(
         "[queries] database failed, using snapshot:",
-        error instanceof Error ? error.message : error,
+        // PRINT THE UNDERLYING PG/NETWORK ERROR, NOT JUST DRIZZLE'S WRAPPER
+        error instanceof Error
+          ? `${error.message} | CAUSE: ${(error.cause as Error | undefined)?.message ?? "none"}`
+          : error,
       );
     }
   }
