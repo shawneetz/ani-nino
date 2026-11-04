@@ -5,6 +5,9 @@
 // an endless "Loading map…".
 "use client";
 
+// ADDED: MAPLIBRE CSS IMPORTED HERE (MOVED FROM globals.css) SO MARKERS GET POSITIONED
+import "maplibre-gl/dist/maplibre-gl.css";
+
 import { useEffect, useRef, useState } from "react";
 import * as maplibregl from "maplibre-gl";
 import type { Map as MapLibreMap, Marker } from "maplibre-gl";
@@ -93,6 +96,8 @@ export function PinMap({ pins, familyColors, selectedPinId, onSelectPin }: Props
     };
     const onMapClick = () => onSelectRef.current(null);
     map.on("load", onLoad);
+    // ADDED: MARK READY AS SOON AS THE STYLE LOADS; MARKERS DON'T NEED TILES
+    map.on("style.load", onLoad);
     map.on("error", onError);
     map.on("click", onMapClick);
 
@@ -102,6 +107,8 @@ export function PinMap({ pins, familyColors, selectedPinId, onSelectPin }: Props
     return () => {
       resizeObserver.disconnect();
       map.off("load", onLoad);
+      // ADDED
+      map.off("style.load", onLoad);
       map.off("error", onError);
       map.off("click", onMapClick);
       markersRef.current.forEach((marker) => marker.remove());
