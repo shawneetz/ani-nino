@@ -1,10 +1,24 @@
-// What this file does: sets shared page metadata and the accessible root layout.
+// What this file does: sets the page shell shared by every route.
+// It adds the site header (with nav), the skip link, and the title and
+// share-card (Open Graph) metadata. The share image comes from opengraph-image.tsx.
 import type { Metadata } from "next";
+import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
+// Share links need an absolute URL. Vercel provides the production host.
+const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "http://localhost:3000";
+
+const title = "Anino ng Ani: Sino ang Nagbayad sa Masaganang Ani?";
+const description =
+  "Who Paid for the Harvest? An evidence-labeled map of martial-law farm policy in CALABARZON, 1972 to 1986, with the programs that echo it today.";
+
 export const metadata: Metadata = {
-  title: "Ani Nino — Programs, places, and evidence",
-  description: "Explore public programs, their promises, and the records connected to them.",
+  metadataBase: new URL(siteUrl),
+  title: { default: title, template: "%s | Anino ng Ani" },
+  description,
+  openGraph: { title, description, type: "website", locale: "en_PH" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -17,6 +31,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
+        {/* The header lives here so every page gets it. Each page renders its own <main id="main">. */}
+        <SiteHeader />
         {children}
       </body>
     </html>
