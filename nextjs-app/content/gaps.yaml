@@ -1,0 +1,28 @@
+# What this file does: lists research gaps shown on the Sources page.
+- id: no-farmer-interviews
+  kind: method
+  title: No interviews with farmers from the martial-law era
+  description: This project relies on documents, reports and studies. No farmers from the period were interviewed, so their own accounts are missing.
+- id: links-are-interpretation
+  kind: method
+  title: Connections between past and present are interpretation
+  description: Links between a martial-law program and later events are the author's reading, not established findings.
+- id: cavite-not-covered
+  kind: scope
+  title: Cavite has no program pages yet
+  description: Cavite is one of the five provinces on the map, but no program there has been researched yet.
+- id: laguna-land-transfer-numbers
+  kind: data_missing
+  title: No Laguna figures for land actually transferred
+  description: Laguna counts of tenants covered, certificates issued and titles awarded have not been found yet.
+  program: laguna-operation-land-transfer
+- id: laguna-fishpen-permits
+  kind: data_missing
+  title: Fishpen permit records for Laguna de Bay
+  description: It is not yet known how many fishpen permits were issued in the 1970s, or who held them.
+  program: laguna-lake-fishpens
+- id: coconut-levy-flow
+  kind: unverified
+  title: Where the coconut levy money went
+  description: How much was collected in Quezon and what returned to farmers there has not been checked.
+  program: quezon-coconut-levy

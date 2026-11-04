@@ -1,0 +1,18 @@
+slug: laguna-certificates-of-land-transfer
+title: Certificates of Land Transfer in Laguna
+when: 1973 onward
+topic: land
+status: checking
+startYear: 1973
+endYear: null
+places:
+  - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
+  - { name: Pagsanjan, province: laguna, lat: 14.27, lng: 121.4569, approximate: true }
+promised: A certificate was meant to be the first step toward owning the land a tenant farmed.
+happened: A certificate was a paper step, not a land title. Whether Laguna tenants went on to receive titles is still being checked.
+question: How many Laguna certificates became Emancipation Patents or titles? Confirm when certificates started being issued in Laguna.
+sources:
+  - title: Presidential Decree No. 27
+    publisher: Official Gazette
+    voice: official
+    backs: context

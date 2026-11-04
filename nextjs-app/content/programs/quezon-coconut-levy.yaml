@@ -1,0 +1,19 @@
+slug: quezon-coconut-levy
+title: The coconut levy in Quezon
+when: 1973 onward
+topic: markets
+status: checking
+startYear: 1973
+endYear: null
+places:
+  - { name: Lucena, province: quezon, lat: 13.9373, lng: 121.6171, approximate: true }
+  - { name: Tayabas, province: quezon, lat: 14.0261, lng: 121.5914, approximate: true }
+  - { name: Sariaya, province: quezon, lat: 13.9631, lng: 121.5253, approximate: true }
+promised: A levy on coconut sales would fund a stabilization fund to help the industry and coconut farmers.
+happened: Farmers paid the levy when they sold copra. Where the money went, and what farmers got back, is still being checked.
+question: Find how much was collected in Quezon, and a court record or study on how the fund was used.
+sources:
+  - title: Presidential Decree No. 276
+    publisher: Official Gazette
+    voice: official
+    backs: promise

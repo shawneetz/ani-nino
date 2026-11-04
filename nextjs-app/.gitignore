@@ -49,3 +49,5 @@ next-env.d.ts
 
 # build output and tooling
 /coverage/
+
+#anino-todo.md
