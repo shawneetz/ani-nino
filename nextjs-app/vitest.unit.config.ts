@@ -10,6 +10,7 @@ export default defineConfig({
   test: {
     include: [
       "src/db/queries-fallback.test.ts",
+      "src/components/video-embed.test.tsx",
       "src/lib/enums.test.ts",
       "src/lib/filter.test.ts",
       "src/lib/pin-query.test.ts",
