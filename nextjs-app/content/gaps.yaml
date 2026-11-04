@@ -10,19 +10,38 @@
 - id: cavite-not-covered
   kind: scope
   title: Cavite has no program pages yet
-  description: Cavite is one of the five provinces on the map, but no program there has been researched yet.
+  description: Cavite is one of the five provinces on the map, but no program there has been researched yet. The martial-law record found so far is thin.
 - id: laguna-land-transfer-numbers
   kind: data_missing
   title: No Laguna figures for land actually transferred
-  description: Laguna counts of tenants covered, certificates issued and titles awarded have not been found yet.
+  description: Laguna counts of tenants covered, certificates issued and titles awarded have not been found yet. The certificate figures used so far are national.
   program: laguna-operation-land-transfer
 - id: laguna-fishpen-permits
   kind: data_missing
   title: Fishpen permit records for Laguna de Bay
   description: It is not yet known how many fishpen permits were issued in the 1970s, or who held them.
   program: laguna-lake-fishpens
+- id: masagana-reach-source
+  kind: unverified
+  title: Source for the 3.7% Masagana 99 reach figure
+  description: The figure that the program reached 3.7% of small rice farmers by 1980 has no attached source yet.
+  program: laguna-masagana-99
+- id: geothermal-displacement
+  kind: unverified
+  title: Whether Proclamation 1111 displaced anyone
+  description: No record of displacement has been found for the geothermal reservation, so it stays a lead.
+  program: laguna-geothermal-reservation
 - id: coconut-levy-flow
   kind: unverified
   title: Where the coconut levy money went
   description: How much was collected in Quezon and what returned to farmers there has not been checked.
   program: quezon-coconut-levy
+- id: laguna-coalition-identity
+  kind: unverified
+  title: Who the "Laguna Coalition" was
+  description: A "Laguna Coalition" was a petitioner in the 2012 Supreme Court coconut levy case. What it represented has not been found yet.
+  program: quezon-coconut-levy
+- id: mridp-laguna
+  kind: data_missing
+  title: MRIDP in Laguna
+  description: No data has been found yet on this program in Laguna. Ask the Laguna Provincial Agriculturist or DA-4A.

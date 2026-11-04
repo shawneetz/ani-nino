@@ -1,0 +1,20 @@
+# What this file does: a LEAD, not a finding. Proclamation 1111 reserved a
+# geothermal area, but no displacement record has been found yet.
+slug: laguna-geothermal-reservation
+title: Geothermal reservation under Proclamation 1111
+when: February 1973 onward
+topic: land
+status: checking
+startYear: 1973
+endYear: null
+places:
+  - { name: Cavinti, province: laguna, lat: 14.2480, lng: 121.5083, approximate: true }
+  - { name: Canlubang, province: laguna, lat: 14.1814, lng: 121.0569, approximate: true }
+promised: A geothermal area would be reserved for energy development.
+happened: Proclamation 1111 (February 1973) reserved a geothermal area across Laguna, Quezon and Batangas, from Cavinti to Canlubang. No record of displacement has been found, so this is a lead.
+question: Find out whether anyone farming or living in the reserved area was affected, and the exact boundaries.
+sources:
+  - title: Proclamation 1111 (1973)
+    publisher: Official Gazette
+    voice: official
+    backs: promise

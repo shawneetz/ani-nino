@@ -1,4 +1,5 @@
-# What this file does: records the Hacienda Yulo land-reform program page.
+# What this file does: the Hacienda Yulo page. The claims come from advocacy
+# reporting, so the label is "advocacy" and the status stays "checking".
 slug: laguna-hacienda-yulo
 title: Hacienda Yulo and land reform in Laguna
 when: 1972 onward
@@ -9,10 +10,16 @@ endYear: null
 places:
   - { name: Canlubang, province: laguna, lat: 14.1814, lng: 121.0569, approximate: true }
   - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
+  - { name: Cabuyao, province: laguna, lat: 14.2745, lng: 121.1250, approximate: true }
+  - { name: Santa Rosa, province: laguna, lat: 14.3122, lng: 121.1114, approximate: true }
 promised: Land reform was meant to transfer covered rice and corn land to the tenants who tilled it.
-happened: The land history around Hacienda Yulo and the people affected by it still needs source-by-source checking.
-question: Find records on the estate, the land covered, and what happened to tenants before 1986.
+happened: Bulatlat reports that the 7,100-hectare sugar estate was exempted from PD 27 through its closeness to the government, and that its farmers became farmworkers. This is an advocacy report.
+question: Find a court, DAR or independent record that confirms or disputes the exemption.
 sources:
+  - title: "Bulatlat: Hacienda Yulo"
+    publisher: Bulatlat
+    voice: advocacy
+    backs: happened
   - title: Presidential Decree No. 27
     publisher: Official Gazette
     voice: official

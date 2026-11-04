@@ -1,4 +1,5 @@
-# What this file does: one program page. Edit on GitHub to improve it.
+# What this file does: Operation Land Transfer in Laguna, with the pilot towns.
+# Santa Cruz was removed because no source lists it as a pilot town.
 slug: laguna-operation-land-transfer
 title: Operation Land Transfer in Laguna
 when: 1972 onward
@@ -8,10 +9,10 @@ startYear: 1972
 endYear: null
 places:
   - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
-  - { name: Santa Cruz, province: laguna, lat: 14.2811, lng: 121.4144, approximate: true }
+  - { name: Biñan, province: laguna, lat: 14.3333, lng: 121.0806, approximate: true }
 promised: PD 27 declared tenant-farmers of private rice and corn lands owners of the land they till.
-happened: Tenants were meant to receive land through a process that began with a Certificate of Land Transfer. How many Laguna tenants actually received land is still being checked.
-question: Find Laguna figures for tenants covered, certificates issued and titles actually awarded, from DAR records or a study. Confirm which Laguna towns were covered.
+happened: Calamba and Biñan were among nine pilot towns in six provinces from November 1972 to 1973. The first targets were estates of 100 hectares and above, widening to 24 hectares and above from Oct 3, 1973. How many Laguna tenants actually received land is still being checked.
+question: Find Laguna figures for tenants covered, certificates issued and titles actually awarded, from DAR records or a study.
 sources:
   - title: Presidential Decree No. 27
     publisher: Official Gazette

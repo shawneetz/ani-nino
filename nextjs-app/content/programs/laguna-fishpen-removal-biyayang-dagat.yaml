@@ -1,0 +1,29 @@
+# What this file does: the 1978 order to remove unpermitted fishpens, and the
+# 1979 Biyayang Dagat credit program that followed.
+slug: laguna-fishpen-removal-biyayang-dagat
+title: Fishpen removal order and Biyayang Dagat credit
+when: 1978 to 1979
+topic: markets
+status: checking
+startYear: 1978
+endYear: 1979
+places:
+  - { name: Santa Cruz lakeshore, province: laguna, lat: 14.2811, lng: 121.4144, approximate: true }
+  - { name: Bay lakeshore, province: laguna, lat: 14.1833, lng: 121.2833, approximate: true }
+  - { name: Calamba lakeshore, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
+promised: Unpermitted pens would be removed, and Biyayang Dagat credit would support small fishers.
+happened: In October 1978 a directive ordered unpermitted fishpens removed, with fisherfolk saying the public lake had become private. The 1979 Biyayang Dagat credit program included freshwater tilapia and carp culture.
+question: Find out how many pens were actually removed and how many small fishers received Biyayang Dagat credit.
+sources:
+  - title: "Supreme Court: 1978 fishpen directive"
+    publisher: Supreme Court of the Philippines
+    voice: independent
+    backs: happened
+  - title: "Carnegie Council: Laguna Lake fisherfolk"
+    publisher: Carnegie Council
+    voice: independent
+    backs: context
+  - title: "LOI 868: Biyayang Dagat '79"
+    publisher: Official Gazette
+    voice: official
+    backs: promise
