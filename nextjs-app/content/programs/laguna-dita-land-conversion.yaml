@@ -1,0 +1,19 @@
+# What this file does: Santa Rosa (Brgy. Dita) land under Operation Land Transfer
+# that was reclassified as residential in 1981. Shows conversion pressure under martial law.
+slug: laguna-dita-land-conversion
+title: Dita land reclassified as residential
+when: 1981 onward
+topic: land
+status: checking
+startYear: 1981
+endYear: null
+places:
+  - { name: "Brgy. Dita, Santa Rosa", province: laguna, lat: 14.2800, lng: 121.0950, approximate: true }
+promised: PD 27 declared tenant-farmers of private rice and corn lands owners of the land they till.
+happened: A lot under Operation Land Transfer was classified residential by a Nov 26, 1981 ordinance and later sold. A court case followed, in which the tenants' rights were upheld.
+question: Find the year of the court decision and confirm the barangay coordinates.
+sources:
+  - title: "Supreme Court: Santa Rosa (Dita) land case"
+    publisher: Supreme Court of the Philippines
+    voice: independent
+    backs: happened

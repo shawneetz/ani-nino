@@ -1,0 +1,19 @@
+# What this file does: Los Baños as the research base of the rice package
+# (IRRI and UPLB institutes). This is the "credit and production" background.
+slug: laguna-irri-uplb-research
+title: IRRI and UPLB research behind the rice package
+when: 1975 to 1979
+topic: support
+status: checking
+startYear: 1975
+endYear: 1979
+places:
+  - { name: Los Baños, province: laguna, lat: 14.1699, lng: 121.2431, approximate: true }
+promised: Research on rice and other crops would raise yields for farmers.
+happened: UPLB set up the Institute of Plant Breeding (1975), the National Crop Protection Center (1976), the Post-Harvest Horticulture Center (1977) and BIOTECH (1979). IRRI is the research center behind the rice package.
+question: Find a source that links these institutes to the rice package, and one on whether Laguna farmers used their results.
+sources:
+  - title: "UPLB history: institutes"
+    publisher: University of the Philippines Los Baños
+    voice: independent
+    backs: happened

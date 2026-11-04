@@ -1,0 +1,19 @@
+# What this file does: the Mt. Makiling reservation and the resettlement committee
+# that followed. The Sampaloc, Quezon site is left for the Quezon starter pins.
+slug: laguna-makiling-resettlement
+title: Mt. Makiling resettlement
+when: 1976 to 1978
+topic: displacement
+status: checking
+startYear: 1976
+endYear: 1978
+places:
+  - { name: Mt. Makiling, province: laguna, lat: 14.1355, lng: 121.1950, approximate: true }
+promised: A resettlement area would be set aside for people living on the Makiling lands.
+happened: Proclamation 1540 (April 1976) reserved 760 hectares in Sampaloc, Quezon. EO 494 (January 1978) created the Makiling Kainginero Resettlement Committee.
+question: Find who lived on the Makiling lands, how many moved, and what the resettlement site was like.
+sources:
+  - title: Proclamation 1540 and EO 494
+    publisher: Official Gazette
+    voice: official
+    backs: promise

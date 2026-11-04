@@ -1,0 +1,20 @@
+# What this file does: LOI 905 of 1979, which let UPLB acquire land for research
+# expansion and funded resettlement for people displaced by it.
+slug: laguna-uplb-expansion-loi-905
+title: UPLB land acquisition under LOI 905
+when: March 1979 onward
+topic: displacement
+status: checking
+startYear: 1979
+endYear: null
+places:
+  - { name: Bay, province: laguna, lat: 14.1833, lng: 121.2833, approximate: true }
+  - { name: Los Baños, province: laguna, lat: 14.1699, lng: 121.2431, approximate: true }
+promised: Resettlement sites would be funded for displaced tenant-tillers and landless workers.
+happened: LOI 905 (March 1979) let UPLB acquire land by sale or expropriation for research expansion. It funded resettlement sites for displaced tenant-tillers and landless workers. How many people were moved is still being checked.
+question: Find how many families were displaced and where the resettlement sites were.
+sources:
+  - title: LOI 905 (1979)
+    publisher: Official Gazette
+    voice: official
+    backs: promise

@@ -1,3 +1,5 @@
+# What this file does: the Pila farmer-association study, a rare look at why
+# farmers joined a Samahang Nayon.
 slug: laguna-samahang-nayon
 title: Samahang Nayon farmer associations in Laguna
 when: 1973 onward
@@ -6,8 +8,7 @@ status: checking
 startYear: 1973
 endYear: null
 places:
-  - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
-  - { name: Victoria, province: laguna, lat: 14.225, lng: 121.325, approximate: true }
+  - { name: Pila, province: laguna, lat: 14.2331, lng: 121.3631, approximate: true }
 promised: Each village would form a Samahang Nayon, a farmers' association meant to pool savings, credit and marketing.
 happened: How many associations existed in Laguna, and how they worked for farmers, is still being checked.
 question: Was membership required to receive land certificates? Find Laguna counts and a study of how the associations worked.

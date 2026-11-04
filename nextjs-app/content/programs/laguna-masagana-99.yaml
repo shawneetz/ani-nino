@@ -1,3 +1,5 @@
+# What this file does: Masagana 99 in Laguna. The 3.7% figure is national and
+# still needs its source attached.
 slug: laguna-masagana-99
 title: Masagana 99 rice credit in Laguna
 when: 1973 onward
@@ -10,5 +12,5 @@ places:
   - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
   - { name: Santa Cruz, province: laguna, lat: 14.2811, lng: 121.4144, approximate: true }
 promised: Loans, seeds and fertilizer for farmers who adopted high-yielding rice varieties, so the country could grow enough rice for itself.
-happened: Who in Laguna got loans, and how many farmers could repay them, is still being checked.
-question: Find Laguna loan and repayment figures, and a study or report on how Laguna farmers experienced the program.
+happened: One national figure says the program reached only 3.7% of small rice farmers by 1980. Who in Laguna got loans, and how many farmers could repay them, is still being checked.
+question: Attach the source for the 3.7% figure, then find Laguna loan and repayment figures.

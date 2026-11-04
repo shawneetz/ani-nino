@@ -1,3 +1,5 @@
+# What this file does: Certificates of Land Transfer, with the national
+# government figures. The numbers are national, not Laguna.
 slug: laguna-certificates-of-land-transfer
 title: Certificates of Land Transfer in Laguna
 when: 1973 onward
@@ -7,10 +9,10 @@ startYear: 1973
 endYear: null
 places:
   - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
-  - { name: Pagsanjan, province: laguna, lat: 14.27, lng: 121.4569, approximate: true }
+  - { name: Biñan, province: laguna, lat: 14.3333, lng: 121.0806, approximate: true }
 promised: A certificate was meant to be the first step toward owning the land a tenant farmed.
-happened: A certificate was a paper step, not a land title. Whether Laguna tenants went on to receive titles is still being checked.
-question: How many Laguna certificates became Emancipation Patents or titles? Confirm when certificates started being issued in Laguna.
+happened: A certificate was a paper step, not a land title. Government figures say certificates went to 12,000 farmers by April 1973 and 210,054 tenants by January 1976, against a goal of 914,914 tenants. These are national figures. Whether Laguna tenants went on to receive titles is still being checked.
+question: Find the source of the national figures, how many Laguna certificates became Emancipation Patents or titles, and when certificates started in Laguna.
 sources:
   - title: Presidential Decree No. 27
     publisher: Official Gazette

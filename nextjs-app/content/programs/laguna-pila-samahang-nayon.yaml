@@ -1,0 +1,23 @@
+# What this file does: the Pila farmer-association study, a rare look at why
+# farmers joined a Samahang Nayon.
+slug: laguna-pila-samahang-nayon
+title: Pila Samahang Nayon social laboratory
+when: 1973 to 1974
+topic: groups
+status: checking
+startYear: 1973
+endYear: 1974
+places:
+  - { name: Pila, province: laguna, lat: 14.2331, lng: 121.3631, approximate: true }
+promised: Each village would form a Samahang Nayon to pool savings, credit and marketing.
+happened: Nine Samahang Nayon were part of the UPLBCA/SEARCA Social Laboratory. Most of the 119 rice farmers surveyed joined for loans and know-how, and some joined to comply with the decree.
+question: Find how many farmers said they joined to comply, and whether the survey results were published by year.
+sources:
+  - title: "SEARCA: Pila Social Laboratory"
+    publisher: SEARCA
+    voice: independent
+    backs: happened
+  - title: Presidential Decree No. 175
+    publisher: Official Gazette
+    voice: official
+    backs: promise

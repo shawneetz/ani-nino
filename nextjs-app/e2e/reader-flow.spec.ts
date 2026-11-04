@@ -3,7 +3,7 @@
 import { expect, test } from "@playwright/test";
 
 // Martial-law programs shown by default. Today programs are hidden until the switch is on.
-const MARTIAL_LAW_PROGRAMS = 12;
+const MARTIAL_LAW_PROGRAMS = 19;
 
 test.describe("reader flow", () => {
   test("opens the map with all programs and marks Map as current", async ({ page }) => {
