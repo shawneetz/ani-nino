@@ -1,4 +1,5 @@
 # What this file does: lists research gaps shown on the Sources page.
+# Updated 2026-11-05 after the research round. Each "program" must match an existing program slug.
 - id: no-farmer-interviews
   kind: method
   title: No interviews with farmers from the martial-law era
@@ -10,38 +11,49 @@
 - id: cavite-not-covered
   kind: scope
   title: Cavite has no program pages yet
-  description: Cavite is one of the five provinces on the map, but no program there has been researched yet. The martial-law record found so far is thin.
+  description: Cavite is one of the five provinces on the map, but no program there has been researched yet.
 - id: laguna-land-transfer-numbers
   kind: data_missing
   title: No Laguna figures for land actually transferred
-  description: Laguna counts of tenants covered, certificates issued and titles awarded have not been found yet. The certificate figures used so far are national.
+  description: National counts were found (210,054 certificates by January 1976). Laguna counts of tenants covered, certificates issued and titles awarded have not been found. A 1991 UPLB thesis on Calamba and Los Baños land use is an unread lead.
   program: laguna-operation-land-transfer
 - id: laguna-fishpen-permits
   kind: data_missing
-  title: Fishpen permit records for Laguna de Bay
-  description: It is not yet known how many fishpen permits were issued in the 1970s, or who held them.
+  title: Fishpen permit holders on Laguna de Bay
+  description: A 1973 survey counted 993 pens on 4,802 hectares. Who held the permits in the 1970s is not yet known.
   program: laguna-lake-fishpens
-- id: masagana-reach-source
-  kind: unverified
-  title: Source for the 3.7% Masagana 99 reach figure
-  description: The figure that the program reached 3.7% of small rice farmers by 1980 has no attached source yet.
-  program: laguna-masagana-99
-- id: geothermal-displacement
-  kind: unverified
-  title: Whether Proclamation 1111 displaced anyone
-  description: No record of displacement has been found for the geothermal reservation, so it stays a lead.
-  program: laguna-geothermal-reservation
 - id: coconut-levy-flow
   kind: unverified
   title: Where the coconut levy money went
-  description: How much was collected in Quezon and what returned to farmers there has not been checked.
+  description: A national total was found (9.695 billion pesos, 1973 to 1983). How much came from Quezon and what returned to Quezon farmers has not been checked.
   program: quezon-coconut-levy
-- id: laguna-coalition-identity
+- id: masagana-repayment-conflict
   kind: unverified
-  title: Who the "Laguna Coalition" was
-  description: A "Laguna Coalition" was a petitioner in the 2012 Supreme Court coconut levy case. What it represented has not been found yet.
+  title: Masagana 99 repayment figures disagree
+  description: Sources give different repayment rates (94 percent falling to 68 percent in one table, 93.3 falling to 45.8 in another, about 90 falling to 35 in a third). The measures and dates need to be compared against the original studies.
+  program: laguna-masagana-99
+- id: hacienda-yulo-coverage
+  kind: unverified
+  title: Whether Hacienda Yulo was ever covered by PD 27
+  description: Only advocacy sources say the estate was exempt. A DAR or court record is needed. The Yulo hacienda in Floridablanca, Pampanga is a different estate.
+  program: laguna-hacienda-yulo
+- id: laguna-coalition-lead
+  kind: unverified
+  title: What the "Laguna Coalition" in the 2012 coco levy case represented
+  description: Not found in this research round.
   program: quezon-coconut-levy
-- id: mridp-laguna
+- id: laiban-martial-law-impact
   kind: data_missing
-  title: MRIDP in Laguna
-  description: No data has been found yet on this program in Laguna. Ask the Laguna Provincial Agriculturist or DA-4A.
+  title: Effect of the Laiban plans on Dumagat communities before 1986
+  description: The project was conceived in 1979, but no source on displacement or consultation before 1986 has been found. The PCIJ chronology is a lead.
+  program: rizal-kaliwa-laiban-dam
+- id: uplb-displacement-numbers
+  kind: data_missing
+  title: Families displaced by UPLB and IRRI land acquisition
+  description: PD 457 and LOI 905 are documented, but the number of families displaced and the resettlement sites built are not.
+  program: laguna-uplb-land-acquisition
+- id: makiling-resettlement-outcomes
+  kind: data_missing
+  title: Outcome of the Makiling kainginero resettlement
+  description: Proclamation 1540 and Executive Order 494 are documented, but the number of families resettled in Sampaloc and what became of them are not.
+  program: laguna-makiling-resettlement

@@ -1,20 +1,44 @@
-# What this file does: Operation Land Transfer in Laguna, with the pilot towns.
-# Santa Cruz was removed because no source lists it as a pilot town.
+# What this file does: program page for Operation Land Transfer (OLT) in Laguna.
+# Status is "confirmed": each claim below was checked against the linked sources on 2026-11-05.
+# The Laguna-only numbers are still missing, and gaps.yaml tracks that.
 slug: laguna-operation-land-transfer
 title: Operation Land Transfer in Laguna
 when: 1972 onward
 topic: land
-status: checking
+status: confirmed
 startYear: 1972
 endYear: null
+# Calamba and Biñan were two of the nine pilot towns. Pins are town centers, so they are approximate.
 places:
   - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
-  - { name: Biñan, province: laguna, lat: 14.3333, lng: 121.0806, approximate: true }
-promised: PD 27 declared tenant-farmers of private rice and corn lands owners of the land they till.
-happened: Calamba and Biñan were among nine pilot towns in six provinces from November 1972 to 1973. The first targets were estates of 100 hectares and above, widening to 24 hectares and above from Oct 3, 1973. How many Laguna tenants actually received land is still being checked.
-question: Find Laguna figures for tenants covered, certificates issued and titles actually awarded, from DAR records or a study.
+  - { name: Biñan, province: laguna, lat: 14.3333, lng: 121.0833, approximate: true }
+promised: "PD 27 declared tenant-farmers of private rice and corn lands the owners of the land they till as of October 21, 1972. The land was to be paid for over 15 years at 6 percent a year, and title would come only after payment and membership in a farmers' cooperative."
+happened: "Operation Land Transfer started in November 1972. Nine towns in six provinces were chosen as pilot areas, including Calamba and Biñan in Laguna. A government magazine reported that by January 31, 1976, 210,054 tenants across the country held certificates of land transfer. Its 53 percent figure matches a revised target of 393,778 tenants, set after landholdings of seven hectares and below were left out; the original target was 914,914 (see the Charts page). A certificate was not a title: an Emancipation Patent came later, after payment and other requirements. An article published by the Martial Law Museum says the decree reached less than 14 percent of all cultivated land, because it left out sugar, coconut and other export crops. Laguna-only counts of tenants, certificates and titles have not been found."
+checkedOn: "2026-11-05"
 sources:
   - title: Presidential Decree No. 27
-    publisher: Official Gazette
+    publisher: Official Gazette (text on Lawphil)
     voice: official
+    url: "https://www.lawphil.net/statutes/presdecs/pd1972/pd_27_1972.html"
+    accessed: "2026-11-05"
     backs: promise
+  - title: New life throbbing in rural areas
+    publisher: The Republic (1973)
+    voice: official
+    cite: "Names the nine pilot towns, including Calamba and Binan in Laguna."
+    url: "https://repository.mainlib.upd.edu.ph/omekas/s/rare-periodicals/media/107471"
+    accessed: "2026-11-05"
+    backs: happened
+  - title: Removing roadblocks
+    publisher: The Republic (issue of May 16 to June 15, 1976)
+    voice: official
+    cite: "Progress report as of January 31, 1976, with the 210,054, 914,914 and 393,778 figures."
+    url: "https://repository.mainlib.upd.edu.ph/omekas/s/rare-periodicals/media/106301"
+    accessed: "2026-11-05"
+    backs: happened
+  - title: "The Marcos Agrarian Reform Program: Promises and Contradictions"
+    publisher: Martial Law Museum
+    voice: independent
+    url: "https://martiallawmuseum.ph/?p=1149"
+    accessed: "2026-11-05"
+    backs: context

@@ -1,0 +1,34 @@
+# What this file does: one chart of Masagana 99 loans granted per phase.
+# Repayment rates are in each point's note because sources disagree on them.
+id: masagana-99-credit
+title: "Masagana 99: loans released and repaid"
+description: How much credit was released in selected phases, and the repayment rate listed for each.
+unit: million pesos
+caveat: Sources disagree on borrowers and repayment. Another source gives 402,757 borrowers in phase 1 and 716.1 million in phase 3. It also gives repayment of 93.3 percent in 1973 falling to 45.8 percent in 1979. UPLB speakers said repayment fell from about 90 percent to 35 percent or lower.
+points:
+  - label: "Phase 1 (May to Oct 1973)"
+    value: 369.5
+    qualifier: exact
+    note: "401,461 borrowers. No repayment rate listed for this phase."
+    source: &martial_law_museum
+      title: "The Marcos Agrarian Reform Program: Promises and Contradictions"
+      publisher: Martial Law Museum
+      voice: independent
+      cite: "Table 3, status of the Masagana 99 credit program, as printed."
+      url: "https://martiallawmuseum.ph/?p=1149"
+      accessed: "2026-11-05"
+  - label: "Phase 3 (May to Oct 1974)"
+    value: 716.2
+    qualifier: exact
+    note: "529,161 borrowers. Repayment rate 94 percent."
+    source: *martial_law_museum
+  - label: "Phase 6 (Nov 1975 to Apr 1976)"
+    value: 255.9
+    qualifier: exact
+    note: "151,862 borrowers. Repayment rate 76 percent."
+    source: *martial_law_museum
+  - label: "Phase 12 (Nov 1978 to Apr 1979)"
+    value: 158.0
+    qualifier: exact
+    note: "85,401 borrowers. Repayment rate 68 percent."
+    source: *martial_law_museum

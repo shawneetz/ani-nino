@@ -1,5 +1,5 @@
-# What this file does: the Hacienda Yulo page. The claims come from advocacy
-# reporting, so the label is "advocacy" and the status stays "checking".
+# What this file does: program page for Hacienda Yulo (Canlubang Sugar Estate) and land reform.
+# It stays "still checking" because the exemption claim comes only from advocacy sources.
 slug: laguna-hacienda-yulo
 title: Hacienda Yulo and land reform in Laguna
 when: 1972 onward
@@ -10,17 +10,60 @@ endYear: null
 places:
   - { name: Canlubang, province: laguna, lat: 14.1814, lng: 121.0569, approximate: true }
   - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
-  - { name: Cabuyao, province: laguna, lat: 14.2745, lng: 121.1250, approximate: true }
-  - { name: Santa Rosa, province: laguna, lat: 14.3122, lng: 121.1114, approximate: true }
-promised: Land reform was meant to transfer covered rice and corn land to the tenants who tilled it.
-happened: Bulatlat reports that the 7,100-hectare sugar estate was exempted from PD 27 through its closeness to the government, and that its farmers became farmworkers. This is an advocacy report.
-question: Find a court, DAR or independent record that confirms or disputes the exemption.
+promised: "PD 27 was meant to transfer tenanted rice and corn land to the tenants who tilled it."
+happened: "PD 27 covered only tenanted rice and corn land and left out sugar and other export crops. Advocacy reports say the Canlubang Sugar Estate, the Yulo hacienda in Calamba, was exempt because of the Yulo family's closeness to the government. The farmers' group KASAMA-TK says the hacienda was never covered by PD 27 or the later CARP. In the 1980s farmers began organizing to ask for the land. In 1991 the government denied a petition to include the hacienda in CARP, after DAR had found the land highly suitable for agriculture. No DAR or court record from 1972 to 1986 has been found yet."
+question: "Find a DAR, court or independent record on whether the Canlubang estate was ever covered by Operation Land Transfer, and what happened to its tenants before 1986. Do not confuse it with the Hacienda Yulo in Floridablanca, Pampanga (1,581 hectares), which The Republic (1976) lists as a DAR land consolidation project."
+since:
+  - year: 2010
+    text: "Advocacy groups reported a clash between farmers and police over disputed land at Sitio Buntog, Barangay Canlubang."
+    source:
+      title: Hundreds of Farmers Injured, Several Handcuffed, Two Illegally Detained by PNP over Hacienda Yulo Land Dispute
+      publisher: Bulatlat
+      voice: advocacy
+      cite: "Press release, May 21, 2010."
+      url: "https://www.bulatlat.com/2010/05/21/hundreds-of-farmers-injured-several-handcuffed-two-illegally-detained-by-pnp-over-hacienda-yulo-land-dispute/"
+      accessed: "2026-11-05"
+  - year: 2020
+    text: "Armed men tried to evict farmers at Sitio Buntog on August 24, 2020, according to KASAMA-TK."
+    source:
+      title: Peasants in Hacienda Yulo face renewed harassment, threats of eviction
+      publisher: Bulatlat
+      voice: advocacy
+      cite: "August 27, 2020."
+      url: "https://www.bulatlat.com/?p=115977"
+      accessed: "2026-11-05"
 sources:
-  - title: "Bulatlat: Hacienda Yulo"
+  - title: Presidential Decree No. 27
+    publisher: Official Gazette (text on Lawphil)
+    voice: official
+    url: "https://www.lawphil.net/statutes/presdecs/pd1972/pd_27_1972.html"
+    accessed: "2026-11-05"
+    backs: context
+  - title: "The Marcos Agrarian Reform Program: Promises and Contradictions"
+    publisher: Martial Law Museum
+    voice: independent
+    cite: "PD 27 excluded sugar, copra and other traditional export crops."
+    url: "https://martiallawmuseum.ph/?p=1149"
+    accessed: "2026-11-05"
+    backs: context
+  - title: One hundred years of struggle in Hacienda Yulo
     publisher: Bulatlat
     voice: advocacy
+    cite: "January 31, 2021. Says closeness to the government exempted the estate from PD 27."
+    url: "https://www.bulatlat.org/2021/01/31/one-hundred-years-of-struggle-in-hacienda-yulo/"
+    accessed: "2026-11-05"
     backs: happened
-  - title: Presidential Decree No. 27
-    publisher: Official Gazette
-    voice: official
-    backs: context
+  - title: Peasants in Hacienda Yulo face renewed harassment, threats of eviction
+    publisher: Bulatlat
+    voice: advocacy
+    cite: "August 27, 2020. KASAMA-TK says the hacienda was never covered by PD 27 or CARP."
+    url: "https://www.bulatlat.com/?p=115977"
+    accessed: "2026-11-05"
+    backs: happened
+  - title: Hacienda Yulo farmers appeal to government to include the land in agrarian reform
+    publisher: LiCAS News
+    voice: independent
+    cite: "Reports the 1991 denial of the CARP petition and the DAR finding. Headline not captured; check before publishing."
+    url: "https://philippines.licas.news/?p=157740"
+    accessed: "2026-11-05"
+    backs: happened

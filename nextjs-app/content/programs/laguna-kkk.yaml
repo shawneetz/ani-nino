@@ -1,3 +1,5 @@
+# What this file does: program page for Kilusang Kabuhayan at Kaunlaran (KKK) in Laguna.
+# It stays "still checking" because no Laguna project list or repayment data was found.
 slug: laguna-kkk
 title: Kilusang Kabuhayan at Kaunlaran (KKK) in Laguna
 when: 1981 to 1986
@@ -8,6 +10,30 @@ endYear: 1986
 places:
   - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
   - { name: San Pablo, province: laguna, lat: 14.0683, lng: 121.3256, approximate: true }
-promised: Livelihood loans and training for small village enterprises, including farm-based ones.
-happened: Which Laguna projects were funded, and who benefited, is still being checked.
-question: Confirm the program's dates, find a list of Laguna projects, and find a study on repayment and who received loans.
+promised: "A national livelihood program of loans and training for small village enterprises, set up as a priority program by Executive Order 715 (August 6, 1981) and run through the Ministry of Human Settlements."
+happened: "Loans and releases were to be guaranteed by a KKK Capital Fund held at the Central Bank. The Martial Law Museum article says an August 1981 Central Bank circular directed one-fourth of the Barrio Savings Fund, which Samahang Nayon farmers paid into, to KKK. That claim still needs checking against the circular. Which Laguna projects were funded, and who received the loans, has not been found."
+question: "Find a list of Laguna KKK projects, the Central Bank circular on the Barrio Savings Fund, and a study of repayment and who received loans."
+since:
+  - year: 1988
+    text: "Executive Order 327 ordered the collection of all outstanding unpaid KKK loans under the successor program, Bagong KKK."
+    source:
+      title: Executive Order No. 327
+      publisher: Official Gazette (text on Lawphil)
+      voice: official
+      cite: "June 9, 1988."
+      url: "https://lawphil.net/executive/execord/eo1988/eo_327_1988.html"
+      accessed: "2026-11-05"
+sources:
+  - title: Executive Order No. 715
+    publisher: Official Gazette (text on ChanRobles)
+    voice: official
+    cite: "August 6, 1981."
+    url: "https://chanrobles.com/executiveorders/1981/executiveorderno715-1981.html"
+    accessed: "2026-11-05"
+    backs: promise
+  - title: "The Marcos Agrarian Reform Program: Promises and Contradictions"
+    publisher: Martial Law Museum
+    voice: independent
+    url: "https://martiallawmuseum.ph/?p=1149"
+    accessed: "2026-11-05"
+    backs: happened

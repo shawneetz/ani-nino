@@ -1,3 +1,5 @@
+# What this file does: program page for the coconut levy, with the Quezon angle.
+# It stays "still checking" because no Quezon-only collection figures were found.
 slug: quezon-coconut-levy
 title: The coconut levy in Quezon
 when: 1973 onward
@@ -9,11 +11,57 @@ places:
   - { name: Lucena, province: quezon, lat: 13.9373, lng: 121.6171, approximate: true }
   - { name: Tayabas, province: quezon, lat: 14.0261, lng: 121.5914, approximate: true }
   - { name: Sariaya, province: quezon, lat: 13.9631, lng: 121.5253, approximate: true }
-promised: A levy on coconut sales would fund a stabilization fund to help the industry and coconut farmers.
-happened: Farmers paid the levy when they sold copra. Where the money went, and what farmers got back, is still being checked.
-question: Find how much was collected in Quezon, and a court record or study on how the fund was used.
+promised: "PD 276 (August 20, 1973) set a levy of 15 pesos per 100 kilos of copra on every first sale. It fed a Coconut Consumers Stabilization Fund to subsidize coconut-based consumer goods. Later decrees (PD 961 and PD 1468) said the funds were owned by coconut farmers."
+happened: "Farmers paid the levy when they sold copra, from 1973 to 1982, and at one point it reached 100 pesos per 100 kilos. Inquirer reports say Quezon farmers were believed to be the biggest contributors. The PCGG said 9.695 billion pesos was collected from 1973 to 1983. Where the money went, and what Quezon farmers got back, is still being checked."
+question: "Find how much was collected in Quezon alone (PCA or COA records). Also check the 2021 coco levy trust fund law (RA 11524), which is in your notes but which I did not verify."
+since:
+  - year: 2001
+    text: "The Supreme Court, voting 10 to 5, declared the coconut levy funds public and owned by the government."
+    source:
+      title: "Supreme Court: Coco levy public fund"
+      publisher: Philstar
+      voice: independent
+      cite: "December 15, 2001."
+      url: "https://www.philstar.com/headlines/2001/12/15/143671/supreme-court-coco-levy-public-fund"
+      accessed: "2026-11-05"
+  - year: 2012
+    text: "The Supreme Court declared the fund belongs to the government for the benefit of coconut farmers. Inquirer reported in 2022 that carrying out the ruling was still tied up."
+    source:
+      title: Quezon governor backs Marcos, but wants assurance coco levy fund will be returned to farmers
+      publisher: Philippine Daily Inquirer
+      voice: independent
+      url: "https://newsinfo.inquirer.net/1572455/quezon-governor-backs-marcos-but-wants-assurance-coco-levy-fund-will-be-returned-to-farmers/amp"
+      accessed: "2026-11-05"
 sources:
   - title: Presidential Decree No. 276
     publisher: Official Gazette
     voice: official
     backs: promise
+  - title: "Blue Bar Coconut Phil. v. Tantuico Jr., G.R. No. L-47051 (1988)"
+    publisher: Supreme Court decision (ChanRobles)
+    voice: independent
+    cite: "Describes PD 276 of August 20, 1973 and the stabilization fund."
+    url: "https://chanrobles.com/scdecisions/jurisprudence1988/jul1988/gr_l_47051_1988.php"
+    accessed: "2026-11-05"
+    backs: promise
+  - title: Philippine Supreme Court decisions, April 2012 (coconut levy case)
+    publisher: ChanRobles
+    voice: independent
+    cite: "Notes that PD 961 and PD 1468 (June 11, 1978) said levy funds were owned by farmers."
+    url: "https://chanrobles.com/cralaw/2012aprildecisions.php?id=269"
+    accessed: "2026-11-05"
+    backs: promise
+  - title: Wish of farmers this Christmas, Return coco levy fund
+    publisher: Philippine Daily Inquirer
+    voice: independent
+    cite: "Levy reached 100 pesos per 100 kilos; Quezon believed the biggest contributor."
+    url: "https://newsinfo.inquirer.net/?p=109367"
+    accessed: "2026-11-05"
+    backs: happened
+  - title: Quezon governor backs Marcos, but wants assurance coco levy fund will be returned to farmers
+    publisher: Philippine Daily Inquirer
+    voice: independent
+    cite: "PCGG figure of 9.695 billion pesos collected from 1973 to 1983."
+    url: "https://newsinfo.inquirer.net/1572455/quezon-governor-backs-marcos-but-wants-assurance-coco-levy-fund-will-be-returned-to-farmers/amp"
+    accessed: "2026-11-05"
+    backs: happened

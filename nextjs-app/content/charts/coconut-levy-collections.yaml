@@ -1,6 +1,30 @@
+# What this file does: one chart of total coconut levy collected, from two government figures.
+# No Quezon-only figure was found, so both points are nationwide.
 id: coconut-levy-collections
 title: Coconut levy collected
 description: Amounts collected from coconut farmers through the levy.
 unit: million pesos
-caveat: Collection figures say nothing about how the money was spent.
-points: []
+caveat: Collection figures say nothing about how the money was spent. Quezon was believed to be the biggest contributor, but no Quezon-only figure was found.
+points:
+  - label: "1973 to 1983, nationwide"
+    value: 9695
+    qualifier: exact
+    note: "Figure from the PCGG, as reported by the Inquirer."
+    source:
+      title: Quezon governor backs Marcos, but wants assurance coco levy fund will be returned to farmers
+      publisher: Philippine Daily Inquirer
+      voice: official
+      cite: "Reports the PCGG figure."
+      url: "https://newsinfo.inquirer.net/1572455/quezon-governor-backs-marcos-but-wants-assurance-coco-levy-fund-will-be-returned-to-farmers/amp"
+      accessed: "2026-11-05"
+  - label: "Nine years of the levy, state audit"
+    value: 9600
+    qualifier: approx
+    note: "A state audit found about 9.6 billion pesos collected over the nine years the copra tax was enforced."
+    source:
+      title: Coco levy biggest joke to hit century
+      publisher: Philippine Daily Inquirer
+      voice: official
+      cite: "Reports the state audit figure. Headline text approximate; check before publishing."
+      url: "https://newsinfo.inquirer.net/?p=779990"
+      accessed: "2026-11-05"
