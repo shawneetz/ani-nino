@@ -1,5 +1,7 @@
 // What this file does: connects filters, the map, the pin list, and URL selection.
-// The only change from before: the placeholder heading is replaced by IntroStrip.
+// New layout (phone first): intro, month slider, map, collapsible filters, list, legend.
+// The filters sit in a <details> box so the map is visible without scrolling
+// past all the checkboxes. On desktop the map and list sit side by side.
 "use client";
 
 import dynamic from "next/dynamic";
@@ -21,7 +23,7 @@ import { visiblePinsForUi } from "@/lib/visible-for-ui";
 // The map only runs in the browser, so it is loaded without server rendering.
 const PinMap = dynamic(() => import("@/components/PinMap").then((module) => module.PinMap), {
   ssr: false,
-  loading: () => <div className="h-[50vh] min-h-[360px] animate-pulse rounded-xl bg-neutral-200 lg:h-[70vh]" />,
+  loading: () => <div className="h-[50vh] min-h-[320px] animate-pulse rounded-xl bg-neutral-200 lg:h-[70vh]" />,
 });
 
 const URL_DEBOUNCE_MS = 200;
@@ -108,11 +110,25 @@ export function Explorer({
     [selectPin, closePin],
   );
 
+  // Count of active filters, shown on the collapsed "Filters" button.
+  const activeFilters = state.families.length + state.provinces.length + (state.today ? 1 : 0);
+
   return (
     <div className={`mx-auto max-w-7xl space-y-4 px-4 py-6 transition-[padding] ${slug ? "lg:pr-[29rem]" : ""}`}>
       <IntroStrip />
-      <FilterControls />
+
       <MonthSlider month={month} onChange={handleMonthChange} visibleCount={visible.length} />
+
+      {/* Filters are collapsed by default so the map stays near the top on phones. */}
+      <details className="rounded-xl border border-neutral-200 bg-white">
+        <summary className="cursor-pointer select-none px-4 py-3 text-sm font-semibold">
+          Filters{activeFilters > 0 ? ` (${activeFilters} active)` : ""}
+        </summary>
+        <div className="px-4 pb-4">
+          <FilterControls />
+        </div>
+      </details>
+
       {state.today && <p className="text-sm text-neutral-700">Today pins stay on the map whatever month is selected.</p>}
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
@@ -170,6 +186,7 @@ export function Explorer({
           </ul>
         </section>
       </div>
+
       <Legend />
       <PinDetailHost slug={slug} onSelect={selectPin} onClose={closePin} />
     </div>
