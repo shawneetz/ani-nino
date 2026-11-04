@@ -1,3 +1,5 @@
+// What this file does: defines every table, enum and CHECK rule in Postgres.
+// The database itself rejects bad rows (wrong dates, missing sources, swapped layers).
 import { sql } from "drizzle-orm";
 import {
   boolean,
@@ -6,6 +8,7 @@ import {
   doublePrecision,
   foreignKey,
   integer,
+  jsonb,
   pgEnum,
   pgTable,
   primaryKey,
@@ -32,11 +35,13 @@ import {
 } from "../lib/enums";
 import { FAMILIES } from "../lib/vocab";
 
+// Family keys come from vocab.ts so the database enum always matches the UI.
 const families = Object.keys(FAMILIES) as [
   keyof typeof FAMILIES,
   ...(keyof typeof FAMILIES)[],
 ];
 
+/* ---------- Enums ---------- */
 export const pinLayer = pgEnum("pin_layer", [...LAYERS]);
 export const pinFamily = pgEnum("pin_family", families);
 export const pinStatus = pgEnum("pin_status", [...STATUSES]);
@@ -52,31 +57,35 @@ export const qualifier = pgEnum("chart_qualifier", [...QUALIFIERS]);
 export const gapKind = pgEnum("gap_kind", [...GAP_KINDS]);
 export const gapStatus = pgEnum("gap_status", [...GAP_STATUSES]);
 
+/* ---------- Pins ---------- */
+// One row per program or event shown on the map.
 export const pins = pgTable(
   "pins",
   {
-    id: text("id").primaryKey(),
+    id: text("id").primaryKey(), // slug, also used in share links (?pin=slug)
     layer: pinLayer("layer").notNull(),
     title: text("title").notNull(),
     program: text("program"),
     instruments: text("instruments").array().notNull().default(sql`'{}'::text[]`),
-    family: pinFamily("family").notNull(),
+    family: pinFamily("family").notNull(), // primary family, sets the pin color
     secondaryFamilies: pinFamily("secondary_families")
       .array()
       .notNull()
       .default(sql`'{}'::pin_family[]`),
+    // Slider window. First-of-month dates. end_date NULL = still in effect.
     startDate: date("start_date", { mode: "string" }).notNull(),
     endDate: date("end_date", { mode: "string" }),
-    dateLabel: text("date_label").notNull(),
+    dateLabel: text("date_label").notNull(), // text shown to readers
     promise: text("promise"),
     record: text("record"),
-    badge: pinBadge("badge"),
+    badge: pinBadge("badge"), // evidence class of the record claim
     status: pinStatus("status").notNull(),
     openQuestion: text("open_question"),
     verifiedOn: date("verified_on", { mode: "string" }),
     verificationNote: text("verification_note"),
   },
   (table) => [
+    // Target of the composite foreign keys in pin_links.
     unique("pins_id_layer_uq").on(table.id, table.layer),
     check("pins_id_slug", sql`${table.id} ~ '^[a-z0-9]+(-[a-z0-9]+)*$'`),
     check("pins_start_first_of_month", sql`EXTRACT(DAY FROM ${table.startDate}) = 1`),
@@ -111,6 +120,7 @@ export const pins = pgTable(
   ],
 );
 
+/* ---------- Sources ---------- */
 export const sources = pgTable(
   "sources",
   {
@@ -120,13 +130,14 @@ export const sources = pgTable(
     author: text("author"),
     kind: sourceKind("kind").notNull(),
     url: text("url"),
-    archivedUrl: text("archived_url"),
+    archivedUrl: text("archived_url"), // saved copy, protects against dead links
     publishedYear: integer("published_year"),
     accessedOn: date("accessed_on", { mode: "string" }),
     note: text("note"),
   },
   (table) => [
     check("sources_id_slug", sql`${table.id} ~ '^[a-z0-9]+(-[a-z0-9]+)*$'`),
+    // A link must say when you opened it.
     check(
       "sources_url_needs_accessed",
       sql`(${table.url} IS NULL AND ${table.archivedUrl} IS NULL) OR ${table.accessedOn} IS NOT NULL`,
@@ -134,6 +145,8 @@ export const sources = pgTable(
   ],
 );
 
+/* ---------- Pin locations (map markers) ---------- */
+// One pin can have several markers (for example three towns).
 export const pinLocations = pgTable(
   "pin_locations",
   {
@@ -147,19 +160,22 @@ export const pinLocations = pgTable(
     lat: doublePrecision("lat").notNull(),
     lng: doublePrecision("lng").notNull(),
     precision: locationPrecision("precision").notNull().default("municipality"),
-    isAnchor: boolean("is_anchor").notNull().default(false),
+    isAnchor: boolean("is_anchor").notNull().default(false), // marker the map flies to
     sortOrder: integer("sort_order").notNull().default(0),
   },
   (table) => [
+    // Coarse Philippines box. The seed validator uses a tighter CALABARZON box.
     check("pin_locations_lat", sql`${table.lat} BETWEEN 4.5 AND 21.5`),
     check("pin_locations_lng", sql`${table.lng} BETWEEN 116 AND 127`),
     check("pin_locations_name_not_empty", sql`length(trim(${table.name})) > 0`),
+    // At most one anchor per pin.
     uniqueIndex("pin_locations_one_anchor")
       .on(table.pinId)
       .where(sql`${table.isAnchor}`),
   ],
 );
 
+/* ---------- Pin <-> source ---------- */
 export const pinSources = pgTable(
   "pin_sources",
   {
@@ -170,26 +186,27 @@ export const pinSources = pgTable(
       .notNull()
       .references(() => sources.id, { onDelete: "restrict" }),
     role: sourceRole("role").notNull(),
-    citationNote: text("citation_note"),
+    citationNote: text("citation_note"), // for example "Sec. 2" or "p. 14"
   },
   (table) => [primaryKey({ columns: [table.pinId, table.sourceId, table.role] })],
 );
 
-export const pinEvents = pgTable(
-  "pin_events",
-  {
-    id: serial("id").primaryKey(),
-    pinId: text("pin_id")
-      .notNull()
-      .references(() => pins.id, { onDelete: "cascade" }),
-    eventDate: date("event_date", { mode: "string" }).notNull(),
-    precision: eventPrecision("precision").notNull().default("month"),
-    description: text("description").notNull(),
-    sourceId: text("source_id").references(() => sources.id, { onDelete: "set null" }),
-    sortOrder: integer("sort_order").notNull().default(0),
-  },
-);
+/* ---------- Pin events (mini timeline in the panel) ---------- */
+export const pinEvents = pgTable("pin_events", {
+  id: serial("id").primaryKey(),
+  pinId: text("pin_id")
+    .notNull()
+    .references(() => pins.id, { onDelete: "cascade" }),
+  eventDate: date("event_date", { mode: "string" }).notNull(),
+  precision: eventPrecision("precision").notNull().default("month"),
+  description: text("description").notNull(),
+  sourceId: text("source_id").references(() => sources.id, { onDelete: "set null" }),
+  sortOrder: integer("sort_order").notNull().default(0),
+});
 
+/* ---------- Pin links (past <-> today, always "my interpretation") ---------- */
+// The composite foreign keys force the today side to be a 'today' pin and
+// the past side to be a 'martial_law' pin, with no trigger needed.
 export const pinLinks = pgTable(
   "pin_links",
   {
@@ -218,6 +235,7 @@ export const pinLinks = pgTable(
   ],
 );
 
+/* ---------- Videos ---------- */
 export const videos = pgTable(
   "videos",
   {
@@ -226,7 +244,7 @@ export const videos = pgTable(
     youtubeId: text("youtube_id").notNull(),
     title: text("title").notNull(),
     channel: text("channel").notNull(),
-    creditLine: text("credit_line").notNull(),
+    creditLine: text("credit_line").notNull(), // always shown under the embed
     startSeconds: integer("start_seconds"),
     sortOrder: integer("sort_order").notNull().default(0),
     url: text("url"),
@@ -239,6 +257,7 @@ export const videos = pgTable(
   ],
 );
 
+/* ---------- Charts: chart > series > points ---------- */
 export const charts = pgTable("charts", {
   id: text("id").primaryKey(),
   title: text("title").notNull(),
@@ -247,43 +266,40 @@ export const charts = pgTable("charts", {
   xLabel: text("x_label"),
   yLabel: text("y_label"),
   unit: text("unit"),
-  caveat: text("caveat"),
+  caveat: text("caveat"), // shown under the chart
   sortOrder: integer("sort_order").notNull().default(0),
 });
 
-export const chartSeries = pgTable(
-  "chart_series",
-  {
-    id: serial("id").primaryKey(),
-    chartId: text("chart_id")
-      .notNull()
-      .references(() => charts.id, { onDelete: "cascade" }),
-    name: text("name").notNull(),
-    kind: seriesKind("kind").notNull(),
-    sortOrder: integer("sort_order").notNull().default(0),
-  },
-);
+export const chartSeries = pgTable("chart_series", {
+  id: serial("id").primaryKey(),
+  chartId: text("chart_id")
+    .notNull()
+    .references(() => charts.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  kind: seriesKind("kind").notNull(), // 'target' draws a goal line
+  sortOrder: integer("sort_order").notNull().default(0),
+});
 
-export const chartPoints = pgTable(
-  "chart_points",
-  {
-    id: serial("id").primaryKey(),
-    seriesId: integer("series_id")
-      .notNull()
-      .references(() => chartSeries.id, { onDelete: "cascade" }),
-    xLabel: text("x_label").notNull(),
-    xDate: date("x_date", { mode: "string" }),
-    value: doublePrecision("value").notNull(),
-    qualifier: qualifier("qualifier").notNull().default("exact"),
-    badge: pinBadge("badge").notNull(),
-    note: text("note"),
-    sortOrder: integer("sort_order").notNull().default(0),
-    sourceId: text("source_id")
-      .notNull()
-      .references(() => sources.id, { onDelete: "restrict" }),
-  },
-);
+// Every point carries its own badge and source, because one chart can mix
+// claims of different strength.
+export const chartPoints = pgTable("chart_points", {
+  id: serial("id").primaryKey(),
+  seriesId: integer("series_id")
+    .notNull()
+    .references(() => chartSeries.id, { onDelete: "cascade" }),
+  xLabel: text("x_label").notNull(),
+  xDate: date("x_date", { mode: "string" }),
+  value: doublePrecision("value").notNull(),
+  qualifier: qualifier("qualifier").notNull().default("exact"),
+  badge: pinBadge("badge").notNull(),
+  note: text("note"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  sourceId: text("source_id")
+    .notNull()
+    .references(() => sources.id, { onDelete: "restrict" }),
+});
 
+/* ---------- Research gaps (feeds the methods page) ---------- */
 export const researchGaps = pgTable(
   "research_gaps",
   {
@@ -295,13 +311,14 @@ export const researchGaps = pgTable(
     status: gapStatus("status").notNull().default("open"),
     sortOrder: integer("sort_order").notNull().default(0),
   },
-  (table) => [
-    check("research_gaps_id_slug", sql`${table.id} ~ '^[a-z0-9]+(-[a-z0-9]+)*$'`),
-  ],
+  (table) => [check("research_gaps_id_slug", sql`${table.id} ~ '^[a-z0-9]+(-[a-z0-9]+)*$'`)],
 );
 
+/* ---------- Seed bookkeeping ---------- */
+// One row per seed run. counts is compared with your data files at launch.
 export const seedRuns = pgTable("seed_runs", {
   id: serial("id").primaryKey(),
   gitSha: text("git_sha"),
   seededAt: timestamp("seeded_at", { withTimezone: true }).notNull().defaultNow(),
+  counts: jsonb("counts").notNull(),
 });

@@ -10,9 +10,8 @@ Requirements: Node.js and pnpm.
 
 ```bash
 pnpm install
-cp .env.example .env
-pnpm db:setup-local       # starts local Postgres and creates the roles/database
-pnpm db:migrate           # applies committed SQL migrations
+cp .env.supabase .env
+pnpm db:migrate:prod      # applies committed SQL migrations to Supabase
 pnpm snapshot:seed
 pnpm dev
 ```
@@ -28,18 +27,18 @@ pin records under `data/`, then rerun `pnpm snapshot:seed`.
 
 `src/db/schema.ts` defines the Postgres schema. Commit generated SQL migrations under `drizzle/`;
 runtime code never runs migrations. The app uses `DATABASE_URL` with the read-only `anino_app`
-role. `DATABASE_URL_MIGRATE` is reserved for migrations, seed scripts, and tests, and must never
-be set in Coolify.
+role. `DATABASE_URL_MIGRATE` is reserved for migrations and seed scripts, and must never be set
+in the runtime deployment.
 
 To regenerate a migration after changing the schema:
 
 ```bash
 pnpm db:generate
-pnpm db:migrate
+pnpm db:migrate:prod
 ```
 
-Database-backed tests require the local database and both URLs in `.env`. CI creates a disposable
-Postgres instance and verifies that the committed migrations match the schema.
+Tests use the database-independent unit configuration. Run migrations and content publishing
+against Supabase explicitly with the `:prod` scripts.
 
 ### Seed files
 
@@ -70,37 +69,13 @@ load map tiles.
 ## Checks
 
 ```bash
-pnpm db:setup-local
-cp .env.example .env
 pnpm lint && pnpm typecheck && pnpm test && pnpm build
 pnpm test:e2e
 ```
 
-`pnpm test` applies migrations to the configured database and runs database integration tests, so
-Postgres must be available. `pnpm test:unit` runs the focused database-independent backend, fallback,
-and API contract tests. To verify the DB fallback, stop the local service with `docker compose stop db`,
-open `/api/health`, and confirm it returns HTTP 200 with `"db":"down"`.
+`pnpm test` runs the database-independent backend, fallback, API contract, and component tests.
 
 ## Deploy
 
-Push to `main`. GitHub Actions runs checks, builds an arm64 image, pushes it to GHCR, joins the
-Tailscale network briefly, and triggers Coolify on the Pi. The app health check is `/api/health`.
-Set `TS_OAUTH_CLIENT_ID`, `TS_OAUTH_SECRET`, `COOLIFY_URL`, `COOLIFY_TOKEN`, and
-`COOLIFY_APP_UUID` in the GitHub repository secrets. Coolify receives only the runtime
-`DATABASE_URL`; keep `DATABASE_URL_MIGRATE` out of the app container.
-
-For the Pi's existing Postgres instance, run `db/roles.sql` as the Postgres superuser with
-production passwords supplied as psql variables, then run `pnpm db:migrate` from a trusted machine
-using `DATABASE_URL_MIGRATE` over Tailscale. Give the app only its `anino_app` URL in Coolify.
-Restrict Postgres access to the Tailscale range for migrations and the Coolify Docker network for
-the app; never expose port 5432 to the LAN or internet.
-
-## Local container
-
-```bash
-docker build -t anino-test .
-docker run --rm -p 3000:3000 anino-test
-```
-
-Open `http://localhost:3000/api/health`; it returns HTTP 200 with `"ok":true` and a `"db"` field
-showing whether Postgres is reachable.
+Deploy the Next.js app with the Supabase `DATABASE_URL` runtime connection string. Keep
+`DATABASE_URL_MIGRATE` out of the runtime deployment.

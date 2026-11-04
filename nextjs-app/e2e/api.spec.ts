@@ -1,20 +1,34 @@
-// What this file does: checks the home page and pin APIs in a real browser server.
+// What this file does: checks the pages and APIs in a real server.
+// It no longer expects an empty database: it checks shapes and statuses,
+// so it keeps passing once real pins are loaded.
 import { expect, test } from "@playwright/test";
 
-test("home route renders the explorer", async ({ request }) => {
+test("home route renders the site title", async ({ request }) => {
   const response = await request.get("/");
   expect(response.ok()).toBeTruthy();
-  expect(await response.text()).toContain("A map of promises and records");
+  expect(await response.text()).toContain("Anino ng Ani");
 });
 
-test("pins API serves a valid empty snapshot and rejects malformed months", async ({ request }) => {
+test("charts and methods pages render", async ({ request }) => {
+  const charts = await request.get("/charts");
+  expect(charts.ok()).toBeTruthy();
+  expect(await charts.text()).toContain("Charts");
+
+  const methods = await request.get("/methods");
+  expect(methods.ok()).toBeTruthy();
+  expect(await methods.text()).toContain("Methods and sources");
+});
+
+test("pins API returns a valid response and rejects malformed months", async ({ request }) => {
   const response = await request.get("/api/pins?month=1975-06");
   expect(response.ok()).toBeTruthy();
-  expect(await response.json()).toMatchObject({
-    count: 0,
+  const body = await response.json();
+  expect(body).toMatchObject({
     filters: { month: "1975-06", mode: "range", families: [], provinces: [], today: false },
-    pins: [],
   });
+  // Check the shape, not a fixed count, so the test survives real data.
+  expect(typeof body.count).toBe("number");
+  expect(body.pins).toHaveLength(body.count);
 
   const invalidMonth = await request.get("/api/pins?month=June-1975");
   expect(invalidMonth.status()).toBe(400);

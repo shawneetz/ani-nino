@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "id": "pd-27",
+    "title": "Presidential Decree No. 27",
+    "publisher": "Official Gazette",
+    "kind": "law_or_decree",
+    "publishedYear": 1972
+  },
+  {
+    "id": "bulatlat-hacienda-yulo",
+    "title": "Hacienda Yulo",
+    "publisher": "Bulatlat",
+    "kind": "advocacy_publication",
+    "note": "Add the URL and accessedOn date when you confirm the article."
+  },
+  {
+    "id": "bulatlat-yulo-hunger-strike-2010",
+    "title": "Hacienda Yulo hunger strike warning",
+    "publisher": "Bulatlat",
+    "kind": "advocacy_publication",
+    "publishedYear": 2010,
+    "note": "Add the URL and accessedOn date when you confirm the article."
+  }
+]

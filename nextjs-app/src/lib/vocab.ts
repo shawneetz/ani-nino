@@ -1,35 +1,68 @@
-// What this file does: keeps family, province, evidence, and status labels in one place.
+// What this file does: keeps every label, color and definition in one place.
+// The legend, filters, detail panel and methods page all read from here,
+// so the wording can never differ between screens.
 import type { BadgeKind, Province, SourceKind, Status } from "./enums";
-import { PROVINCES } from "./enums";
 
+// The six program families. The key is stored in the database;
+// the label and color are only for display.
 export const FAMILIES = {
-  land_reform: { label: "Land reform", color: "#b45309" },
-  export_tax_monopoly: { label: "Export taxes and monopolies", color: "#7c3aed" },
-  infrastructure: { label: "Infrastructure", color: "#0369a1" },
-  displacement: { label: "Displacement", color: "#be123c" },
-  labor: { label: "Labor", color: "#047857" },
-  public_services: { label: "Public services", color: "#4f46e5" },
+  land_reform: {
+    label: "Land reform",
+    color: "#b45309",
+    description: "Land transfer, tenancy and land conversion.",
+  },
+  credit_production: {
+    label: "Credit and production",
+    color: "#1d4ed8",
+    description: "Loans, research and the rice production package.",
+  },
+  organizing: {
+    label: "Farmer organizing",
+    color: "#15803d",
+    description: "Cooperatives and farmer associations set up under the programs.",
+  },
+  export_tax_monopoly: {
+    label: "Export taxes and monopolies",
+    color: "#7c3aed",
+    description: "Levies, monopolies and control over export crops and the lake.",
+  },
+  markets_prices: {
+    label: "Markets and prices",
+    color: "#0d9488",
+    description: "Where farmers and fisherfolk sold, and at what price.",
+  },
+  displacement: {
+    label: "Displacement",
+    color: "#be123c",
+    description: "People moved off land or water for other uses.",
+  },
 } as const;
 
 export type Family = keyof typeof FAMILIES;
 
-const provinceNames: Record<Province, string> = Object.fromEntries(
-  PROVINCES.map((province) => [
-    province,
-    province.split("-").map((part) => part[0].toUpperCase() + part.slice(1)).join(" "),
-  ]),
-) as Record<Province, string>;
-provinceNames["metro-manila"] = "Metro Manila";
+export const PROVINCE_LABELS: Record<Province, string> = {
+  cavite: "Cavite",
+  laguna: "Laguna",
+  batangas: "Batangas",
+  rizal: "Rizal",
+  quezon: "Quezon",
+};
 
-export const PROVINCE_LABELS = provinceNames;
-
+// Short label shown on each pin.
 export const BADGE_LABELS: Record<BadgeKind, string> = {
-  law_or_decree: "Law or decree",
-  court_record: "Court record",
-  government_record: "Government record",
-  academic_research: "Academic research",
+  official: "Official record",
+  independent_record: "Independent record",
   advocacy_report: "Advocacy report",
-  news_report: "News report",
+  supporters_claim: "Supporters' claim",
+};
+
+// Longer definition shown in the legend and on the methods page.
+export const BADGE_DEFINITIONS: Record<BadgeKind, string> = {
+  official: "The government's own documents or figures.",
+  independent_record:
+    "Court decisions, archives or academic research not produced by a party to the claim.",
+  advocacy_report: "Reporting by groups that advocate a position.",
+  supporters_claim: "Claims made by those who ran or promoted the program.",
 };
 
 export const STATUS_LABELS: Record<Status, string> = {
