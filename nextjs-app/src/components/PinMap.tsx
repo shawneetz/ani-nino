@@ -1,6 +1,8 @@
 // What this file does: displays the visible pins on a MapLibre map of CALABARZON.
 // Marker styles: filled = verified, hollow ring = lead, dashed border = approximate place.
 // Map tiles come from OpenFreeMap (free, no API key).
+// New: if the map style fails to load, a clear message is shown instead of
+// an endless "Loading map…".
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -9,7 +11,7 @@ import type { Map as MapLibreMap, Marker } from "maplibre-gl";
 import { APPROXIMATE_PRECISIONS } from "@/components/pin-detail/detail-labels";
 import type { ExplorerPin } from "@/lib/map-types";
 
-// OpenFreeMap style URL. It includes its own attribution. Check their terms before launch.
+// OpenFreeMap style URL. It includes its own attribution.
 const MAP_STYLE = "https://tiles.openfreemap.org/styles/positron";
 const CALABARZON_CENTER: [number, number] = [121.2, 14.05];
 
@@ -52,6 +54,7 @@ export function PinMap({ pins, familyColors, selectedPinId, onSelectPin }: Props
   const mapRef = useRef<MapLibreMap | null>(null);
   const markersRef = useRef<Marker[]>([]);
   const [mapReady, setMapReady] = useState(false);
+  const [mapFailed, setMapFailed] = useState(false);
 
   // Keep the newest callback and pins in refs. This lets the map be created ONCE,
   // instead of being rebuilt every time the URL (and so the callback) changes.
@@ -77,9 +80,20 @@ export function PinMap({ pins, familyColors, selectedPinId, onSelectPin }: Props
     });
     mapRef.current = map;
 
-    const onLoad = () => setMapReady(true);
+    let loaded = false;
+    const onLoad = () => {
+      loaded = true;
+      setMapReady(true);
+    };
+    // Errors before the first load (bad style URL, blocked network) mean no map.
+    // Later tile errors are ignored so one missing tile does not hide the map.
+    const onError = (event: maplibregl.ErrorEvent) => {
+      console.error("[map]", event.error?.message ?? event);
+      if (!loaded) setMapFailed(true);
+    };
     const onMapClick = () => onSelectRef.current(null);
     map.on("load", onLoad);
+    map.on("error", onError);
     map.on("click", onMapClick);
 
     const resizeObserver = new ResizeObserver(() => map.resize());
@@ -88,6 +102,7 @@ export function PinMap({ pins, familyColors, selectedPinId, onSelectPin }: Props
     return () => {
       resizeObserver.disconnect();
       map.off("load", onLoad);
+      map.off("error", onError);
       map.off("click", onMapClick);
       markersRef.current.forEach((marker) => marker.remove());
       markersRef.current = [];
@@ -134,12 +149,17 @@ export function PinMap({ pins, familyColors, selectedPinId, onSelectPin }: Props
       data-map-ready={String(mapReady)}
       data-pin-count={pins.length}
       aria-label="Map of selected pins"
-      className="relative h-[50vh] min-h-[360px] overflow-hidden rounded-xl border border-neutral-300 bg-neutral-100 lg:h-[70vh]"
+      className="relative h-[50vh] min-h-[320px] overflow-hidden rounded-xl border border-neutral-300 bg-neutral-100 lg:h-[70vh]"
     >
       <div ref={containerRef} className="absolute inset-0" />
-      {!mapReady && (
+      {!mapReady && !mapFailed && (
         <p className="absolute left-3 top-3 rounded bg-white/90 px-3 py-2 text-sm text-neutral-700">
-          Loading map… The list of pins works even if the map does not load.
+          Loading map…
+        </p>
+      )}
+      {mapFailed && !mapReady && (
+        <p className="absolute left-3 top-3 right-3 rounded bg-white/95 px-3 py-2 text-sm text-neutral-800">
+          The map could not load. The list of pins below still works.
         </p>
       )}
       {mapReady && pins.length === 0 && (
