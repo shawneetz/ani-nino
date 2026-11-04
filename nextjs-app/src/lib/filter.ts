@@ -1,6 +1,5 @@
-// What this file does: decides which pins are visible for a given month and filters.
-// The list, the map, the slider count and /api/pins ALL use this one function.
-// What this file does: the one filter function used by the map, list and count.
+// What this file does: shared filter logic for the map, list and count, plus
+// helpers that read and write filters in the URL.
 import {
   FIRST_YEAR,
   LAST_YEAR,
@@ -9,28 +8,6 @@ import {
   type Province,
   type Topic,
 } from "./vocab";
-import type { Layer } from "./enums";
-import type { Family } from "./vocab";
-export const SLIDER_START_MONTH = "1972-09";
-export const SLIDER_END_MONTH = "1986-02";
-export const POINT_EVENT_LINGER_MONTHS = 11;
-export type FilterMode = "range" | "cumulative";
-export interface PinFilters { month?: string | null; mode?: FilterMode; families?: string[]; provinces?: string[]; today?: boolean; pointEventLingerMonths?: number; }
-export interface FilterablePin { layer: Layer; family: Family; secondaryFamilies: Family[]; startDate: string; endDate: string | null; locations: { province: Province }[]; }
-function addMonths(date: string, count: number): string { const total = Number(date.slice(0, 4)) * 12 + Number(date.slice(5, 7)) - 1 + count; const year = Math.floor(total / 12); const month = ((total % 12) + 12) % 12; return `${year}-${String(month + 1).padStart(2, "0")}-01`; }
-export function visiblePins<T extends FilterablePin>(pins: readonly T[], filters: PinFilters = {}): T[] {
-  const { month = null, mode = "range", families = [], provinces = [], today = false } = filters;
-  const linger = filters.pointEventLingerMonths ?? POINT_EVENT_LINGER_MONTHS;
-  if (month !== null && !/^\d{4}-(0[1-9]|1[0-2])$/.test(month)) throw new RangeError(`Invalid month "${month}", expected YYYY-MM`);
-  if (!Number.isInteger(linger) || linger < 0) throw new RangeError("pointEventLingerMonths must be a non-negative integer");
-  const monthDate = month === null ? null : `${month}-01`;
-  return pins.filter((pin) => {
-    if (pin.layer === "today") { if (!today) return false; }
-    else if (monthDate !== null && (pin.startDate > monthDate || (mode !== "cumulative" && pin.endDate !== null && (pin.endDate === pin.startDate ? addMonths(pin.endDate, linger) : pin.endDate) < monthDate))) return false;
-    if (families.length > 0 && !families.includes(pin.family) && !pin.secondaryFamilies.some((family) => families.includes(family))) return false;
-    return provinces.length === 0 || pin.locations.some((location) => provinces.includes(location.province));
-  });
-}
 
 export type Filterable = {
   startYear: number;
@@ -38,6 +15,7 @@ export type Filterable = {
   topic: Topic;
   places: { province: Province }[];
 };
+
 export type Filters = { year: number | null; topics: Topic[]; provinces: Province[] };
 export const EMPTY_FILTERS: Filters = { year: null, topics: [], provinces: [] };
 
@@ -45,11 +23,14 @@ export function isActiveInYear(p: Filterable, year: number): boolean {
   return p.startYear <= year && year <= (p.endYear ?? LAST_YEAR);
 }
 
+// The one filter used everywhere. Empty topic/province lists mean no restriction.
 export function visiblePrograms<T extends Filterable>(programs: T[], f: Filters): T[] {
   return programs.filter((p) => {
     if (f.year !== null && !isActiveInYear(p, f.year)) return false;
     if (f.topics.length > 0 && !f.topics.includes(p.topic)) return false;
-    if (f.provinces.length > 0 && !p.places.some((pl) => f.provinces.includes(pl.province))) return false;
+    if (f.provinces.length > 0 && !p.places.some((place) => f.provinces.includes(place.province))) {
+      return false;
+    }
     return true;
   });
 }

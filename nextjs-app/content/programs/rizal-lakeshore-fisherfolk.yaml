@@ -1,0 +1,19 @@
+slug: rizal-lakeshore-fisherfolk
+title: Rizal lakeshore fisherfolk and the fishpens
+when: 1975 onward
+topic: displacement
+status: checking
+startYear: 1975
+endYear: null
+places:
+  - { name: Binangonan, province: rizal, lat: 14.4639, lng: 121.1925, approximate: true }
+  - { name: Cardona, province: rizal, lat: 14.4864, lng: 121.2275, approximate: true }
+  - { name: Morong, province: rizal, lat: 14.5175, lng: 121.2392, approximate: true }
+promised: The Laguna Lake Development Authority was given wider powers over the lake so it could be developed for fish, water and other uses.
+happened: Towns on the Rizal side of the lake share the same shoreline as the Laguna fishpens. How the fishpens affected fisherfolk in these towns is still being checked.
+question: Find accounts or records from Binangonan, Cardona or Morong about fishpens and small fisherfolk.
+sources:
+  - title: Presidential Decree No. 813
+    publisher: Official Gazette
+    voice: official
+    backs: promise

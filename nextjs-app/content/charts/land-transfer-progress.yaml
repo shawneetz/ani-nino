@@ -1,0 +1,7 @@
+# What this file does: one chart. Add points as sourced numbers become available.
+id: land-transfer-progress
+title: "Land transfer: goal versus certificates issued"
+description: What the government aimed for compared with what its own records show.
+unit: tenants
+caveat: Government counts show what was counted, not who was left out.
+points: []
