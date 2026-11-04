@@ -1,8 +1,10 @@
+// What this file does: tests the shared filter that decides which pins are visible.
 import { describe, expect, it } from "vitest";
 import { visiblePins, type FilterablePin } from "./filter";
 
 type TestPin = FilterablePin & { id: string };
 
+// Builds a pin with sensible defaults. Each test changes only what it needs.
 function pin(id: string, overrides: Partial<TestPin> = {}): TestPin {
   return {
     id,
@@ -17,7 +19,7 @@ function pin(id: string, overrides: Partial<TestPin> = {}): TestPin {
 }
 
 const ended = pin("ended", { startDate: "1972-11-01", endDate: "1973-12-01" });
-const open = pin("open", { family: "infrastructure", startDate: "1975-01-01" });
+const open = pin("open", { family: "organizing", startDate: "1975-01-01" });
 const event = pin("event", {
   family: "displacement",
   startDate: "1979-03-01",
@@ -25,12 +27,12 @@ const event = pin("event", {
   locations: [{ province: "laguna" }, { province: "quezon" }],
 });
 const secondary = pin("secondary", {
-  family: "labor",
+  family: "markets_prices",
   secondaryFamilies: ["export_tax_monopoly"],
   startDate: "1978-10-01",
   endDate: "1979-12-01",
 });
-const today = pin("today", { layer: "today", family: "labor", startDate: "2021-01-01" });
+const today = pin("today", { layer: "today", family: "organizing", startDate: "2021-01-01" });
 const all = [ended, open, event, secondary, today];
 const ids = (pins: TestPin[]) => pins.map(({ id }) => id);
 
@@ -51,8 +53,19 @@ describe("visiblePins", () => {
     expect(ids(visiblePins(all, { provinces: ["quezon"] }))).toEqual(["event"]);
   });
 
-  it("allows explicit linger for point events and keeps Today separate", () => {
-    expect(ids(visiblePins(all, { month: "1980-02", pointEventLingerMonths: 11 }))).toContain("event");
+  it("keeps a one-off event visible for 12 months by default", () => {
+    expect(ids(visiblePins(all, { month: "1979-03" }))).toContain("event");
+    expect(ids(visiblePins(all, { month: "1980-02" }))).toContain("event");
+    expect(ids(visiblePins(all, { month: "1980-03" }))).not.toContain("event");
+  });
+
+  it("lets a caller turn the linger off", () => {
+    expect(
+      ids(visiblePins(all, { month: "1979-04", pointEventLingerMonths: 0 })),
+    ).not.toContain("event");
+  });
+
+  it("keeps Today pins separate from the slider", () => {
     expect(ids(visiblePins(all, { month: "1972-09", today: true }))).toEqual(["today"]);
   });
 

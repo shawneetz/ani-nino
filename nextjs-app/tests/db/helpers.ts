@@ -1,19 +1,25 @@
+// What this file does: shared helpers for the database tests
+// (connections, rollback wrapper, and valid example rows to break on purpose).
 import "dotenv/config";
 import { Pool, type PoolClient } from "pg";
 import { expect } from "vitest";
+import { assertLocalDb } from "../../src/db/assert-local";
 
-function requiredEnv(name: string): string {
+// Reads a required env var and refuses Supabase URLs.
+function requiredLocalUrl(name: string): string {
   const value = process.env[name];
   if (!value) throw new Error(`${name} is required for database tests`);
+  assertLocalDb(value, name);
   return value;
 }
 
+// ownerPool can write (used to insert test rows); appPool is the read-only role.
 export const ownerPool = new Pool({
-  connectionString: requiredEnv("DATABASE_URL_MIGRATE"),
+  connectionString: requiredLocalUrl("DATABASE_URL_MIGRATE"),
   max: 4,
 });
 export const appPool = new Pool({
-  connectionString: requiredEnv("DATABASE_URL"),
+  connectionString: requiredLocalUrl("DATABASE_URL"),
   max: 2,
 });
 
@@ -21,6 +27,7 @@ export async function closePools() {
   await Promise.all([ownerPool.end(), appPool.end()]);
 }
 
+// Runs a test inside a transaction and always rolls it back.
 export async function withRollback(fn: (client: PoolClient) => Promise<void>) {
   const client = await ownerPool.connect();
   try {
@@ -32,10 +39,12 @@ export async function withRollback(fn: (client: PoolClient) => Promise<void>) {
   }
 }
 
+// Postgres error codes we expect to see.
 export const CHECK_VIOLATION = "23514";
 export const UNIQUE_VIOLATION = "23505";
 export const FK_VIOLATION = "23503";
 
+// Expects the statement to fail with a specific Postgres error.
 export async function expectDbError(
   statement: Promise<unknown>,
   code: string | string[],
@@ -64,9 +73,11 @@ export function insert(client: PoolClient, table: string, row: Row) {
   );
 }
 
+// Unique ids so tests never collide with each other.
 let counter = 0;
 export const uid = (prefix: string) => `${prefix}-${++counter}-${Date.now().toString(36)}`;
 
+// A valid martial-law pin. Tests override one field to break one rule.
 export const validPin = (overrides: Row = {}): Row => ({
   id: uid("pin"),
   layer: "martial_law",
@@ -77,7 +88,7 @@ export const validPin = (overrides: Row = {}): Row => ({
   date_label: "Jun 1975 to Jun 1976",
   promise: "What the program said it would do.",
   record: "What the record shows.",
-  badge: "government_record",
+  badge: "official",
   status: "lead",
   open_question: "Find the exact date.",
   ...overrides,

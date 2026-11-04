@@ -1,3 +1,4 @@
+// What this file does: checks the query functions against a real (local) database.
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { snapshotSchema } from "../lib/api-schemas";
 import { deleteFixtures, fixtureIds, insertFixtures, requireTestDbUrl } from "./test-fixtures";
@@ -19,6 +20,7 @@ afterAll(async () => {
   vi.unstubAllEnvs();
 });
 
+// Start every test with an empty query cache.
 beforeEach(() => queries.clearQueryCache());
 
 describe("getPin", () => {
@@ -58,12 +60,14 @@ describe("getPins", () => {
     expect(await hasPin("1975-12")).toBe(true);
     expect(await hasPin("1976-01")).toBe(false);
     expect(await hasPin("1972-12")).toBe(false);
-    expect((await queries.getPins({ families: ["export_tax_monopoly"] })).some(
-      (pin) => pin.id === ids.past,
-    )).toBe(true);
-    expect((await queries.getPins({ provinces: ["quezon"] })).some(
-      (pin) => pin.id === ids.past,
-    )).toBe(true);
+    expect(
+      (await queries.getPins({ families: ["export_tax_monopoly"] })).some(
+        (pin) => pin.id === ids.past,
+      ),
+    ).toBe(true);
+    expect(
+      (await queries.getPins({ provinces: ["quezon"] })).some((pin) => pin.id === ids.past),
+    ).toBe(true);
   });
 });
 
@@ -77,7 +81,7 @@ describe("chart and methods queries", () => {
     expect(chart?.series[0].points[1]).toMatchObject({
       value: 210_054,
       qualifier: "at_most",
-      badge: "government_record",
+      badge: "official",
       source: { id: ids.promiseSource, title: "Fixture decree" },
     });
   });
