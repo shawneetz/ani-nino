@@ -4,10 +4,8 @@
   "private": true,
   "packageManager": "pnpm@12.14.0",
   "scripts": {
-    "copy:worker": "node scripts/copy-maplibre-worker.mjs",
-    "postinstall": "node scripts/copy-maplibre-worker.mjs",
-    "dev": "node scripts/copy-maplibre-worker.mjs && next dev",
-    "build": "node scripts/copy-maplibre-worker.mjs && tsx scripts/check-content.ts && next build",
+    "dev": "next dev",
+    "build": "tsx scripts/check-content.ts && next build",
     "start": "node .next/standalone/server.js",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
@@ -18,7 +16,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "maplibre-gl": "^6.15.0",
+    "maplibre-gl": "^5.0.0",
     "next": "^15.5.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
