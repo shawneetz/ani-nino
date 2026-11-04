@@ -1,19 +1,45 @@
+# What this file does: program page for the Rizal side of the Laguna de Bay fishpens.
+# It stays "still checking" because no fisherfolk accounts from Binangonan, Cardona or Morong were found.
 slug: rizal-lakeshore-fisherfolk
 title: Rizal lakeshore fisherfolk and the fishpens
-when: 1975 onward
+when: 1970s onward
 topic: displacement
 status: checking
-startYear: 1975
+startYear: 1972
 endYear: null
 places:
   - { name: Binangonan, province: rizal, lat: 14.4639, lng: 121.1925, approximate: true }
   - { name: Cardona, province: rizal, lat: 14.4864, lng: 121.2275, approximate: true }
   - { name: Morong, province: rizal, lat: 14.5175, lng: 121.2392, approximate: true }
-promised: The Laguna Lake Development Authority was given wider powers over the lake so it could be developed for fish, water and other uses.
-happened: Towns on the Rizal side of the lake share the same shoreline as the Laguna fishpens. How the fishpens affected fisherfolk in these towns is still being checked.
-question: Find accounts or records from Binangonan, Cardona or Morong about fishpens and small fisherfolk.
+promised: "The Laguna Lake Development Authority was given wider powers over the lake so it could be developed for fish, water and other uses."
+happened: "LLDA built its first pilot fishpen at Looc, Cardona, around 1970 to 1971, so the Rizal shore is where the pens began. A 2017 Inquirer report says the lake's fish farming began in the early 1970s with businessmen, mostly from Malabon and Rizal. How the pens affected small fisherfolk in Binangonan, Cardona and Morong is still being checked."
+question: "Find accounts or records from Binangonan, Cardona or Morong about fishpens and small fisherfolk. Two leads I have not read: a 1981 UP thesis on the Biyayang Dagat credit program (https://selib.upd.edu.ph/etdir/items/25e1c415-707d-495e-a9af-0b2bf30cc703) and a 1988 UPLB thesis on fishermen-borrowers under the DBP-LLDA financing program (https://www.ukdr.uplb.edu.ph/etd-undergrad/3148)."
+since:
+  - year: 2017
+    text: "The DENR and LLDA dismantled a 100-hectare fish pen in waters off Cardona, Rizal."
+    source:
+      title: Gov't starts dismantling fish pens in Laguna de Bay
+      publisher: Philippine Daily Inquirer
+      voice: independent
+      cite: "January 27, 2017."
+      url: "https://newsinfo.inquirer.net/865905/govt-starts-dismantling-fish-pens-in-laguna-de-bay"
+      accessed: "2026-11-05"
 sources:
   - title: Presidential Decree No. 813
     publisher: Official Gazette
     voice: official
     backs: promise
+  - title: Survey of Laguna de Bay fishpen operators, 1974 to 1975 (AgEcon Search record 321635)
+    publisher: AgEcon Search
+    voice: independent
+    cite: "First LLDA pen at Looc, Cardona, Rizal. Title not captured; check before publishing."
+    url: "https://ageconsearch.umn.edu/record/321635/files/giannini-misc-767.pdf"
+    accessed: "2026-11-05"
+    backs: happened
+  - title: Fish pens strangle Laguna de Bay
+    publisher: Philippine Daily Inquirer
+    voice: independent
+    cite: "January 3, 2017."
+    url: "https://newsinfo.inquirer.net/858767/fish-pens-strangle-laguna-de-bay"
+    accessed: "2026-11-05"
+    backs: happened

@@ -1,5 +1,5 @@
-# What this file does: the Pila farmer-association study, a rare look at why
-# farmers joined a Samahang Nayon.
+# What this file does: program page for Samahang Nayon farmer associations (PD 175, LOI 23).
+# It stays "still checking" because the counts found are regional, not Laguna-only.
 slug: laguna-samahang-nayon
 title: Samahang Nayon farmer associations in Laguna
 when: 1973 onward
@@ -8,12 +8,29 @@ status: checking
 startYear: 1973
 endYear: null
 places:
-  - { name: Pila, province: laguna, lat: 14.2331, lng: 121.3631, approximate: true }
-promised: Each village would form a Samahang Nayon, a farmers' association meant to pool savings, credit and marketing.
-happened: How many associations existed in Laguna, and how they worked for farmers, is still being checked.
-question: Was membership required to receive land certificates? Find Laguna counts and a study of how the associations worked.
+  - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
+  - { name: Victoria, province: laguna, lat: 14.225, lng: 121.325, approximate: true }
+promised: "Each barrio would form a Samahang Nayon, an association of small farmers meant to pool savings, credit and marketing. PD 175 (April 14, 1973) created the system, and LOI 23 (July 9, 1973) set the rules."
+happened: "Members had to finish pre-membership training, pledge improved farming and savings, and pay fees. A Barrio Guarantee Fund guaranteed the land payments of members under PD 27. PD 27's text says no title is issued until the tenant is a full member of a recognized cooperative. The Martial Law Museum article goes further and says membership came before even the certificate. It also says some farmers avoided joining because of the money obligations. Region IV (Southern Tagalog) had 1,365 associations with 60,043 members in 1974 and 1,879 with 86,535 members in 1979. These are regional figures, not Laguna-only counts."
+question: "Find Laguna counts of associations and members. The SEARCA and UPLBCA Pila Social Laboratory study (1973 to 1974) is a lead I have not verified."
 sources:
-  - title: Presidential Decree No. 175
-    publisher: Official Gazette
+  - title: Presidential Decree No. 27
+    publisher: Official Gazette (text on Lawphil)
     voice: official
+    url: "https://www.lawphil.net/statutes/presdecs/pd1972/pd_27_1972.html"
+    accessed: "2026-11-05"
+    backs: context
+  - title: Letter of Implementation No. 23, Regulations on Samahang Nayon and Kilusang Bayan
+    publisher: Supreme Court E-Library (Official Gazette text)
+    voice: official
+    cite: "July 9, 1973. Implements PD 175."
+    url: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/33/22666"
+    accessed: "2026-11-05"
     backs: promise
+  - title: "The Marcos Agrarian Reform Program: Promises and Contradictions"
+    publisher: Martial Law Museum
+    voice: independent
+    cite: "Table 2, registered Samahang Nayon and members 1974 to 1979, from LUSSA 1982."
+    url: "https://martiallawmuseum.ph/?p=1149"
+    accessed: "2026-11-05"
+    backs: happened

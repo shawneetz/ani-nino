@@ -1,16 +1,45 @@
-# What this file does: Masagana 99 in Laguna. The 3.7% figure is national and
-# still needs its source attached.
+# What this file does: program page for Masagana 99 rice credit, with the Laguna angle (UPLB).
+# It stays "still checking" because Laguna-only loan and repayment figures were not found.
 slug: laguna-masagana-99
 title: Masagana 99 rice credit in Laguna
 when: 1973 onward
 topic: support
 status: checking
 startYear: 1973
-endYear: null
+endYear: 1984
 places:
   - { name: Los Baños, province: laguna, lat: 14.1699, lng: 121.2431, approximate: true }
   - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
   - { name: Santa Cruz, province: laguna, lat: 14.2811, lng: 121.4144, approximate: true }
-promised: Loans, seeds and fertilizer for farmers who adopted high-yielding rice varieties, so the country could grow enough rice for itself.
-happened: One national figure says the program reached only 3.7% of small rice farmers by 1980. Who in Laguna got loans, and how many farmers could repay them, is still being checked.
-question: Attach the source for the 3.7% figure, then find Laguna loan and repayment figures.
+promised: "Loans, seed, fertilizer and chemicals for farmers who adopted high-yielding rice, aiming at 99 cavans of palay per hectare, up from about 40."
+happened: "Masagana 99 began on May 21, 1973. The government tapped academics and scientists, many from UPLB, to design and run it. Nationally, about 400,000 farmers borrowed in the first phase (May to October 1973) and about 530,000 in the third (May to October 1974). By the 14th phase (November 1979 to April 1980) only 54,250 borrowed. Repayment fell as well; the Charts page shows the table figures, and sources disagree on exact rates. National Scientist Emil Javier, as reported by Rappler, put the share of small rice farmers who could borrow at 3.7 percent by 1980. The program stopped in 1984. Laguna-only loan and repayment figures have not been found."
+question: "Find Laguna loan and repayment figures from rural banks, PNB or the Agricultural Credit Administration, and a study of how Laguna farmers experienced the program."
+sources:
+  - title: "'Success' of Masagana 99 all in Imee's head (UP researchers)"
+    publisher: UP Diktadura archive
+    voice: independent
+    cite: "Uses Esguerra (1981), Philippine Sociological Review. Repayment 93.3 percent in 1973 to 45.8 percent in 1979; 54,250 borrowers in phase 14."
+    url: "https://diktadura.upd.edu.ph/2022/09/18/success-of-masagana-99-all-in-imees-head/"
+    accessed: "2026-11-05"
+    backs: happened
+  - title: "The Marcos Agrarian Reform Program: Promises and Contradictions"
+    publisher: Martial Law Museum
+    voice: independent
+    cite: "Table 3, status of the Masagana 99 credit program after phase 12."
+    url: "https://martiallawmuseum.ph/?p=1149"
+    accessed: "2026-11-05"
+    backs: happened
+  - title: Masagana 99 both a success and a failure, experts say
+    publisher: UPLB
+    voice: independent
+    cite: "Repayment fell from about 90 percent to 35 percent or lower; UPLB academics helped create the program."
+    url: "https://uplb.edu.ph/all-news/masagana-99-both-a-success-and-a-failure-experts-say/"
+    accessed: "2026-11-05"
+    backs: context
+  - title: Masagana 99 and the proposed Masagana 150 (Rappler explainer)
+    publisher: Rappler
+    voice: independent
+    cite: "Quotes Emil Javier on the 3.7 percent figure. Headline not captured; check before publishing."
+    url: "https://www.rappler.com/?p=1956071"
+    accessed: "2026-11-05"
+    backs: happened

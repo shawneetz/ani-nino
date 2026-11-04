@@ -1,19 +1,30 @@
-# What this file does: the Mt. Makiling reservation and the resettlement committee
-# that followed. The Sampaloc, Quezon site is left for the Quezon starter pins.
+# What this file does: NEW program page for the Mt. Makiling kainginero resettlement.
+# The resettlement site was in Sampaloc, Quezon. Add that pin once its coordinates are sourced.
+# It stays "still checking" because the number of families resettled was not found.
 slug: laguna-makiling-resettlement
-title: Mt. Makiling resettlement
-when: 1976 to 1978
+title: Mt. Makiling kainginero resettlement
+when: 1976 onward
 topic: displacement
 status: checking
 startYear: 1976
-endYear: 1978
+endYear: null
 places:
-  - { name: Mt. Makiling, province: laguna, lat: 14.1355, lng: 121.1950, approximate: true }
-promised: A resettlement area would be set aside for people living on the Makiling lands.
-happened: Proclamation 1540 (April 1976) reserved 760 hectares in Sampaloc, Quezon. EO 494 (January 1978) created the Makiling Kainginero Resettlement Committee.
-question: Find who lived on the Makiling lands, how many moved, and what the resettlement site was like.
+  - { name: Mt. Makiling Forest Reserve, province: laguna, lat: 14.14, lng: 121.195, approximate: true }
+promised: "Proclamation 1540 (April 12, 1976) reserved 760 hectares of public land in Sampaloc, Quezon for resettlement. Executive Order 494 (January 6, 1978) created a Makiling Kainginero Resettlement Committee chaired by UPLB to plan and run it."
+happened: "The order told the committee to clear the resettlement area of trees, except those needed for riverbank protection. Money from the harvested timber went to the area's development, with UPLB as trustee. The area was cut out of the timber concession of the International Hardwood and Veneer Company of the Philippines. How many families were moved, and what became of them, has not been found."
+question: "Find the number of kainginero families resettled, and any account from the settlers or UPLB."
 sources:
-  - title: Proclamation 1540 and EO 494
-    publisher: Official Gazette
+  - title: Proclamation No. 1540
+    publisher: Official Gazette (text on Batas Natin)
     voice: official
+    cite: "April 12, 1976."
+    url: "https://batasnatin.com/laws/proc-1540-2"
+    accessed: "2026-11-05"
     backs: promise
+  - title: Executive Order No. 494
+    publisher: Official Gazette (text on Lawphil)
+    voice: official
+    cite: "January 6, 1978."
+    url: "https://www.lawphil.net/executive/execord/eo1978/eo_494_1978.html"
+    accessed: "2026-11-05"
+    backs: happened

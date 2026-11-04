@@ -1,19 +1,67 @@
+# What this file does: program page for Laguna de Bay fishpens and the rules around them.
+# Status is "confirmed": each claim was checked against the linked sources on 2026-11-05.
+# Who held the 1970s permits is still unknown, and gaps.yaml tracks that.
 slug: laguna-lake-fishpens
 title: Laguna de Bay fishpens
-when: 1975 onward
+when: 1970s onward
 topic: displacement
-status: checking
-startYear: 1975
+status: confirmed
+startYear: 1972
 endYear: null
 places:
   - { name: Santa Cruz lakeshore, province: laguna, lat: 14.2811, lng: 121.4144, approximate: true }
   - { name: Bay lakeshore, province: laguna, lat: 14.1833, lng: 121.2833, approximate: true }
   - { name: Calamba lakeshore, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
-promised: The Laguna Lake Development Authority was given wider powers over the lake so it could be developed for fish, water and other uses.
-happened: Fishpens spread across the lake during the 1970s. How permits and pen locations affected small fisherfolk is still being checked.
-question: Find permit records and an account from fisherfolk or a study on who lost access to the lake.
+promised: "The Laguna Lake Development Authority (LLDA) was given wider powers over the lake so it could be developed for fish, water and other uses. In 1984 the government said its policy was to democratize the lake's benefits by giving marginal users a chance to own, manage and run fishpens."
+happened: "LLDA set up its first pilot fishpen at Looc, Cardona, Rizal, around 1970 to 1971. A survey counted 993 pens covering 4,802 hectares by 1973. FAO figures show pen area growing from 40 hectares in 1971 to about 30,000 hectares by 1983. A United Nations University review says the early, uncontrolled pens clashed with small fishermen, who said the pens cut their fishing area. It adds that all of the rise in the lake's revenue from 1968 to 1973 went to pen owners. On October 9, 1978 a presidential directive ordered unpermitted fishpens destroyed and new permits suspended. Letter of Instructions 769 (November 16, 1978) set the rules for removing or restructuring pens. Letter of Instructions 1399 (April 11, 1984) ordered excess pen areas turned over to small fishermen's cooperatives, up to 30 hectares each. Who held the 1970s permits is not yet known."
+checkedOn: "2026-11-05"
+since:
+  - year: 2017
+    text: "The DENR and LLDA began dismantling big fish pens and cages in the lake, after a presidential order to give small fishermen access to their traditional fishing grounds."
+    source:
+      title: Gov't starts dismantling fish pens in Laguna de Bay
+      publisher: Philippine Daily Inquirer
+      voice: independent
+      cite: "January 27, 2017."
+      url: "https://newsinfo.inquirer.net/865905/govt-starts-dismantling-fish-pens-in-laguna-de-bay"
+      accessed: "2026-11-05"
 sources:
   - title: Presidential Decree No. 813
     publisher: Official Gazette
     voice: official
     backs: promise
+  - title: Letter of Instructions No. 769, Guidelines on removal or restructuring of fishpens in Laguna de Bay
+    publisher: Supreme Court E-Library (Official Gazette text)
+    voice: official
+    cite: "November 16, 1978. Recites the October 9, 1978 presidential directive."
+    url: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/34/14029"
+    accessed: "2026-11-05"
+    backs: happened
+  - title: Letter of Instructions No. 1399, Turn-over of excess fishpens to small fishermen's associations
+    publisher: Supreme Court E-Library (Official Gazette text)
+    voice: official
+    cite: "April 11, 1984."
+    url: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/34/31838"
+    accessed: "2026-11-05"
+    backs: promise
+  - title: Laguna de Bay fishpen operations (M. N. Delmendo)
+    publisher: FAO
+    voice: independent
+    cite: "Area from 40 hectares in 1971 to about 30,000 hectares in 1983. Title not captured; check before publishing."
+    url: "https://www.fao.org/4/ag162e/AG162E01.htm"
+    accessed: "2026-11-05"
+    backs: happened
+  - title: Laguna de Bay fishery chapter (UN University Press book 80346E, chapter 9)
+    publisher: United Nations University
+    voice: independent
+    cite: "Conflicts with small fishermen; lake revenue 1968 to 1973. Title not captured; check before publishing."
+    url: "https://archive.unu.edu/unupress/unupbooks/80346e/80346E09.htm"
+    accessed: "2026-11-05"
+    backs: happened
+  - title: Survey of Laguna de Bay fishpen operators, 1974 to 1975 (AgEcon Search record 321635)
+    publisher: AgEcon Search
+    voice: independent
+    cite: "993 pens and 4,802 hectares in 1973; first LLDA pen at Looc, Cardona, Rizal. Title not captured; check before publishing."
+    url: "https://ageconsearch.umn.edu/record/321635/files/giannini-misc-767.pdf"
+    accessed: "2026-11-05"
+    backs: happened

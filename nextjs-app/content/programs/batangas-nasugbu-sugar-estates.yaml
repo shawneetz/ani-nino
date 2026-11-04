@@ -1,3 +1,6 @@
+# What this file does: program page for Nasugbu sugar estates, which PD 27 left out.
+# Hacienda Looc and the Roxas haciendas (Palico, Banilad, Caylaway) are two different properties.
+# It stays "still checking" because nothing was found on what happened to sugar tenants before 1986.
 slug: batangas-nasugbu-sugar-estates
 title: Sugar estates in Nasugbu and PD 27
 when: 1972 onward
@@ -6,13 +9,63 @@ status: checking
 startYear: 1972
 endYear: null
 places:
-  - { name: Nasugbu, province: batangas, lat: 14.0722, lng: 120.6319, approximate: true }
+  - { name: Nasugbu, province: batangas, lat: 14.0722, lng: 121.6319, approximate: true }
   - { name: Tuy, province: batangas, lat: 14.0192, lng: 120.7289, approximate: true }
-promised: PD 27 covered tenants on private rice and corn lands.
-happened: Sugar lands were not on that list, so tenants on sugar estates in areas like Nasugbu fell outside it. What this meant for Nasugbu farmers is still being checked.
-question: Which Nasugbu estates were sugar, and what land reform reached their tenants before 1986? Find a study or record.
+promised: "PD 27 covered tenants on private rice and corn lands."
+happened: "PD 27 left out sugar, copra and other export-crop lands, so tenants on sugar estates in Nasugbu fell outside it. On November 28, 1975, Proclamation 1520 declared parts of Nasugbu and the Cavite towns of Maragondon and Ternate a tourism zone. Roxas and Co. later cited it to seek conversion of its three Nasugbu haciendas (Palico, Banilad and Caylaway); the Supreme Court's 2009 decision describes this. Hacienda Looc is a separate 8,650-hectare property. DAR issued 25 CLOAs for 3,981 hectares there in 1991 to 1993. What land reform reached Nasugbu sugar tenants before 1986 is still being checked."
+question: "Find a DAR record, court record or independent study on tenants of Roxas and Co. sugar lands in Nasugbu from 1972 to 1986. Also check an advocates' claim, which I could not find, that 1,282.98 hectares of Hacienda Looc were placed under agrarian reform early in martial law."
+since:
+  - year: 1991
+    text: "DAR issued 25 CLOAs covering 3,981.2806 hectares of Hacienda Looc between 1991 and 1993."
+    source:
+      title: Supreme Court decision, G.R. No. 152797 (2019)
+      publisher: Lawphil
+      voice: independent
+      url: "https://lawphil.net/judjuris/juri2019/sep2019/gr_152797_2019.html"
+      accessed: "2026-11-05"
+  - year: 2009
+    text: "The Court of Appeals dismissed the claim of 45 farmers over a 1,219-hectare part of Hacienda Looc, clearing the way for a golf course."
+    source:
+      title: Court of Appeals junks claim of 45 farmers in Nasugbu land case
+      publisher: Philstar
+      voice: independent
+      cite: "April 7, 2009."
+      url: "https://philstar.com/headlines/2009/04/07/455649/court-appeals-junks-claim-45-farmers-nasugbu-land-case"
+      accessed: "2026-11-05"
+  - year: 2024
+    text: "DAR upheld its order voiding CLOAs issued to agrarian reform beneficiaries in Nasugbu."
+    source:
+      title: DAR upholds order voiding Nasugbu CLOAs
+      publisher: Daily Tribune
+      voice: independent
+      cite: "June 10, 2024."
+      url: "https://tribune.net.ph/2024/06/10/dar-upholds-order-voiding-nasugbu-cloas"
+      accessed: "2026-11-05"
 sources:
   - title: Presidential Decree No. 27
-    publisher: Official Gazette
+    publisher: Official Gazette (text on Lawphil)
     voice: official
+    url: "https://www.lawphil.net/statutes/presdecs/pd1972/pd_27_1972.html"
+    accessed: "2026-11-05"
     backs: promise
+  - title: "The Marcos Agrarian Reform Program: Promises and Contradictions"
+    publisher: Martial Law Museum
+    voice: independent
+    cite: "PD 27 excluded sugar, copra, banana, tobacco and pineapple farmlands and plantations."
+    url: "https://martiallawmuseum.ph/?p=1149"
+    accessed: "2026-11-05"
+    backs: happened
+  - title: Roxas and Co. v. DAMBA-NFSW, G.R. No. 149548 (2009)
+    publisher: Supreme Court decision (ChanRobles)
+    voice: independent
+    cite: "Proclamation 1520 and the three Nasugbu haciendas."
+    url: "https://chanrobles.com/scdecisions/jurisprudence2009/dec2009/gr_149548_2009.php"
+    accessed: "2026-11-05"
+    backs: happened
+  - title: Paulino Reyes et al. v. Fil-Estate Properties, G.R. No. 148967 (2007)
+    publisher: Supreme Court E-Library
+    voice: independent
+    cite: "Hacienda Looc is an 8,650-hectare property in Nasugbu."
+    url: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/4/40975"
+    accessed: "2026-11-05"
+    backs: context

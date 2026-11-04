@@ -1,3 +1,5 @@
+# What this file does: program page for the Laiban and Kaliwa dam plans on the Kaliwa River.
+# It stays "still checking" because nothing was found on Dumagat communities before 1986.
 slug: rizal-kaliwa-laiban-dam
 title: Laiban and Kaliwa dam plans
 when: Late 1970s onward
@@ -7,7 +9,38 @@ startYear: 1979
 endYear: null
 places:
   - { name: Tanay, province: rizal, lat: 14.4975, lng: 121.2864, approximate: true }
-  - { name: Infanta, province: quezon, lat: 14.7439, lng: 121.6497, approximate: true }
-promised: Dams on the Kaliwa river were planned to supply water to Metro Manila.
-happened: The plans covered land where Dumagat communities live. What happened to them during the martial-law years is still being checked.
-question: Confirm when the planning began, and find sources on what the plans meant for Dumagat communities before 1986.
+  - { name: General Nakar, province: quezon, lat: 14.7667, lng: 121.6333, approximate: true }
+promised: "Dams on the Kaliwa River were planned to supply water to Metro Manila. In the 1979 and 2015 studies only the Laiban plan had hydropower."
+happened: "The Manila Water Supply III project, later called the Laiban Dam, was conceived in 1979 under Marcos, and the Inquirer says planning for a Laiban Dam in Tanay began that year. A Mongabay report says abuses and civil unrest halted construction. NEDA approved a smaller Kaliwa dam only in 2014. Its site lies in ancestral domain titled to the Dumagat-Remontado. What the plans meant for Dumagat communities before 1986 is still being checked."
+question: "Confirm what happened between 1979 and 1986 (the PCIJ Laiban Dam chronology, July 2009, is a lead I could not open), and find sources on what the plans meant for Dumagat communities."
+since:
+  - year: 2014
+    text: "NEDA approved construction of the Kaliwa dam, after the project was first proposed in the 1970s."
+    source:
+      title: Kaliwa Dam project pushing through, MWSS
+      publisher: Philstar
+      voice: independent
+      cite: "December 12, 2022."
+      url: "https://www.philstar.com/business/2022/12/12/2230129/kaliwa-dam-project-pushing-through-mwss"
+      accessed: "2026-11-05"
+sources:
+  - title: A Philippine tribe that defeated a dam prepares to fight its reincarnation
+    publisher: Mongabay (republished by Indigenous Peoples SDG)
+    voice: independent
+    cite: "Project conceived in 1979; ancestral domain title; Laiban alone had hydropower in both studies."
+    url: "https://www.indigenouspeoples-sdg.org/index.php/english/ttt/1249-a-philippine-tribe-that-defeated-a-dam-prepares-to-fight-its-reincarnation"
+    accessed: "2026-11-05"
+    backs: happened
+  - title: "Metro Manila water woes: Years of policy logjam lead to dry taps"
+    publisher: Philippine Daily Inquirer
+    voice: independent
+    cite: "Says planning for the Laiban Dam began in 1979."
+    url: "https://newsinfo.inquirer.net/?p=1099136"
+    accessed: "2026-11-05"
+    backs: promise
+  - title: Kaliwa Dam project pushing through, MWSS
+    publisher: Philstar
+    voice: independent
+    url: "https://www.philstar.com/business/2022/12/12/2230129/kaliwa-dam-project-pushing-through-mwss"
+    accessed: "2026-11-05"
+    backs: context

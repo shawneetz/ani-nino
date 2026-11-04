@@ -1,7 +1,33 @@
-# What this file does: one chart. Add points as sourced numbers become available.
+# What this file does: one chart comparing certificates issued with two government targets.
+# Both targets come from the same 1976 government report, so both are labeled official.
 id: land-transfer-progress
 title: "Land transfer: goal versus certificates issued"
 description: What the government aimed for compared with what its own records show.
 unit: tenants
-caveat: Government counts show what was counted, not who was left out.
-points: []
+caveat: Government counts show what was counted, not who was left out. The target fell after landholdings of seven hectares and below were set aside.
+points:
+  # Same count of 210,054 twice, once against each target.
+  - label: "Jan 1976 vs original target"
+    value: 210054
+    goal: 914914
+    qualifier: exact
+    note: "Original target was 914,914 tenants on 1,422,988 hectares."
+    source:
+      title: Removing roadblocks
+      publisher: The Republic (issue of May 16 to June 15, 1976)
+      voice: official
+      cite: "Progress report as of January 31, 1976."
+      url: "https://repository.mainlib.upd.edu.ph/omekas/s/rare-periodicals/media/106301"
+      accessed: "2026-11-05"
+  - label: "Jan 1976 vs revised target"
+    value: 210054
+    goal: 393778
+    qualifier: exact
+    note: "After landholdings of seven hectares and below were set aside, coverage fell to 393,778 tenants. The report calls the certificates 53 percent of the target."
+    source:
+      title: Removing roadblocks
+      publisher: The Republic (issue of May 16 to June 15, 1976)
+      voice: official
+      cite: "Progress report as of January 31, 1976."
+      url: "https://repository.mainlib.upd.edu.ph/omekas/s/rare-periodicals/media/106301"
+      accessed: "2026-11-05"

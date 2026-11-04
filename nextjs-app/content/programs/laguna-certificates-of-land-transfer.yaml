@@ -1,5 +1,5 @@
-# What this file does: Certificates of Land Transfer, with the national
-# government figures. The numbers are national, not Laguna.
+# What this file does: program page for Certificates of Land Transfer (CLTs) in Laguna.
+# It stays "still checking" because nobody has found how many Laguna certificates became titles.
 slug: laguna-certificates-of-land-transfer
 title: Certificates of Land Transfer in Laguna
 when: 1973 onward
@@ -9,12 +9,33 @@ startYear: 1973
 endYear: null
 places:
   - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
-  - { name: Biñan, province: laguna, lat: 14.3333, lng: 121.0806, approximate: true }
-promised: A certificate was meant to be the first step toward owning the land a tenant farmed.
-happened: A certificate was a paper step, not a land title. Government figures say certificates went to 12,000 farmers by April 1973 and 210,054 tenants by January 1976, against a goal of 914,914 tenants. These are national figures. Whether Laguna tenants went on to receive titles is still being checked.
-question: Find the source of the national figures, how many Laguna certificates became Emancipation Patents or titles, and when certificates started in Laguna.
+  - { name: Pagsanjan, province: laguna, lat: 14.27, lng: 121.4569, approximate: true }
+promised: "A certificate was meant to be the first step toward owning the land a tenant farmed. It showed the tenant as an amortizing owner and could be used to borrow."
+happened: "Operation Land Transfer began issuing certificates in November 1972. Under PD 315 of October 22, 1973, banks had to accept a registered certificate as collateral for loans. A certificate was still not a title: the Emancipation Patent came after payment and other requirements. The Martial Law Museum article says a tenant first had to join a Samahang Nayon to get a certificate. Nationwide, 210,054 tenants held certificates by January 1976. How many Laguna certificates became patents is still being checked."
+question: "How many Laguna certificates became Emancipation Patents or titles? Look for DAR Region IV records or a study. A 1991 UPLB thesis on landownership and land use change in Calamba and Los Baños (Patindol) is a lead I have not read: https://www.ukdr.uplb.edu.ph/etd-grad/3826"
 sources:
   - title: Presidential Decree No. 27
-    publisher: Official Gazette
+    publisher: Official Gazette (text on Lawphil)
     voice: official
+    url: "https://www.lawphil.net/statutes/presdecs/pd1972/pd_27_1972.html"
+    accessed: "2026-11-05"
+    backs: promise
+  - title: Presidential Decree No. 315
+    publisher: Official Gazette (text on Lawphil)
+    voice: official
+    cite: "October 22, 1973. Land transfer certificates accepted as loan collateral."
+    url: "https://lawphil.net/statutes/presdecs/pd1973/pd_315_1973.html"
+    accessed: "2026-11-05"
+    backs: happened
+  - title: Removing roadblocks
+    publisher: The Republic (issue of May 16 to June 15, 1976)
+    voice: official
+    url: "https://repository.mainlib.upd.edu.ph/omekas/s/rare-periodicals/media/106301"
+    accessed: "2026-11-05"
+    backs: happened
+  - title: "The Marcos Agrarian Reform Program: Promises and Contradictions"
+    publisher: Martial Law Museum
+    voice: independent
+    url: "https://martiallawmuseum.ph/?p=1149"
+    accessed: "2026-11-05"
     backs: context
