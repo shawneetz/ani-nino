@@ -1,14 +1,18 @@
 // What this file does: enables the Next.js features the app needs.
-// The custom Turbopack CSS rule was removed. Tailwind now runs through
-// postcss.config.mjs, which is the standard setup and works on Vercel.
+// Tailwind runs through postcss.config.mjs, the standard setup that works on Vercel.
 import type { NextConfig } from "next";
 
+// "standalone" output is only needed for Docker-style hosting. Vercel does not use it.
+// It also makes Windows builds fail (EPERM) because it creates symlinks.
+// So it is OFF by default. Turn it on with: STANDALONE=1 pnpm build
+const useStandalone = process.env.STANDALONE === "1";
+
 const nextConfig: NextConfig = {
-  output: "standalone",
+  ...(useStandalone ? { output: "standalone" as const } : {}),
   poweredByHeader: false,
   reactStrictMode: true,
-  // The server actions read content/*.yaml at run time (to check a proposal's
-  // program or gap). This makes sure those files are shipped with the server code.
+  // Content YAML is read on the server. This makes sure the files are shipped
+  // with the server code if any page ever reads them at run time.
   outputFileTracingIncludes: {
     "/**/*": ["./content/**/*"],
   },
