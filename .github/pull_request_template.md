@@ -1,11 +1,13 @@
-<!-- What this file does: the checklist shown on every new pull request. -->
+<!-- What this file does: the checklist shown when someone opens a pull request. -->
 
 ## What does this change?
 
+<!-- One or two plain sentences. -->
+
 ## Checklist
 
-- [ ] Every new claim has a source with a title, publisher and label.
-- [ ] Every source has a working link and an `accessed` date, where one exists.
-- [ ] I only set `status: confirmed` after checking the sources and filling in `checkedOn`.
-- [ ] Unclear material stays `checking` and has a `question`.
 - [ ] `pnpm content:check` passes.
+- [ ] Every new source has a link, an `accessed` date and the right `voice` label.
+- [ ] I opened every link I added.
+- [ ] No opinions in `happened`, and no long quotes.
+- [ ] I did not set `status: confirmed` (only the maintainer does, after checking sources).

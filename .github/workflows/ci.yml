@@ -1,5 +1,5 @@
-# What this file does: runs the project checks on pull requests and pushes to main.
-# Vercel deploys from Git separately, so CI has no deployment step.
+# What this file does: runs all checks on every pull request and every push to main.
+# It has no deploy step. Vercel deploys main by itself.
 name: CI
 
 on:
@@ -12,14 +12,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # pnpm version is read from "packageManager" in package.json.
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+
+      # Content first: it gives the clearest error for contributors.
+      - run: pnpm content:check
       - run: pnpm lint
       - run: pnpm typecheck
-      - run: pnpm content:check
       - run: pnpm test
       - run: pnpm build

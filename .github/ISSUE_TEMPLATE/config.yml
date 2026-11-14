@@ -1,0 +1,2 @@
+# What this file does: turns off blank issues so everyone uses the two forms.
+blank_issues_enabled: false

@@ -1,0 +1,57 @@
+# What this file does: the GitHub issue form for "Suggest a source".
+# The "program" field is pre-filled from the link on each program page (id must stay "program").
+name: Suggest a source
+description: Share a document, report or study that backs or challenges a program page.
+title: "Source for program: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you. A maintainer opens and checks every link before it is added.
+        Please do not paste long quotes. A short description of what the source shows is enough.
+  - type: input
+    id: program
+    attributes:
+      label: Program
+      description: The program page this source is for (the slug is pre-filled).
+    validations:
+      required: true
+  - type: input
+    id: source-title
+    attributes:
+      label: Source title
+    validations:
+      required: true
+  - type: input
+    id: publisher
+    attributes:
+      label: Publisher
+      description: Who published it, for example a court, newspaper, university or agency.
+    validations:
+      required: true
+  - type: input
+    id: link
+    attributes:
+      label: Link
+      description: A web link starting with http or https.
+    validations:
+      required: true
+  - type: dropdown
+    id: voice
+    attributes:
+      label: Who is speaking?
+      description: Pick the label that fits the publisher, not whether you agree with it.
+      options:
+        - Government (government documents or figures)
+        - Court/archive/study (independent records or research)
+        - Advocacy group (reporting by an advocacy group)
+        - Program supporters (claims made by program supporters)
+    validations:
+      required: true
+  - type: textarea
+    id: shows
+    attributes:
+      label: What it shows
+      description: In your own words, which claim it backs or challenges. No long quotes.
+    validations:
+      required: true

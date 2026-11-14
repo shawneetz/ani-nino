@@ -1,0 +1,32 @@
+# What this file does: the GitHub issue form for "Report a problem".
+# The "program" field is pre-filled from the link on each program page (id must stay "program").
+name: Report a problem
+description: Tell us about a wrong fact, a wrong pin on the map, a broken link or a missing source.
+title: "Problem with program: "
+body:
+  - type: input
+    id: program
+    attributes:
+      label: Program
+      description: The program page with the problem (the slug is pre-filled).
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of problem is it?
+      options:
+        - Wrong fact or date
+        - Wrong place on the map
+        - Broken or wrong link
+        - Source is labeled wrongly
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: What is wrong?
+      description: Say what you saw and what you think it should be. Add a source link if you have one.
+    validations:
+      required: true
