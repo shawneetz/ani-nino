@@ -1,6 +1,8 @@
 // What this file does: `pnpm content:check` validates every file in content/.
 // It prints a summary and exits with code 1 when any content is invalid.
-// It also warns (does not fail) if the GitHub repo link is still a placeholder.
+// It only WARNS about the repo placeholder and the confirmed-program audit,
+// so those can never break the build. Run `pnpm content:audit` for the strict check.
+import { auditConfirmed } from "../src/lib/confirmed-audit";
 import { ContentError, loadContent } from "../src/lib/load-content";
 import { isRepoConfigured } from "../src/lib/site";
 
@@ -20,14 +22,19 @@ async function main() {
       if (chart.points.length === 0) {
         console.warn(`WARN: chart "${chart.id}" has no data points yet`);
       }
-
-      // Every contribution link depends on this, so make the problem loud.
-      if (!isRepoConfigured()) {
-        console.warn(
-          "WARN: REPO_OWNER in src/lib/site.ts is still YOUR-NAME. All GitHub contribution links are broken.",
-        );
-      }
     }
+
+    // Every contribution link depends on this, so make the problem loud.
+    if (!isRepoConfigured()) {
+      console.warn(
+        "WARN: REPO_OWNER in src/lib/site.ts is still YOUR-NAME. All GitHub contribution links are broken.",
+      );
+    }
+
+    // Show honesty problems as warnings here. `pnpm content:audit` makes them fail.
+    const audit = auditConfirmed(programs);
+    audit.problems.forEach((problem) => console.warn(`WARN (confirmed audit): ${problem}`));
+    audit.warnings.forEach((warning) => console.warn(`WARN: ${warning}`));
   } catch (error) {
     if (error instanceof ContentError) {
       console.error(`FAILED: ${error.issues.length} problem(s)`);
