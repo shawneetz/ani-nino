@@ -1,9 +1,10 @@
 // what this file does: renders one program page with evidence context, the
 // link between past and present, and github contribution links
 // changes in this version
-//   u12: the header is now ProgramHeader (large title, status tag, copy link)
-//   u13: promise vs record and the still checking box are now components
-// the rest of the page is rebuilt in c4
+//   the header is ProgramHeader (large title, status tag, copy link)
+//   promise vs record and the still checking box are components
+//   "what came after" is now the SinceTimeline (linked sources and labels)
+// the rest of the page is rebuilt 
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -12,6 +13,7 @@ import { ContributeLinks } from "@/components/ContributeLinks";
 import { PageRail, type NavItem } from "@/components/PageNav";
 import { ProgramHeader } from "@/components/ProgramHeader";
 import { CheckingBox, RecordPanels } from "@/components/RecordPanels";
+import { SinceTimeline } from "@/components/SinceTimeline";
 import { SourceList } from "@/components/SourceList";
 import { StatusTag } from "@/components/StatusTag";
 import { VideoEmbed } from "@/components/VideoEmbed";
@@ -86,19 +88,11 @@ export default async function ProgramPage({ params }: Props) {
         {/* stronger open-question box right after the record */}
         {question && <CheckingBox question={question} />}
 
-        {/* plain list for now, the linked timeline comes in u14 */}
+        {/* what came after: year, text, linked source and voice label for each entry */}
         {program.since.length > 0 && (
-          <section id="after" aria-labelledby="after-heading" className="scroll-mt-24 space-y-2">
-            <h2 id="after-heading" className="text-lg font-semibold">What came after</h2>
-            <ul className="space-y-2">
-              {program.since.map((item) => (
-                <li key={`${item.year}-${item.text}`}>
-                  <strong>{item.year}:</strong> {item.text}{" "}
-                  <span className="text-sm text-stone-600">(Source: {item.source.title})</span>
-                </li>
-              ))}
-            </ul>
-          </section>
+          <Block id="after" title="What came after">
+            <SinceTimeline items={program.since} />
+          </Block>
         )}
 
         {/* the past/present links share one anchor so the nav can jump to them */}
@@ -139,7 +133,7 @@ export default async function ProgramPage({ params }: Props) {
           </Block>
         )}
 
-        {/* mini-map goes here later, for now a plain place list */}
+        {/* mini-map goes here later (u15), for now a plain place list */}
         <Block id="where" title="Where">
           <ul className="list-disc space-y-1 pl-6 text-lg">
             {program.places.map((place) => (
