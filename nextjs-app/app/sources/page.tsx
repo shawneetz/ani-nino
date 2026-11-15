@@ -2,7 +2,7 @@
 // and every source used on the site.
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SourceList } from "@/components/source-list";
+import { SourceList } from "@/components/SourceList";
 import { getGaps, getPrograms, getSources } from "@/lib/content";
 import { GAP_KINDS, VOICES, VOICE_KEYS } from "@/lib/vocab";
 

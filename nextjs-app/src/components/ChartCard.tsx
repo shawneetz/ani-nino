@@ -13,7 +13,7 @@ import {
   YAxis,
 } from "recharts";
 import type { Chart, ChartPoint } from "@/lib/content-schema";
-import { VoiceChip } from "./voice-chip";
+import { VoiceChip } from "./VoiceChip";
 
 const QUALIFIER_PREFIX: Record<ChartPoint["qualifier"], string> = {
   exact: "",

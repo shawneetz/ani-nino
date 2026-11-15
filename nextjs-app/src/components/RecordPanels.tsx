@@ -6,7 +6,7 @@
 // the yaml wording is shown as written, nothing is edited here
 import type { Source } from "@/lib/content-schema";
 import { partisanNote, uniqueVoices } from "@/lib/source-summary";
-import { VoiceChip } from "./voice-chip";
+import { VoiceChip } from "./VoiceChip";
 
 // shared looks, so both panels always match
 const PANEL = "rounded-card border border-stone-300 bg-white p-5";

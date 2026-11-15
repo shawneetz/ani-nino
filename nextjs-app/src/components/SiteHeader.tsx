@@ -2,7 +2,7 @@
 // at the top of every page. To rename the site, change SITE in src/lib/site.ts
 // and the title in app/layout.tsx.
 import Link from "next/link";
-import { SiteNav } from "@/components/site-nav";
+import { SiteNav } from "@/components/SiteNav";
 import { SITE } from "@/lib/site";
 
 export function SiteHeader() {

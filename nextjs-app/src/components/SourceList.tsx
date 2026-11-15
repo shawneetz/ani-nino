@@ -1,7 +1,7 @@
 // What this file does: lists sources with their label, publisher, citation and access date.
 // The title is normal reading size and the details are at least 15px.
 import type { Source } from "@/lib/content-schema";
-import { VoiceChip } from "./voice-chip";
+import { VoiceChip } from "./VoiceChip";
 
 const BACKS_LABELS = {
   promise: "Backs the promise",

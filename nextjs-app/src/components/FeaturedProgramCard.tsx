@@ -9,8 +9,8 @@ import { firstSentence } from "@/lib/first-sentence";
 import { uniqueVoices } from "@/lib/source-summary";
 import { TOPICS } from "@/lib/vocab";
 import { Card } from "./Card";
-import { StatusTag } from "./status-tag";
-import { VoiceChip } from "./voice-chip";
+import { StatusTag } from "./StatusTag";
+import { VoiceChip } from "./VoiceChip";
 
 export function FeaturedProgramCard({ program }: { program: Program }) {
   const topic = TOPICS[program.topic];
