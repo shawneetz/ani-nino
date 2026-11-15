@@ -1,5 +1,7 @@
-// What this file does: renders one program page with evidence context, the
-// link between past and present, and GitHub contribution links.
+// what this file does: renders one program page with evidence context, the
+// link between past and present, and github contribution links
+// change in this version: "back to the map" now goes to /map (not the landing page)
+// the rest of the page is rebuilt in c4
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -36,13 +38,13 @@ export default async function ProgramPage({ params }: Props) {
   const topic = TOPICS[program.topic];
   const voices = uniqueVoices(program.sources);
   const balanceNote = partisanNote(program.sources);
-  // Past/present links: the older program this one echoes, and today's echoes of this one.
+  // past/present links: the older program this one echoes, and today's echoes of this one
   const origin = program.echoOf ? all.find((item) => item.slug === program.echoOf) : null;
   const echoes = all.filter((item) => item.echoOf === program.slug);
 
   return (
     <main id="main" className="mx-auto max-w-3xl space-y-8 px-4 py-6">
-      <Link href="/" className="text-sm underline">Back to the map</Link>
+      <Link href="/map" className="tap-target inline-flex items-center text-sm underline">Back to the map</Link>
       <header className="space-y-2">
         <h1 className="text-2xl font-semibold">{program.title}</h1>
         <div className="flex flex-wrap gap-3 text-sm text-stone-600">
@@ -79,7 +81,7 @@ export default async function ProgramPage({ params }: Props) {
         </section>
       )}
 
-      {/* Today program -> the martial-law program it echoes. */}
+      {/* today program -> the martial-law program it echoes */}
       {origin && (
         <section className="space-y-2">
           <h2 className="text-lg font-semibold">Echoes an older program</h2>
@@ -87,7 +89,7 @@ export default async function ProgramPage({ params }: Props) {
         </section>
       )}
 
-      {/* Martial-law program -> today programs that echo it. */}
+      {/* martial-law program -> today programs that echo it */}
       {echoes.length > 0 && (
         <section className="space-y-2">
           <h2 className="text-lg font-semibold">Echoed today</h2>

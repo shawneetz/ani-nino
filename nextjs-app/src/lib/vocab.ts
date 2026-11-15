@@ -1,15 +1,16 @@
-// What this file does: keeps every label, color and definition in one place.
-// The filters, legend, program pages, map and sources page all read from here,
-// so the wording can never differ between screens.
+// what this file does: keeps every label, color and definition in one place
+// the filters, legend, program pages, map, landing page and sources page all
+// read from here, so the wording can never differ between screens
+// change in this version: added program_status_blurbs (one-line meaning of each status)
 
 export const FIRST_YEAR = 1972;
 export const LAST_YEAR = 1986;
 
-// Window allowed for "today" programs (the echo layer).
+// window allowed for "today" programs (the echo layer)
 export const TODAY_FIRST_YEAR = 2000;
 export const TODAY_LAST_YEAR = 2026;
 
-// Which layer a program belongs to. Default is the martial-law layer.
+// which layer a program belongs to. default is the martial-law layer
 export const ERAS = {
   martial_law: { label: "Martial law" },
   today: { label: "Today" },
@@ -45,6 +46,12 @@ export const PROGRAM_STATUS_KEYS = Object.keys(PROGRAM_STATUSES) as [
   ProgramStatus,
   ...ProgramStatus[],
 ];
+
+// one-line meaning of each status, shown on the landing page
+export const PROGRAM_STATUS_BLURBS: Record<ProgramStatus, string> = {
+  confirmed: "Checked against its sources on the date shown on the page.",
+  checking: "Some claims are not verified yet. The open question is shown on the page.",
+};
 
 export const PROVINCE_KEYS = ["cavite", "laguna", "batangas", "rizal", "quezon"] as const;
 export type Province = (typeof PROVINCE_KEYS)[number];
