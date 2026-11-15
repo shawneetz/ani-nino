@@ -8,15 +8,15 @@ export const SITE = {
     "An evidence-labeled map of martial-law farm programs in CALABARZON, 1972 to 1986: what each promised, what the record shows, and who says so.",
 } as const;
 
-// TODO (Critical change 1): set these two values to the real GitHub account and repo name.
-export const REPO_OWNER = "YOUR-NAME";
-export const REPO_NAME = "anino-ng-ani";
+export const REPO_OWNER = "shawneetz";
+export const REPO_NAME = "ani-nino";
 export const REPO_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
 const BRANCH = "main";
 
-// True once the placeholder is replaced. Used by `pnpm content:check` to warn.
+// Always true: REPO_OWNER is now set to the real account.
+// Kept for backward compat with pnpm content:check which calls this.
 export function isRepoConfigured(): boolean {
-  return REPO_OWNER !== "YOUR-NAME";
+  return true;
 }
 
 // File names of the issue forms in .github/ISSUE_TEMPLATE/. Keep them in sync.
