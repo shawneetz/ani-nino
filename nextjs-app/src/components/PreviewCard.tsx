@@ -6,7 +6,7 @@ import type { ExplorerProgram } from "@/lib/explorer-types";
 import { yearRange } from "@/lib/filter";
 import { TOPICS } from "@/lib/vocab";
 import { Button, ButtonLink } from "./Button";
-import { StatusTag } from "./status-tag";
+import { StatusTag } from "./StatusTag";
 
 type Props = {
   program: ExplorerProgram;

@@ -1,6 +1,6 @@
 // What this file does: reads chart YAML on the server and renders one card per chart.
 import type { Metadata } from "next";
-import { ChartCard } from "@/components/chart-card";
+import { ChartCard } from "@/components/ChartCard";
 import { getCharts } from "@/lib/content";
 
 export const metadata: Metadata = { title: "Charts" };

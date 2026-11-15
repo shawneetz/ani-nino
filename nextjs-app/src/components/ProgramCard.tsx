@@ -5,8 +5,8 @@ import Link from "next/link";
 import type { ExplorerProgram } from "@/lib/explorer-types";
 import { yearRange } from "@/lib/filter";
 import { TOPICS } from "@/lib/vocab";
-import { StatusTag } from "./status-tag";
-import { VoiceChip } from "./voice-chip";
+import { StatusTag } from "./StatusTag";
+import { VoiceChip } from "./VoiceChip";
 
 type Props = {
   program: ExplorerProgram;

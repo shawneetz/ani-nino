@@ -1,7 +1,7 @@
 // what this file does: shows the "what came after" entries as a vertical timeline
 // every entry has its year, text, a linked source title and a voice label
 import type { Program } from "@/lib/content-schema";
-import { VoiceChip } from "./voice-chip";
+import { VoiceChip } from "./VoiceChip";
 
 export function SinceTimeline({ items }: { items: Program["since"] }) {
   return (

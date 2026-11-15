@@ -6,7 +6,7 @@ import type { Program } from "@/lib/content-schema";
 import { yearRange } from "@/lib/filter";
 import { TOPICS } from "@/lib/vocab";
 import { CopyLinkButton } from "./CopyLinkButton";
-import { StatusTag } from "./status-tag";
+import { StatusTag } from "./StatusTag";
 
 // only the fields the header needs, so it stays easy to test and reuse
 type Props = {

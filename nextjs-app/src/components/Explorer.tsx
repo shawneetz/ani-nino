@@ -16,11 +16,11 @@ import { useFilterState } from "@/hooks/use-filter-state";
 import type { ExplorerProgram } from "@/lib/explorer-types";
 import { visiblePrograms } from "@/lib/filter";
 import { PROVINCE_LABELS } from "@/lib/vocab";
-import { FilterControls } from "./filter-controls";
+import { FilterControls } from "./FilterControls";
 import { FilterSheet } from "./FilterSheet";
-import { Legend } from "./legend";
+import { Legend } from "./Legend";
 import { PreviewCard } from "./PreviewCard";
-import { ProgramCard } from "./program-card";
+import { ProgramCard } from "./ProgramCard";
 import { YearSlider } from "./YearSlider";
 
 // the map is loaded in the browser only, with a placeholder while it loads
