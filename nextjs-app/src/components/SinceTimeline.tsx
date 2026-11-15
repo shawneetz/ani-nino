@@ -1,28 +1,36 @@
-// what this file does: shows the "what came after" entries as a vertical timeline
+// what this file does: shows the "what came after" entries as a vertical timeline 
 // every entry has its year, text, a linked source title and a voice label
+// entries are sorted by year, so the order never depends on the yaml order
 import type { Program } from "@/lib/content-schema";
 import { VoiceChip } from "./VoiceChip";
 
 export function SinceTimeline({ items }: { items: Program["since"] }) {
+  // copy before sorting, the original array must not change
+  const sorted = [...items].sort((a, b) => a.year - b.year);
+
   return (
     // the left border is the timeline line
     <ol className="space-y-6 border-l-2 border-stone-300 pl-5">
-      {items.map((item) => (
+      {sorted.map((item) => (
         <li key={`${item.year}-${item.text}`} className="relative">
           {/* dot sitting on the line */}
           <span aria-hidden="true" className="absolute -left-[1.72rem] top-2 h-3 w-3 rounded-full border-2 border-stone-500 bg-white" />
           <p className="text-lg font-semibold text-stone-900">{item.year}</p>
           <p className="mt-1 max-w-[68ch] text-lg leading-relaxed text-stone-800">{item.text}</p>
-          <div className="mt-2 flex flex-wrap items-center gap-2 text-base text-stone-700">
+
+          {/* source title is a link when the yaml has a url, plus the voice label */}
+          <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-base text-stone-700">
             <span>Source:</span>
             {item.source.url ? (
               <a
                 href={item.source.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline underline-offset-2"
+                className="tap-target inline-flex items-center underline underline-offset-2"
               >
                 {item.source.title}
+                {/* tells screen reader users the link leaves the site */}
+                <span className="sr-only"> (opens in a new tab)</span>
               </a>
             ) : (
               <span>{item.source.title}</span>
