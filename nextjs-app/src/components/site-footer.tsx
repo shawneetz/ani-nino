@@ -1,11 +1,12 @@
-// What this file does: shows the shared footer with links in three groups
-// (Explore, Evidence, Project) and the GitHub link.
+// what this file does: shows the shared footer with links in three groups
+// (explore, evidence, project) and the github link
+// change in this version: the "map" link now points to /map
 import Link from "next/link";
 import { REPO_URL, SITE } from "@/lib/site";
 
-// Footer groups live here. Add the Programs link to "Explore" when /programs exists.
+// footer groups live here. add the programs link to "explore" when /programs exists
 const GROUPS = [
-  { title: "Explore", links: [{ href: "/", label: "Map" }] },
+  { title: "Explore", links: [{ href: "/map", label: "Map" }] },
   {
     title: "Evidence",
     links: [
@@ -16,7 +17,7 @@ const GROUPS = [
   { title: "Project", links: [{ href: "/about", label: "About" }] },
 ] as const;
 
-// Shared link look: 44px tall so it is easy to tap.
+// shared link look: 44px tall so it is easy to tap
 const LINK = "tap-target inline-flex items-center underline underline-offset-2";
 
 export function SiteFooter() {
@@ -36,7 +37,7 @@ export function SiteFooter() {
                     <Link href={link.href} className={LINK}>{link.label}</Link>
                   </li>
                 ))}
-                {/* GitHub sits in the Project group. */}
+                {/* github sits in the project group */}
                 {group.title === "Project" && (
                   <li>
                     <a href={REPO_URL} target="_blank" rel="noopener noreferrer" className={LINK}>GitHub</a>
