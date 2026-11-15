@@ -1,29 +1,64 @@
-# What this file does: runs all checks on every pull request and every push to main.
-# It has no deploy step. Vercel deploys main by itself.
-name: CI
+# what this file does: runs content checks, lint, typecheck, unit tests and a build on every push and pull request
+# all app commands run inside nextjs-app because package.json lives there, not at the repo root
+name: ci
 
 on:
-  pull_request:
   push:
     branches: [main]
+  pull_request:
+
+# cancel older runs of the same branch so only the newest one finishes
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# read-only token is enough for checks
+permissions:
+  contents: read
 
 jobs:
   check:
     runs-on: ubuntu-latest
+
+    # every run step starts inside the app folder
+    defaults:
+      run:
+        working-directory: nextjs-app
+
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      # pnpm version is read from "packageManager" in package.json.
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      # read the pnpm version from packageManager in nextjs-app/package.json
+      # this fixes the "no pnpm version is specified" error
+      - uses: pnpm/action-setup@v5
         with:
-          node-version: 22
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
+          package_json_file: nextjs-app/package.json
 
-      # Content first: it gives the clearest error for contributors.
-      - run: pnpm content:check
-      - run: pnpm lint
-      - run: pnpm typecheck
-      - run: pnpm test
-      - run: pnpm build
+      # node 24 satisfies jsdom 30 and avoids the node 20 deprecation notice
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: nextjs-app/pnpm-lock.yaml
+
+      # frozen lockfile makes ci fail if package.json and the lockfile drift apart
+      - name: install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # validates every yaml file in content/ (also runs again inside build)
+      - name: check content
+        run: pnpm content:check
+
+      - name: lint
+        run: pnpm lint
+
+      # runs next typegen first, then tsc
+      - name: typecheck
+        run: pnpm typecheck
+
+      - name: unit tests
+        run: pnpm test:unit
+
+      # build runs content:check first, then next build
+      - name: build
+        run: pnpm build
