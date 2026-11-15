@@ -4,6 +4,8 @@
 //   markers are 28px to look at with a 44px tap area (c3.12)
 //   the map fits to the visible pins and flies to the selected program (c3.7)
 //   maplibre moves less when the device asks for reduced motion (c6.4a)
+// change in this version: static marker styles are tailwind classes now, not inline styles
+// only the per-program color, fill, border and shape stay inline (from markerLook)
 // maplibre is loaded from a cdn at runtime instead of being bundled by next.js,
 // because next's bundler breaks maplibre's web worker ("worker failed to load")
 // the version and optional integrity hashes live in src/lib/map-config.ts
@@ -31,6 +33,13 @@ type MapLibreLib = typeof MapLibre;
 type Group = PlaceGroup<ExplorerProgram>;
 type Pin = { marker: MapLibre.Marker; el: HTMLButtonElement; dot: HTMLSpanElement; group: Group };
 type Point = [number, number];
+
+// marker classes, the outer button is the 44px tap area and the inner dot is the 28px marker you see
+const PIN_BUTTON = "z-[1] flex h-[44px] w-[44px] cursor-pointer items-center justify-center border-0 bg-transparent p-0";
+const PIN_DOT = "box-border flex h-[28px] w-[28px] items-center justify-center text-[14px] font-bold text-white";
+// the ring and the raised layer are toggled for the selected program
+const PIN_RING = "shadow-[0_0_0_3px_#fff,0_0_0_6px_#171717]";
+const PIN_RAISED = "z-[2]";
 
 // the cdn script puts maplibre on window.maplibregl
 declare global {
@@ -199,29 +208,11 @@ export default function PinMap({ programs, provinces, selectedSlug, onSelect, on
       // outer button is the 44px tap area, the inner dot is the 28px marker you see
       const el = document.createElement("button");
       el.type = "button";
-      Object.assign(el.style, {
-        width: "44px",
-        height: "44px",
-        padding: "0",
-        border: "0",
-        background: "transparent",
-        cursor: "pointer",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      });
+      el.className = PIN_BUTTON;
+
       const dot = document.createElement("span");
-      Object.assign(dot.style, {
-        width: "28px",
-        height: "28px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        boxSizing: "border-box",
-        color: "#fff",
-        fontSize: "14px",
-        fontWeight: "700",
-      });
+      dot.className = PIN_DOT;
+      // color, fill, border and shape depend on the program, so they stay inline
       if (count === 1) {
         Object.assign(dot.style, markerLook({ topic: first.topic, era: first.era, status: first.status, approximate: group.approximate }));
       } else {
@@ -254,8 +245,8 @@ export default function PinMap({ programs, provinces, selectedSlug, onSelect, on
   useEffect(() => {
     pins.current.forEach((pin) => {
       const on = pin.group.items.some((item) => item.slug === selectedSlug);
-      pin.dot.style.boxShadow = on ? "0 0 0 3px #fff, 0 0 0 6px #171717" : "none";
-      pin.el.style.zIndex = on ? "2" : "1";
+      pin.dot.classList.toggle(PIN_RING, on);
+      pin.el.classList.toggle(PIN_RAISED, on);
     });
   }, [lib, map, groups, selectedSlug]);
 
