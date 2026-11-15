@@ -1,27 +1,28 @@
 // what this file does: renders one program page with evidence context, the
 // link between past and present, and github contribution links
 // changes in this version
-//   the header is ProgramHeader (large title, status tag, copy link)
-//   promise vs record and the still checking box are components
-//   "what came after" is now the SinceTimeline (linked sources and labels)
-// the rest of the page is rebuilt 
+//   u15: "where" is now a lazy-loaded mini-map with the places listed beside it
+//   u16: a sticky jump select for phones (the desktop rail was already in place)
+//   u17: related programs use the RelatedPrograms component
+//   u18: the contribute panel owns its own anchor
+// all component imports use PascalCase file names
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { ContributeLinks } from "@/components/ContributeLinks";
-import { PageRail, type NavItem } from "@/components/PageNav";
+import { JumpSelect, PageRail, type NavItem } from "@/components/PageNav";
 import { ProgramHeader } from "@/components/ProgramHeader";
+import { ProgramMiniMap } from "@/components/ProgramMiniMap";
 import { CheckingBox, RecordPanels } from "@/components/RecordPanels";
+import { RelatedPrograms } from "@/components/RelatedPrograms";
 import { SinceTimeline } from "@/components/SinceTimeline";
 import { SourceList } from "@/components/SourceList";
-import { StatusTag } from "@/components/StatusTag";
 import { VideoEmbed } from "@/components/VideoEmbed";
 import { getProgram, getPrograms } from "@/lib/content";
-import { yearRange } from "@/lib/filter";
+import { toExplorerProgram } from "@/lib/explorer-types";
 import { programDescription } from "@/lib/program-description";
 import { relatedPrograms } from "@/lib/related";
-import { PROVINCE_LABELS, TOPICS } from "@/lib/vocab";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -82,6 +83,11 @@ export default async function ProgramPage({ params }: Props) {
 
         <ProgramHeader program={program} />
 
+        {/* phones only: a jump menu that stays at the top while the reader scrolls */}
+        <div className="sticky top-0 z-20 -mx-4 border-b border-stone-200 bg-background/95 px-4 py-2 backdrop-blur lg:hidden">
+          <JumpSelect items={nav} />
+        </div>
+
         {/* promise vs record, then who says so */}
         <RecordPanels promised={program.promised} happened={program.happened} sources={program.sources} />
 
@@ -133,16 +139,9 @@ export default async function ProgramPage({ params }: Props) {
           </Block>
         )}
 
-        {/* mini-map goes here later (u15), for now a plain place list */}
+        {/* mini-map with the places listed beside it, the map loads when it nears the screen */}
         <Block id="where" title="Where">
-          <ul className="list-disc space-y-1 pl-6 text-lg">
-            {program.places.map((place) => (
-              <li key={`${place.name}-${place.province}`}>
-                {place.name}, {PROVINCE_LABELS[place.province]}
-                {place.approximate ? " (approximate)" : ""}
-              </li>
-            ))}
-          </ul>
+          <ProgramMiniMap program={toExplorerProgram(program)} />
         </Block>
 
         {program.sources.length > 0 && (
@@ -151,30 +150,13 @@ export default async function ProgramPage({ params }: Props) {
           </Block>
         )}
 
-        <div id="contribute" className="scroll-mt-24">
-          <ContributeLinks slug={program.slug} />
-        </div>
+        {/* github only panel, it carries its own anchor */}
+        <ContributeLinks slug={program.slug} />
 
         {/* related programs replace the old previous and next links */}
         {related.length > 0 && (
           <Block id="related" title="Related programs">
-            <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-              {related.map((item) => (
-                <li key={item.slug}>
-                  <Link
-                    href={`/programs/${item.slug}`}
-                    className="block h-full rounded-xl border border-stone-300 bg-white p-4 hover:border-stone-500 focus-visible:outline focus-visible:outline-2"
-                  >
-                    <span className="block text-lg font-semibold text-stone-900">{item.title}</span>
-                    <span className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-base text-stone-700">
-                      <span>{yearRange(item)}</span>
-                      <span style={{ color: TOPICS[item.topic].color }}>{TOPICS[item.topic].label}</span>
-                      <StatusTag status={item.status} />
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <RelatedPrograms items={related} />
           </Block>
         )}
       </div>

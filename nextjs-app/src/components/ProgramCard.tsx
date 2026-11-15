@@ -1,5 +1,5 @@
-// what this file does: one program in the explorer list (c3.11)
-// shows title, years, topic, first sentence (2 lines), status tag on every card
+// what this file does: one program in the explorer list
+// shows title, years, topic, first sentence , status tag on every card
 // and voice chips, the title is the only link, "show on map" selects the program
 import Link from "next/link";
 import type { ExplorerProgram } from "@/lib/explorer-types";
@@ -21,9 +21,8 @@ export function ProgramCard({ program, selected, onShowOnMap }: Props) {
     // the id lets the map scroll this card into view when its pin is picked
     <article
       id={`program-${program.slug}`}
-      className={`scroll-mt-4 rounded-card border bg-white p-4 ${
-        selected ? "border-accent ring-2 ring-accent" : "border-stone-200 hover:border-stone-400"
-      }`}
+      className={`scroll-mt-4 rounded-card border bg-white p-4 ${selected ? "border-accent ring-2 ring-accent" : "border-stone-200 hover:border-stone-400"
+        }`}
     >
       <h3 className="text-lg font-semibold leading-snug text-stone-900">
         <Link href={`/programs/${program.slug}`} className="underline-offset-4 hover:underline">

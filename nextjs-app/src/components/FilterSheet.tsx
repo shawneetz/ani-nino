@@ -1,8 +1,8 @@
-// what this file does: the phone filter bottom sheet (c3.3)
+// what this file does: the phone filter bottom sheet
 //   opens from the "filters" button, shows the same controls as the desktop bar
 //   focus moves in on open, tab stays inside, escape or the backdrop closes it
 //   the page behind stops scrolling while it is open
-// the parent returns focus to the filters button after close (c6.2)
+// the parent returns focus to the filters button after close
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";

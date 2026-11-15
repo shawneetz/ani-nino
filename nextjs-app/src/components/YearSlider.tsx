@@ -1,4 +1,4 @@
-// what this file does: the 1972 to 1986 year control (c3.9)
+// what this file does: the 1972 to 1986 year control
 //   slider with tick labels that sit under the real thumb positions
 //   previous / next year buttons and an "all years" button (year = null)
 //   a note that the year only filters martial-law programs

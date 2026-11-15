@@ -1,4 +1,4 @@
-// what this file does: the "map key" disclosure (c3.10)
+// what this file does: the "map key" disclosure
 // it draws real marker samples from marker-style.ts, so the key always matches the map
 import type { CSSProperties, ReactNode } from "react";
 import { GROUP_LOOK, markerLook } from "@/lib/marker-style";

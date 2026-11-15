@@ -1,6 +1,6 @@
-// what this file does: the card that opens over the map when a program is selected (c3.5)
+// what this file does: the card that opens over the map when a program is selected
 // it previews first, the reader chooses to open the full page
-// the parent moves focus here on open and closes it on escape (c6.2)
+// the parent moves focus here on open and closes it on escape 
 import type { RefObject } from "react";
 import type { ExplorerProgram } from "@/lib/explorer-types";
 import { yearRange } from "@/lib/filter";

@@ -1,11 +1,13 @@
-// what this file does: draws the map and one marker per place (c3.4)
+// what this file does: draws the map and one marker per place
 //   markers are grouped by spot, a spot with several programs shows a count
 //   clicking a marker selects the program (or opens a picker for a group), it never leaves the page
-//   markers are 28px to look at with a 44px tap area (c3.12)
-//   the map fits to the visible pins and flies to the selected program (c3.7)
-//   maplibre moves less when the device asks for reduced motion (c6.4a)
-// change in this version: static marker styles are tailwind classes now, not inline styles
-// only the per-program color, fill, border and shape stay inline (from markerLook)
+//   markers are 28px to look at with a 44px tap area
+//   the map fits to the visible pins and flies to the selected program
+//   maplibre moves less when the device asks for reduced motion
+// change in this version: new "embedded" mode for the single-program mini-map
+//   embedded markers are plain divs (the places list beside the map says the same thing)
+//   embedded maps use cooperative gestures, so a swipe on a phone still scrolls the page
+//   onSelect, onClear, provinces and selectedSlug are optional now
 // maplibre is loaded from a cdn at runtime instead of being bundled by next.js,
 // because next's bundler breaks maplibre's web worker ("worker failed to load")
 // the version and optional integrity hashes live in src/lib/map-config.ts
@@ -31,15 +33,19 @@ import { Button } from "./Button";
 
 type MapLibreLib = typeof MapLibre;
 type Group = PlaceGroup<ExplorerProgram>;
-type Pin = { marker: MapLibre.Marker; el: HTMLButtonElement; dot: HTMLSpanElement; group: Group };
+type Pin = { marker: MapLibre.Marker; el: HTMLElement; dot: HTMLSpanElement; group: Group };
 type Point = [number, number];
 
-// marker classes, the outer button is the 44px tap area and the inner dot is the 28px marker you see
-const PIN_BUTTON = "z-[1] flex h-[44px] w-[44px] cursor-pointer items-center justify-center border-0 bg-transparent p-0";
+// marker classes, the outer element is the 44px tap area and the inner dot is the 28px marker you see
+// the cursor is added in code, because embedded markers are not clickable
+const PIN_BUTTON = "z-[1] flex h-[44px] w-[44px] items-center justify-center border-0 bg-transparent p-0";
 const PIN_DOT = "box-border flex h-[28px] w-[28px] items-center justify-center text-[14px] font-bold text-white";
 // the ring and the raised layer are toggled for the selected program
 const PIN_RING = "shadow-[0_0_0_3px_#fff,0_0_0_6px_#171717]";
 const PIN_RAISED = "z-[2]";
+
+// a stable empty list, a new [] on every render would rebuild the markers every time
+const NO_PROVINCES: Province[] = [];
 
 // the cdn script puts maplibre on window.maplibregl
 declare global {
@@ -99,13 +105,22 @@ function fitPoints(lib: MapLibreLib, map: MapLibre.Map, points: Point[], animate
 
 type Props = {
   programs: ExplorerProgram[];
-  provinces: Province[];
-  selectedSlug: string | null;
-  onSelect: (slug: string) => void;
-  onClear: () => void;
+  provinces?: Province[];
+  selectedSlug?: string | null;
+  onSelect?: (slug: string) => void;
+  onClear?: () => void;
+  // true for the small map on a program page: no clicks on markers, gentler gestures
+  embedded?: boolean;
 };
 
-export default function PinMap({ programs, provinces, selectedSlug, onSelect, onClear }: Props) {
+export default function PinMap({
+  programs,
+  provinces = NO_PROVINCES,
+  selectedSlug = null,
+  onSelect,
+  onClear,
+  embedded = false,
+}: Props) {
   const box = useRef<HTMLDivElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const pins = useRef<Pin[]>([]);
@@ -166,11 +181,18 @@ export default function PinMap({ programs, provinces, selectedSlug, onSelect, on
   // step 2: create the map once the library and the container are ready
   useEffect(() => {
     if (!lib || !box.current) return;
-    const instance = new lib.Map({ container: box.current, style: MAP_STYLE_URL, center: MAP_CENTER, zoom: MAP_ZOOM });
+    const instance = new lib.Map({
+      container: box.current,
+      style: MAP_STYLE_URL,
+      center: MAP_CENTER,
+      zoom: MAP_ZOOM,
+      // on a long page, ctrl-scroll or two fingers zoom the map, so the page stays scrollable
+      cooperativeGestures: embedded,
+    });
     instance.addControl(new lib.NavigationControl({ showCompass: false }), "top-right");
     // tapping empty map closes the preview and the picker
     instance.on("click", () => {
-      handlers.current.onClear();
+      handlers.current.onClear?.();
       setPickerKey(null);
     });
     setMap(instance);
@@ -178,7 +200,7 @@ export default function PinMap({ programs, provinces, selectedSlug, onSelect, on
       instance.remove();
       setMap(null);
     };
-  }, [lib]);
+  }, [lib, embedded]);
 
   // step 3: keep the map sized to its box, and run a fit that was waiting for it to show
   useEffect(() => {
@@ -205,10 +227,11 @@ export default function PinMap({ programs, provinces, selectedSlug, onSelect, on
       const count = group.items.length;
       const first = group.items[0];
 
-      // outer button is the 44px tap area, the inner dot is the 28px marker you see
-      const el = document.createElement("button");
-      el.type = "button";
-      el.className = PIN_BUTTON;
+      // outer element is the 44px tap area, the inner dot is the 28px marker you see
+      // embedded maps use a plain div, the others use a real button
+      const el = document.createElement(embedded ? "div" : "button");
+      if (el instanceof HTMLButtonElement) el.type = "button";
+      el.className = `${PIN_BUTTON} ${embedded ? "cursor-default" : "cursor-pointer"}`;
 
       const dot = document.createElement("span");
       dot.className = PIN_DOT;
@@ -221,25 +244,30 @@ export default function PinMap({ programs, provinces, selectedSlug, onSelect, on
       }
       el.append(dot);
 
-      const label = count === 1 ? `${first.title}, ${group.name}. Show preview` : `${count} programs at ${group.name}. Choose one`;
-      el.setAttribute("aria-label", label);
-      el.title = label;
-      el.addEventListener("click", (event) => {
-        // stop the click so it does not also count as a tap on the empty map
-        event.stopPropagation();
-        if (count === 1) {
-          setPickerKey(null);
-          handlers.current.onSelect(first.slug);
-        } else {
-          pickerTrigger.current = el;
-          setPickerKey(group.key);
-        }
-      });
+      if (embedded) {
+        // the places list beside the map already says this, so screen readers skip the marker
+        el.setAttribute("aria-hidden", "true");
+      } else {
+        const label = count === 1 ? `${first.title}, ${group.name}. Show preview` : `${count} programs at ${group.name}. Choose one`;
+        el.setAttribute("aria-label", label);
+        el.title = label;
+        el.addEventListener("click", (event) => {
+          // stop the click so it does not also count as a tap on the empty map
+          event.stopPropagation();
+          if (count === 1) {
+            setPickerKey(null);
+            handlers.current.onSelect?.(first.slug);
+          } else {
+            pickerTrigger.current = el;
+            setPickerKey(group.key);
+          }
+        });
+      }
 
       const marker = new lib.Marker({ element: el }).setLngLat([group.lng, group.lat]).addTo(map);
       return { marker, el, dot, group };
     });
-  }, [lib, map, groups]);
+  }, [lib, map, groups, embedded]);
 
   // step 5: ring the markers of the selected program, without rebuilding them
   useEffect(() => {
@@ -285,7 +313,12 @@ export default function PinMap({ programs, provinces, selectedSlug, onSelect, on
 
   return (
     <div className="absolute inset-0">
-      <div ref={box} role="region" aria-label="Map of programs" className="h-full w-full rounded-lg border border-stone-200 bg-stone-100" />
+      <div
+        ref={box}
+        role="region"
+        aria-label={embedded ? "Map of this program's places" : "Map of programs"}
+        className="h-full w-full rounded-lg border border-stone-200 bg-stone-100"
+      />
 
       {/* picker for a spot with several programs */}
       {pickerGroup && (
@@ -305,7 +338,7 @@ export default function PinMap({ programs, provinces, selectedSlug, onSelect, on
                   type="button"
                   onClick={() => {
                     setPickerKey(null);
-                    handlers.current.onSelect(item.slug);
+                    handlers.current.onSelect?.(item.slug);
                   }}
                   className="tap-target w-full rounded-lg px-2 py-1 text-left text-base hover:bg-stone-100"
                 >
