@@ -1,7 +1,9 @@
 // what this file does: describes the reader-flow, keyboard and phone checks
-// updated for the new explorer (c7.2): the today switch has a new name, selecting shows a
+// updated for the new explorer: the today switch has a new name, selecting shows a
 // preview, the list count matches the result count, cavite explains itself,
 // and the phone has a map | list toggle and a filter sheet
+// change in this version : the program page panel is now "What the record shows",
+// and the header has a copy link button 
 // run with `pnpm test:e2e`
 import { expect, test } from "@playwright/test";
 
@@ -110,8 +112,11 @@ test.describe("explorer", () => {
     await page.goto("/programs/laguna-operation-land-transfer");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Operation Land Transfer in Laguna");
     await expect(page.getByRole("heading", { name: "Who says so" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "What happened" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "What it promised" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "What the record shows" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Sources" })).toBeVisible();
+    // the header has a copy link button (u12)
+    await expect(page.getByRole("button", { name: "Copy link" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Suggest a source" })).toHaveAttribute("target", "_blank");
     await expect(page.getByRole("link", { name: "Back to the map" })).toHaveAttribute("href", "/map");
   });
