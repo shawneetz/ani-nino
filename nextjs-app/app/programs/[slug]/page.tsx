@@ -5,14 +5,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { ReactNode } from "react";
 import { ContributeLinks } from "@/components/contribute-links";
+import { CopyLinkButton } from "@/components/CopyLinkButton";
+import { JumpSelect, PageRail, type NavItem } from "@/components/PageNav";
+import { SinceTimeline } from "@/components/SinceTimeline";
 import { SourceList } from "@/components/source-list";
 import { StatusTag } from "@/components/status-tag";
 import { VideoEmbed } from "@/components/video-embed";
 import { VoiceChip } from "@/components/voice-chip";
 import { getProgram, getPrograms } from "@/lib/content";
 import { yearRange } from "@/lib/filter";
+import { firstSentence } from "@/lib/first-sentence";
+import { relatedPrograms } from "@/lib/related";
 import { partisanNote, uniqueVoices } from "@/lib/source-summary";
+import { trimText } from "@/lib/trim-text";
 import { PROVINCE_LABELS, TOPICS } from "@/lib/vocab";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -23,7 +30,20 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const program = await getProgram((await params).slug);
-  return program ? { title: program.title, description: program.happened } : {};
+  // description is the first sentence of "happened", trimmed to 160 characters
+  return program ? { title: program.title, description: trimText(firstSentence(program.happened), 160) } : {};
+}
+
+// shared section wrapper: gives each section an anchor id for the page nav
+function Block({ id, title, children }: { id: string; title: string; children: ReactNode }) {
+  return (
+    <section id={id} aria-labelledby={`${id}-heading`} className="scroll-mt-24 space-y-3">
+      <h2 id={`${id}-heading`} className="text-2xl font-semibold text-stone-900">
+        {title}
+      </h2>
+      {children}
+    </section>
+  );
 }
 
 export default async function ProgramPage({ params }: Props) {
@@ -32,15 +52,24 @@ export default async function ProgramPage({ params }: Props) {
   if (!program) notFound();
 
   const all = await getPrograms();
-  const index = all.findIndex((item) => item.slug === program.slug);
-  const previous = index > 0 ? all[index - 1] : null;
-  const next = index < all.length - 1 ? all[index + 1] : null;
   const topic = TOPICS[program.topic];
   const voices = uniqueVoices(program.sources);
   const balanceNote = partisanNote(program.sources);
   // past/present links: the older program this one echoes, and today's echoes of this one
   const origin = program.echoOf ? all.find((item) => item.slug === program.echoOf) : null;
   const echoes = all.filter((item) => item.echoOf === program.slug);
+  const showChecking = program.status === "checking" && Boolean(program.question);
+
+  // build the nav from the sections that actually render
+  const nav: NavItem[] = [{ id: "record", label: "Promise and record" }];
+  if (showChecking) nav.push({ id: "checking", label: "Still checking" });
+  if (program.since.length > 0) nav.push({ id: "after", label: "What came after" });
+  if (origin || echoes.length > 0) nav.push({ id: "echoes", label: "Past and present" });
+  if (program.video) nav.push({ id: "video", label: "Video" });
+  nav.push({ id: "where", label: "Where" });
+  if (program.sources.length > 0) nav.push({ id: "sources", label: "Sources" });
+  nav.push({ id: "contribute", label: "Help improve this page" });
+  if (related.length > 0) nav.push({ id: "related", label: "Related programs" });
 
   return (
     <main id="main" className="mx-auto max-w-3xl space-y-8 px-4 py-6">
@@ -56,21 +85,48 @@ export default async function ProgramPage({ params }: Props) {
         </div>
       </header>
 
-      <section className="space-y-2">
-        <h2 className="text-lg font-semibold">Who says so</h2>
-        {voices.length > 0 ? (
-          <div className="flex flex-wrap gap-2">{voices.map((voice) => <VoiceChip key={voice} voice={voice} />)}</div>
-        ) : <p className="text-sm text-stone-600">No sources have been attached to this page yet.</p>}
-        {balanceNote && <p className="text-sm text-amber-900">{balanceNote}</p>}
+      {/* promise vs record, side by side from 768px and stacked on phones */}
+      <section id="record" aria-label="Promise and record" className="scroll-mt-24 space-y-4">
+        <div className={`grid gap-4 ${program.promised ? "md:grid-cols-2" : ""}`}>
+          {program.promised && (
+            <div className="rounded-xl border border-stone-300 bg-white p-5">
+              <h2 className="text-xl font-semibold text-stone-900">What it promised</h2>
+              <p className="mt-2 max-w-[68ch] text-lg leading-relaxed text-stone-800">{program.promised}</p>
+            </div>
+          )}
+          <div className="rounded-xl border border-stone-300 bg-white p-5">
+            <h2 className="text-xl font-semibold text-stone-900">What the record shows</h2>
+            <p className="mt-2 max-w-[68ch] text-lg leading-relaxed text-stone-800">{program.happened}</p>
+          </div>
+        </div>
+
+        {/* who says so strip, right under the two panels */}
+        <div className="space-y-2 rounded-xl border border-stone-200 bg-stone-50 p-4">
+          <h2 className="text-lg font-semibold text-stone-900">Who says so</h2>
+          {voices.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {voices.map((voice) => (
+                <VoiceChip key={voice} voice={voice} />
+              ))}
+            </div>
+          ) : (
+            <p className="text-base text-stone-700">No sources have been attached to this page yet.</p>
+          )}
+          {balanceNote && <p className="text-base text-amber-900">{balanceNote}</p>}
+        </div>
       </section>
 
-      {program.promised && <section className="space-y-2"><h2 className="text-lg font-semibold">What it promised</h2><p>{program.promised}</p></section>}
-      <section className="space-y-2"><h2 className="text-lg font-semibold">What happened</h2><p>{program.happened}</p></section>
-
-      {program.status === "checking" && program.question && (
-        <section className="rounded-lg border border-amber-400 bg-amber-50 p-4">
-          <h2 className="font-semibold">Still checking</h2>
-          <p>{program.question}</p>
+      {/* stronger open-question box right after the record */}
+      {showChecking && (
+        <section
+          id="checking"
+          aria-labelledby="checking-heading"
+          className="scroll-mt-24 rounded-xl border-2 border-amber-500 bg-amber-50 p-5"
+        >
+          <h2 id="checking-heading" className="text-xl font-semibold text-amber-950">
+            Still checking
+          </h2>
+          <p className="mt-2 max-w-[68ch] text-lg leading-relaxed text-amber-950">{program.question}</p>
         </section>
       )}
 
@@ -98,18 +154,61 @@ export default async function ProgramPage({ params }: Props) {
         </section>
       )}
 
-      {program.video && <section className="space-y-2"><h2 className="text-lg font-semibold">Video</h2><VideoEmbed video={program.video} /></section>}
+      {program.video && (
+        <Block id="video" title="Video">
+          <VideoEmbed video={program.video} />
+        </Block>
+      )}
 
-      <section className="space-y-2">
-        <h2 className="text-lg font-semibold">Where</h2>
-        <ul className="list-disc pl-5">{program.places.map((place) => <li key={`${place.name}-${place.province}`}>{place.name}, {PROVINCE_LABELS[place.province]}{place.approximate ? " (approximate)" : ""}</li>)}</ul>
-      </section>
-      {program.sources.length > 0 && <section className="space-y-2"><h2 className="text-lg font-semibold">Sources</h2><SourceList sources={program.sources} /></section>}
-      <ContributeLinks slug={program.slug} />
-      <nav aria-label="Other programs" className="flex justify-between text-sm">
-        {previous ? <Link href={`/programs/${previous.slug}`} className="underline">Previous</Link> : <span />}
-        {next ? <Link href={`/programs/${next.slug}`} className="underline">Next</Link> : <span />}
-      </nav>
-    </main>
+      {/* mini-map goes here later, for now a plain place list */}
+      <Block id="where" title="Where">
+        <ul className="list-disc space-y-1 pl-6 text-lg">
+          {program.places.map((place) => (
+            <li key={`${place.name}-${place.province}`}>
+              {place.name}, {PROVINCE_LABELS[place.province]}
+              {place.approximate ? " (approximate)" : ""}
+            </li>
+          ))}
+        </ul>
+      </Block>
+
+      {program.sources.length > 0 && (
+        <Block id="sources" title="Sources">
+          <SourceList sources={program.sources} />
+        </Block>
+      )}
+
+      <div id="contribute" className="scroll-mt-24">
+        <ContributeLinks slug={program.slug} />
+      </div>
+
+      {/* related programs replace the old previous and next links */}
+      {related.length > 0 && (
+        <Block id="related" title="Related programs">
+          <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            {related.map((item) => (
+              <li key={item.slug}>
+                <Link
+                  href={`/programs/${item.slug}`}
+                  className="block h-full rounded-xl border border-stone-300 bg-white p-4 hover:border-stone-500 focus-visible:outline focus-visible:outline-2"
+                >
+                  <span className="block text-lg font-semibold text-stone-900">{item.title}</span>
+                  <span className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-base text-stone-700">
+                    <span>{yearRange(item)}</span>
+                    <span style={{ color: TOPICS[item.topic].color }}>{TOPICS[item.topic].label}</span>
+                    <StatusTag status={item.status} />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Block>
+      )}
+    </div>
+
+        {/* desktop only sticky rail */ }
+  <PageRail items={nav} />
+      </div >
+    </main >
   );
 }
