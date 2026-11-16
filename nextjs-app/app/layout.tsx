@@ -1,7 +1,7 @@
 // What this file does: sets the shared page shell, navigation, footer and metadata.
 import type { Metadata } from "next";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/SiteFooter";
+import { SiteHeader } from "@/components/SiteHeader";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
