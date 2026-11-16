@@ -1,0 +1,90 @@
+// what this file does: topic, layer and province filter chips
+// change in this version (c3.2)
+//   layout "row" puts labels and chips inline for the desktop filter bar
+//   layout "stack" is the roomy version used inside the phone filter sheet
+//   the layer switch is now "show today's echoes" with a one-line hint
+// every chip is at least 44px tall so it is easy to tap on a phone
+"use client";
+
+import { useId } from "react";
+import { PROVINCE_KEYS, PROVINCE_LABELS, TOPIC_KEYS, TOPICS, type Province, type Topic } from "@/lib/vocab";
+
+type Props = {
+  topics: Topic[];
+  provinces: Province[];
+  today: boolean;
+  hasFilters: boolean;
+  layout?: "row" | "stack";
+  onToggleTopic: (topic: Topic) => void;
+  onToggleProvince: (province: Province) => void;
+  onToggleToday: () => void;
+  onClear: () => void;
+};
+
+// one chip, when pressed it is filled with its color
+// aria-pressed also tells screen readers, so state never depends on color alone
+function Chip({ label, pressed, color = "#44403c", onClick }: { label: string; pressed: boolean; color?: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      aria-pressed={pressed}
+      onClick={onClick}
+      style={pressed ? { borderColor: color, backgroundColor: color, color: "#fff" } : { borderColor: color }}
+      className="tap-target rounded-full border-2 px-4 text-base"
+    >
+      {label}
+    </button>
+  );
+}
+
+export function FilterControls({ layout = "stack", ...props }: Props) {
+  // useId keeps ids unique when the controls render in the bar and in the sheet
+  const uid = useId();
+  const row = layout === "row";
+  const group = row ? "flex flex-wrap items-center gap-2" : "space-y-2";
+  const label = "text-base font-medium text-stone-700";
+
+  return (
+    <div className={row ? "space-y-2" : "space-y-5"}>
+      <div role="group" aria-labelledby={`${uid}-topic`} className={group}>
+        <span id={`${uid}-topic`} className={label}>Topic</span>
+        <div className="flex flex-wrap gap-2">
+          {TOPIC_KEYS.map((key) => (
+            <Chip key={key} label={TOPICS[key].label} color={TOPICS[key].color} pressed={props.topics.includes(key)} onClick={() => props.onToggleTopic(key)} />
+          ))}
+        </div>
+      </div>
+
+      <div role="group" aria-labelledby={`${uid}-province`} className={group}>
+        <span id={`${uid}-province`} className={label}>Province</span>
+        <div className="flex flex-wrap gap-2">
+          {PROVINCE_KEYS.map((key) => (
+            <Chip key={key} label={PROVINCE_LABELS[key]} pressed={props.provinces.includes(key)} onClick={() => props.onToggleProvince(key)} />
+          ))}
+        </div>
+      </div>
+
+      <div role="group" aria-labelledby={`${uid}-layer`} className={group}>
+        <span id={`${uid}-layer`} className={label}>Layer</span>
+        {/* a real on/off switch, adds the echo programs of today to the map */}
+        <button
+          type="button"
+          role="switch"
+          aria-checked={props.today}
+          aria-describedby={`${uid}-hint`}
+          onClick={props.onToggleToday}
+          style={props.today ? { borderColor: "#b45309", backgroundColor: "#b45309", color: "#fff" } : { borderColor: "#b45309" }}
+          className="tap-target rounded-full border-2 px-4 text-base"
+        >
+          Show today&apos;s echoes
+        </button>
+        <span id={`${uid}-hint`} className="text-sm text-stone-700">Adds programs from today that echo the older ones.</span>
+        {props.hasFilters && (
+          <button type="button" onClick={props.onClear} className="tap-target text-base text-stone-700 underline underline-offset-2">
+            Clear filters
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}

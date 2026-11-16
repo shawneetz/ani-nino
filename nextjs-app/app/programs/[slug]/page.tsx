@@ -1,17 +1,28 @@
-// What this file does: renders one program page with evidence context, the
-// link between past and present, and GitHub contribution links.
+// what this file does: renders one program page with evidence context, the
+// link between past and present, and github contribution links
+// changes in this version
+//   u15: "where" is now a lazy-loaded mini-map with the places listed beside it
+//   u16: a sticky jump select for phones (the desktop rail was already in place)
+//   u17: related programs use the RelatedPrograms component
+//   u18: the contribute panel owns its own anchor
+// all component imports use PascalCase file names
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ContributeLinks } from "@/components/contribute-links";
-import { SourceList } from "@/components/source-list";
-import { StatusTag } from "@/components/status-tag";
-import { VideoEmbed } from "@/components/video-embed";
-import { VoiceChip } from "@/components/voice-chip";
+import type { ReactNode } from "react";
+import { ContributeLinks } from "@/components/ContributeLinks";
+import { JumpSelect, PageRail, type NavItem } from "@/components/PageNav";
+import { ProgramHeader } from "@/components/ProgramHeader";
+import { ProgramMiniMap } from "@/components/ProgramMiniMap";
+import { CheckingBox, RecordPanels } from "@/components/RecordPanels";
+import { RelatedPrograms } from "@/components/RelatedPrograms";
+import { SinceTimeline } from "@/components/SinceTimeline";
+import { SourceList } from "@/components/SourceList";
+import { VideoEmbed } from "@/components/VideoEmbed";
 import { getProgram, getPrograms } from "@/lib/content";
-import { yearRange } from "@/lib/filter";
-import { partisanNote, uniqueVoices } from "@/lib/source-summary";
-import { PROVINCE_LABELS, TOPICS } from "@/lib/vocab";
+import { toExplorerProgram } from "@/lib/explorer-types";
+import { programDescription } from "@/lib/program-description";
+import { relatedPrograms } from "@/lib/related";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -21,7 +32,20 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const program = await getProgram((await params).slug);
-  return program ? { title: program.title, description: program.happened } : {};
+  // description is the first sentence of "happened", trimmed to 160 characters
+  return program ? { title: program.title, description: programDescription(program.happened) } : {};
+}
+
+// shared section wrapper: gives each section an anchor id for the page nav
+function Block({ id, title, children }: { id: string; title: string; children: ReactNode }) {
+  return (
+    <section id={id} aria-labelledby={`${id}-heading`} className="scroll-mt-24 space-y-3">
+      <h2 id={`${id}-heading`} className="text-2xl font-semibold text-stone-900">
+        {title}
+      </h2>
+      {children}
+    </section>
+  );
 }
 
 export default async function ProgramPage({ params }: Props) {
@@ -30,84 +54,115 @@ export default async function ProgramPage({ params }: Props) {
   if (!program) notFound();
 
   const all = await getPrograms();
-  const index = all.findIndex((item) => item.slug === program.slug);
-  const previous = index > 0 ? all[index - 1] : null;
-  const next = index < all.length - 1 ? all[index + 1] : null;
-  const topic = TOPICS[program.topic];
-  const voices = uniqueVoices(program.sources);
-  const balanceNote = partisanNote(program.sources);
-  // Past/present links: the older program this one echoes, and today's echoes of this one.
+  // past/present links: the older program this one echoes, and today's echoes of this one
   const origin = program.echoOf ? all.find((item) => item.slug === program.echoOf) : null;
   const echoes = all.filter((item) => item.echoOf === program.slug);
+  // up to 3 related programs, echo links are left out so nothing repeats
+  const related = relatedPrograms(program, all);
+  // the open question only shows while the program is still being checked
+  const question = program.status === "checking" ? program.question : undefined;
+
+  // build the nav from the sections that actually render
+  const nav: NavItem[] = [{ id: "record", label: "Promise and record" }];
+  if (question) nav.push({ id: "checking", label: "Still checking" });
+  if (program.since.length > 0) nav.push({ id: "after", label: "What came after" });
+  if (origin || echoes.length > 0) nav.push({ id: "echoes", label: "Past and present" });
+  if (program.video) nav.push({ id: "video", label: "Video" });
+  nav.push({ id: "where", label: "Where" });
+  if (program.sources.length > 0) nav.push({ id: "sources", label: "Sources" });
+  nav.push({ id: "contribute", label: "Help improve this page" });
+  if (related.length > 0) nav.push({ id: "related", label: "Related programs" });
 
   return (
-    <main id="main" className="mx-auto max-w-3xl space-y-8 px-4 py-6">
-      <Link href="/" className="text-sm underline">Back to the map</Link>
-      <header className="space-y-2">
-        <h1 className="text-2xl font-semibold">{program.title}</h1>
-        <div className="flex flex-wrap gap-3 text-sm text-stone-600">
-          <span>{program.when} ({yearRange(program)})</span>
-          <span style={{ color: topic.color }}>{topic.label}</span>
-          {program.era === "today" && <span className="font-medium text-amber-800">Today</span>}
-          <StatusTag status={program.status} />
-          {program.checkedOn && <span>Checked on {program.checkedOn}</span>}
+    // on desktop the content and the sticky rail sit side by side
+    <main id="main" className="mx-auto max-w-6xl px-4 py-6 lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-10">
+      <div className="max-w-3xl space-y-8">
+        <Link href="/map" className="tap-target inline-flex items-center text-base underline underline-offset-2">
+          Back to the map
+        </Link>
+
+        <ProgramHeader program={program} />
+
+        {/* phones only: a jump menu that stays at the top while the reader scrolls */}
+        <div className="sticky top-0 z-20 -mx-4 border-b border-stone-200 bg-background/95 px-4 py-2 backdrop-blur lg:hidden">
+          <JumpSelect items={nav} />
         </div>
-      </header>
 
-      <section className="space-y-2">
-        <h2 className="text-lg font-semibold">Who says so</h2>
-        {voices.length > 0 ? (
-          <div className="flex flex-wrap gap-2">{voices.map((voice) => <VoiceChip key={voice} voice={voice} />)}</div>
-        ) : <p className="text-sm text-stone-600">No sources have been attached to this page yet.</p>}
-        {balanceNote && <p className="text-sm text-amber-900">{balanceNote}</p>}
-      </section>
+        {/* promise vs record, then who says so */}
+        <RecordPanels promised={program.promised} happened={program.happened} sources={program.sources} />
 
-      {program.promised && <section className="space-y-2"><h2 className="text-lg font-semibold">What it promised</h2><p>{program.promised}</p></section>}
-      <section className="space-y-2"><h2 className="text-lg font-semibold">What happened</h2><p>{program.happened}</p></section>
+        {/* stronger open-question box right after the record */}
+        {question && <CheckingBox question={question} />}
 
-      {program.status === "checking" && program.question && (
-        <section className="rounded-lg border border-amber-400 bg-amber-50 p-4">
-          <h2 className="font-semibold">Still checking</h2>
-          <p>{program.question}</p>
-        </section>
-      )}
+        {/* what came after: year, text, linked source and voice label for each entry */}
+        {program.since.length > 0 && (
+          <Block id="after" title="What came after">
+            <SinceTimeline items={program.since} />
+          </Block>
+        )}
 
-      {program.since.length > 0 && (
-        <section className="space-y-2">
-          <h2 className="text-lg font-semibold">What came after</h2>
-          <ul className="space-y-2">{program.since.map((item) => <li key={`${item.year}-${item.text}`}><strong>{item.year}:</strong> {item.text} <span className="text-sm text-stone-600">(Source: {item.source.title})</span></li>)}</ul>
-        </section>
-      )}
+        {/* the past/present links share one anchor so the nav can jump to them */}
+        {(origin || echoes.length > 0) && (
+          <div id="echoes" className="scroll-mt-24 space-y-8">
+            {/* today program -> the martial-law program it echoes */}
+            {origin && (
+              <section className="space-y-2">
+                <h2 className="text-lg font-semibold">Echoes an older program</h2>
+                <p>
+                  This connects to{" "}
+                  <Link href={`/programs/${origin.slug}`} className="underline underline-offset-2">{origin.title}</Link>.
+                  The link is my interpretation, not an established finding.
+                </p>
+              </section>
+            )}
 
-      {/* Today program -> the martial-law program it echoes. */}
-      {origin && (
-        <section className="space-y-2">
-          <h2 className="text-lg font-semibold">Echoes an older program</h2>
-          <p>This connects to <Link href={`/programs/${origin.slug}`} className="underline underline-offset-2">{origin.title}</Link>. The link is my interpretation, not an established finding.</p>
-        </section>
-      )}
+            {/* martial-law program -> today programs that echo it */}
+            {echoes.length > 0 && (
+              <section className="space-y-2">
+                <h2 className="text-lg font-semibold">Echoed today</h2>
+                <ul className="list-disc space-y-1 pl-5">
+                  {echoes.map((item) => (
+                    <li key={item.slug}>
+                      <Link href={`/programs/${item.slug}`} className="underline underline-offset-2">{item.title}</Link>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-sm text-stone-600">These links are my interpretation, not established findings.</p>
+              </section>
+            )}
+          </div>
+        )}
 
-      {/* Martial-law program -> today programs that echo it. */}
-      {echoes.length > 0 && (
-        <section className="space-y-2">
-          <h2 className="text-lg font-semibold">Echoed today</h2>
-          <ul className="list-disc space-y-1 pl-5">{echoes.map((item) => <li key={item.slug}><Link href={`/programs/${item.slug}`} className="underline underline-offset-2">{item.title}</Link></li>)}</ul>
-          <p className="text-sm text-stone-600">These links are my interpretation, not established findings.</p>
-        </section>
-      )}
+        {program.video && (
+          <Block id="video" title="Video">
+            <VideoEmbed video={program.video} />
+          </Block>
+        )}
 
-      {program.video && <section className="space-y-2"><h2 className="text-lg font-semibold">Video</h2><VideoEmbed video={program.video} /></section>}
+        {/* mini-map with the places listed beside it, the map loads when it nears the screen */}
+        <Block id="where" title="Where">
+          <ProgramMiniMap program={toExplorerProgram(program)} />
+        </Block>
 
-      <section className="space-y-2">
-        <h2 className="text-lg font-semibold">Where</h2>
-        <ul className="list-disc pl-5">{program.places.map((place) => <li key={`${place.name}-${place.province}`}>{place.name}, {PROVINCE_LABELS[place.province]}{place.approximate ? " (approximate)" : ""}</li>)}</ul>
-      </section>
-      {program.sources.length > 0 && <section className="space-y-2"><h2 className="text-lg font-semibold">Sources</h2><SourceList sources={program.sources} /></section>}
-      <ContributeLinks slug={program.slug} />
-      <nav aria-label="Other programs" className="flex justify-between text-sm">
-        {previous ? <Link href={`/programs/${previous.slug}`} className="underline">Previous</Link> : <span />}
-        {next ? <Link href={`/programs/${next.slug}`} className="underline">Next</Link> : <span />}
-      </nav>
+        {program.sources.length > 0 && (
+          <Block id="sources" title="Sources">
+            <SourceList sources={program.sources} />
+          </Block>
+        )}
+
+        {/* github only panel, it carries its own anchor */}
+        <ContributeLinks slug={program.slug} />
+
+        {/* related programs replace the old previous and next links */}
+        {related.length > 0 && (
+          <Block id="related" title="Related programs">
+            <RelatedPrograms items={related} />
+          </Block>
+        )}
+      </div>
+
+      {/* desktop only sticky rail */}
+      <PageRail items={nav} />
     </main>
   );
 }
