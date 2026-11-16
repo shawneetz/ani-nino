@@ -1,12 +1,23 @@
 // what this file does: shows the shared footer with links in three groups
 // (explore, evidence, project) and the github link
-// change in this version: the "map" link now points to /map
 import Link from "next/link";
 import { REPO_URL, SITE } from "@/lib/site";
 
-// footer groups live here. add the programs link to "explore" when /programs exists
+/**
+ * The footer link groups, shown as columns.
+ *
+ * @remarks
+ * Keep the "Explore" group in step with `NAV_LINKS` in `src/lib/site.ts`.
+ * The GitHub link is added to the "Project" group in the component.
+ */
 const GROUPS = [
-  { title: "Explore", links: [{ href: "/map", label: "Map" }] },
+  {
+    title: "Explore",
+    links: [
+      { href: "/map", label: "Map" },
+      { href: "/programs", label: "Programs" },
+    ],
+  },
   {
     title: "Evidence",
     links: [
@@ -20,6 +31,12 @@ const GROUPS = [
 // shared link look: 44px tall so it is easy to tap
 const LINK = "tap-target inline-flex items-center underline underline-offset-2";
 
+/**
+ * Renders the site footer with a short note and grouped links.
+ *
+ * @remarks
+ * Server Component. It has no state, so no client code is shipped for it.
+ */
 export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-stone-200 bg-white">

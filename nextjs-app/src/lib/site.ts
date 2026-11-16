@@ -1,7 +1,11 @@
 // what this file does: keeps site-wide text, navigation and github links together
 // github is the only way to contribute in v1, so every link here must point to a real repo
-// changes in this version: "map" now points to /map (the landing page owns "/"),
-// plus featured / featured_gaps for the landing page and two general github links
+// "map" lives at /map (the landing page owns "/"), and "programs" lists every program
+// featured and featured_gaps feed the landing page, plus two general github links
+
+/**
+ * Site-wide text used by the header, metadata and the landing page.
+ */
 export const SITE = {
   title: "Anino ng Ani",
   subtitle: "Sino ang Nagbayad sa Masaganang Ani?",
@@ -10,13 +14,23 @@ export const SITE = {
     "An evidence-labeled map of martial-law farm programs in CALABARZON, 1972 to 1986: what each promised, what the record shows, and who says so.",
 } as const;
 
+/** GitHub account that owns the repository. */
 export const REPO_OWNER = "shawneetz";
+/** Name of the GitHub repository. */
 export const REPO_NAME = "ani-nino";
+/** Full address of the repository, the base of every contribution link. */
 export const REPO_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
 const BRANCH = "main";
 
-// always true: repo_owner is now set to the real account
-// kept for backward compat with pnpm content:check which calls this
+/**
+ * Tells whether the repository owner has been set.
+ *
+ * @remarks
+ * Always `true` now that `REPO_OWNER` is a real account. It stays because
+ * `pnpm content:check` still calls it.
+ *
+ * @returns `true`.
+ */
 export function isRepoConfigured(): boolean {
   return true;
 }
@@ -25,45 +39,87 @@ export function isRepoConfigured(): boolean {
 const SOURCE_TEMPLATE = "suggest-source.yml";
 const PROBLEM_TEMPLATE = "report-problem.yml";
 
+/**
+ * Main navigation links, in the order they appear in the header and on phones.
+ *
+ * @remarks
+ * The footer's "Explore" group lists the same pages, keep them in step.
+ */
 export const NAV_LINKS = [
   { href: "/map", label: "Map" },
+  { href: "/programs", label: "Programs" },
   { href: "/charts", label: "Charts" },
   { href: "/sources", label: "Sources" },
   { href: "/about", label: "About" },
 ] as const;
 
-// landing page "start here" cards. slugs must match files in content/programs/
-// a slug that does not exist is skipped, so a typo never breaks the page
+/**
+ * Slugs of the three programs shown in the landing page "Start here" section.
+ *
+ * @remarks
+ * Slugs must match files in `content/programs/`. A slug that does not exist
+ * is skipped, so a typo never breaks the page.
+ */
 export const FEATURED = [
   "laguna-operation-land-transfer",
   "laguna-lake-fishpens",
   "quezon-coconut-levy",
 ] as const;
 
-// landing page "what we do not know yet" gaps. ids must match content/gaps.yaml
+/**
+ * Ids of the gaps shown in the landing page "What we do not know yet" section.
+ *
+ * @remarks
+ * Ids must match entries in `content/gaps.yaml`.
+ */
 export const FEATURED_GAPS = [
   "laguna-land-transfer-numbers",
   "coconut-levy-flow",
   "hacienda-yulo-coverage",
 ] as const;
 
-// general github links (not tied to one program)
+/** Opens GitHub's issue form chooser, not tied to one program. */
 export const ISSUES_URL = `${REPO_URL}/issues/new/choose`;
+/** Lists the program files on GitHub. */
 export const CONTENT_URL = `${REPO_URL}/tree/${BRANCH}/content/programs`;
 
+/**
+ * Builds the GitHub link that edits one program file.
+ *
+ * @param slug - The program slug, which is also the yaml file name.
+ * @returns The address of GitHub's file editor for that program.
+ */
 export function editUrl(slug: string): string {
   return `${REPO_URL}/edit/${BRANCH}/content/programs/${slug}.yaml`;
 }
 
-// opens a new issue from a form. the "program" field is pre-filled with the slug
+/**
+ * Builds the link that opens a new issue from a form, with the program field filled in.
+ *
+ * @param template - File name of the issue form.
+ * @param slug - The program slug to pre-fill.
+ * @returns The address of the new issue page.
+ */
 function formUrl(template: string, slug: string): string {
   return `${REPO_URL}/issues/new?template=${encodeURIComponent(template)}&program=${encodeURIComponent(slug)}`;
 }
 
+/**
+ * Builds the "report a problem" link for a program.
+ *
+ * @param slug - The program slug to pre-fill.
+ * @returns The address of the problem form.
+ */
 export function issueUrl(slug: string): string {
   return formUrl(PROBLEM_TEMPLATE, slug);
 }
 
+/**
+ * Builds the "suggest a source" link for a program.
+ *
+ * @param slug - The program slug to pre-fill.
+ * @returns The address of the source form.
+ */
 export function sourceIssueUrl(slug: string): string {
   return formUrl(SOURCE_TEMPLATE, slug);
 }

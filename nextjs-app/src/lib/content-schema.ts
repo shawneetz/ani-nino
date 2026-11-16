@@ -20,6 +20,12 @@ const isoDate = z.iso.date();
 const anyYear = z.number().int().min(FIRST_YEAR).max(TODAY_LAST_YEAR);
 const url = z.url({ protocol: /^https?$/ });
 
+/**
+ * Validates one cited source.
+ *
+ * @remarks
+ * `voice` says who is speaking. It is a label, not a verdict on whether the source is right.
+ */
 export const sourceSchema = z.strictObject({
   title: text,
   publisher: text,
@@ -29,8 +35,12 @@ export const sourceSchema = z.strictObject({
   accessed: isoDate.optional(),
   backs: z.enum(["promise", "happened", "context"]).optional(),
 });
+/** A source as written in yaml, after validation. */
 export type Source = z.infer<typeof sourceSchema>;
 
+/**
+ * Validates one place on the map, with coordinates limited to the CALABARZON area.
+ */
 export const placeSchema = z.strictObject({
   name: text,
   province: z.enum(PROVINCE_KEYS),
@@ -38,6 +48,7 @@ export const placeSchema = z.strictObject({
   lng: z.number().min(120.2).max(122.8),
   approximate: z.boolean().default(false),
 });
+/** A place as written in yaml, after validation. */
 export type Place = z.infer<typeof placeSchema>;
 
 const sinceSchema = z.strictObject({
@@ -52,6 +63,14 @@ const videoSchema = z.strictObject({
   channel: text,
 });
 
+/**
+ * Validates one program file in `content/programs/`.
+ *
+ * @remarks
+ * The rules at the bottom keep unchecked claims from being shown as confirmed:
+ * a "checking" program needs an open question, and a "confirmed" program needs
+ * `checkedOn` and at least one source with a url. Each era also has its own year window.
+ */
 export const programSchema = z
   .strictObject({
     slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
@@ -104,30 +123,65 @@ export const programSchema = z
       }
     }
   });
+/** A program as written in yaml, after validation. */
 export type Program = z.infer<typeof programSchema>;
 
+// a chart source must always be linkable and dated
 const chartSourceSchema = sourceSchema.required({ url: true, accessed: true });
 
+/**
+ * Validates one number in a chart.
+ *
+ * @remarks
+ * `kind` decides how the number is drawn. A `"bar"` (the default) is a bar.
+ * A `"target"` is a labeled line across the chart, for example a goal.
+ * Every point, bar or target, carries its own single source.
+ */
 export const chartPointSchema = z.strictObject({
   label: text,
   value: z.number(),
-  goal: z.number().optional(),
+  // "bar" is a drawn bar. "target" is a labeled line across the chart (for example a goal)
+  // every point, bar or target, carries its own single source
+  kind: z.enum(["bar", "target"]).default("bar"),
   qualifier: z.enum(["exact", "approx", "at_most", "at_least"]).default("exact"),
   source: chartSourceSchema,
   note: text.optional(),
 });
+/** A chart point as written in yaml, after validation. */
 export type ChartPoint = z.infer<typeof chartPointSchema>;
 
-export const chartSchema = z.strictObject({
-  id: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
-  title: text,
-  description: text.optional(),
-  unit: z.string().default(""),
-  caveat: text.optional(),
-  points: z.array(chartPointSchema),
-});
+/**
+ * Validates one chart file in `content/charts/`.
+ *
+ * @remarks
+ * A chart may have no points yet. Once it has points, at least one must be a
+ * bar, because target lines need something to be compared with. The old
+ * `goal` field is no longer accepted, use a point with `kind: target`.
+ */
+export const chartSchema = z
+  .strictObject({
+    id: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
+    title: text,
+    description: text.optional(),
+    unit: z.string().default(""),
+    caveat: text.optional(),
+    points: z.array(chartPointSchema),
+  })
+  .superRefine((chart, ctx) => {
+    // target lines need something to be compared with
+    if (chart.points.length > 0 && !chart.points.some((point) => point.kind === "bar")) {
+      ctx.addIssue({ code: "custom", message: "a chart needs at least one bar, not only targets", path: ["points"] });
+    }
+  });
+/** A chart as written in yaml, after validation. */
 export type Chart = z.infer<typeof chartSchema>;
 
+/**
+ * Validates one research gap listed in `content/gaps.yaml`.
+ *
+ * @remarks
+ * `program`, when given, must match an existing program slug. The content loader checks that.
+ */
 export const gapSchema = z.strictObject({
   id: text,
   kind: z.enum(GAP_KIND_KEYS),
@@ -135,4 +189,5 @@ export const gapSchema = z.strictObject({
   description: text,
   program: z.string().optional(),
 });
+/** A gap as written in yaml, after validation. */
 export type Gap = z.infer<typeof gapSchema>;
