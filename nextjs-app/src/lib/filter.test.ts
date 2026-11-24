@@ -13,11 +13,11 @@ import {
 
 type TestProgram = Filterable & { slug: string };
 const programs: TestProgram[] = [
-  { slug: "yulo", topic: "land", startYear: 1972, endYear: null, places: [{ province: "laguna" }] },
-  { slug: "kkk", topic: "support", startYear: 1981, endYear: 1986, places: [{ province: "laguna" }] },
-  { slug: "levy", topic: "markets", startYear: 1973, endYear: null, places: [{ province: "quezon" }] },
-  { slug: "dam", topic: "displacement", startYear: 1979, endYear: null, places: [{ province: "rizal" }, { province: "quezon" }] },
-  { slug: "yulo-today", topic: "land", era: "today", startYear: 2010, endYear: 2021, places: [{ province: "laguna" }] },
+  { slug: "yulo", topic: "land", status: "confirmed", startYear: 1972, endYear: null, places: [{ province: "laguna" }] },
+  { slug: "kkk", topic: "support", status: "checking", startYear: 1981, endYear: 1986, places: [{ province: "laguna" }] },
+  { slug: "levy", topic: "markets", status: "checking", startYear: 1973, endYear: null, places: [{ province: "quezon" }] },
+  { slug: "dam", topic: "displacement", status: "checking", startYear: 1979, endYear: null, places: [{ province: "rizal" }, { province: "quezon" }] },
+  { slug: "yulo-today", topic: "land", era: "today", status: "confirmed", startYear: 2010, endYear: 2021, places: [{ province: "laguna" }] },
 ];
 const filters = (changes: Partial<Filters>): Filters => ({ ...EMPTY_FILTERS, ...changes });
 const slugs = (items: TestProgram[]) => items.map((program) => program.slug);
@@ -45,6 +45,25 @@ describe("visiblePrograms", () => {
     expect(slugs(visiblePrograms(programs, filters({ provinces: ["quezon"] })))).toEqual(["levy", "dam"]);
     expect(slugs(visiblePrograms(programs, filters({ topics: ["support"], provinces: ["quezon"] })))).toEqual([]);
   });
+
+  it("keeps only confirmed programs when confirmed only is on", () => {
+    expect(slugs(visiblePrograms(programs, filters({ confirmed: true })))).toEqual(["yulo"]);
+  });
+
+  it("applies confirmed only to the today layer too", () => {
+    expect(slugs(visiblePrograms(programs, filters({ confirmed: true, today: true })))).toEqual(["yulo", "yulo-today"]);
+  });
+
+  it("combines confirmed only with the other filters", () => {
+    expect(slugs(visiblePrograms(programs, filters({ confirmed: true, topics: ["support"] })))).toEqual([]);
+    expect(slugs(visiblePrograms(programs, filters({ confirmed: true, provinces: ["laguna"] })))).toEqual(["yulo"]);
+  });
+
+  it("hides a program with no status when confirmed only is on", () => {
+    const noStatus: TestProgram[] = [{ ...programs[0], status: undefined }];
+    expect(visiblePrograms(noStatus, filters({ confirmed: true }))).toEqual([]);
+    expect(visiblePrograms(noStatus, EMPTY_FILTERS)).toHaveLength(1);
+  });
 });
 
 describe("yearRange and URL helpers", () => {
@@ -55,18 +74,24 @@ describe("yearRange and URL helpers", () => {
   });
 
   it("ignores invalid URL values and removes duplicates", () => {
-    expect(parseFilters(new URLSearchParams("year=1900&topic=land,land,sports&province=mars"))).toEqual({
+    expect(parseFilters(new URLSearchParams("year=1900&topic=land,land,sports&province=mars&confirmed=yes"))).toEqual({
       year: null,
       topics: ["land"],
       provinces: [],
       today: false,
+      confirmed: false,
     });
   });
 
   it("round-trips filters through a readable query string", () => {
-    const value: Filters = { year: 1980, topics: ["land"], provinces: ["laguna", "rizal"], today: true };
+    const value: Filters = { year: 1980, topics: ["land"], provinces: ["laguna", "rizal"], today: true, confirmed: true };
     const query = toQueryString(value);
-    expect(query).toBe("year=1980&topic=land&province=laguna,rizal&today=1");
+    expect(query).toBe("year=1980&topic=land&province=laguna,rizal&today=1&confirmed=1");
     expect(parseFilters(new URLSearchParams(query))).toEqual(value);
+  });
+
+  it("writes only the confirmed key when nothing else is set", () => {
+    expect(toQueryString(filters({ confirmed: true }))).toBe("confirmed=1");
+    expect(parseFilters(new URLSearchParams("confirmed=1")).confirmed).toBe(true);
   });
 });

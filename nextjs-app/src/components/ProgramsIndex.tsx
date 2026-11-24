@@ -1,5 +1,6 @@
 // what this file does: the searchable list on the /programs page
-//   search box (title or place), topic and province chips, today's echoes switch
+//   search box (title or place), topic and province chips, confirmed filter,
+//   and today's echoes switch when a today program exists
 //   sort by year or title, a live count, and a link that opens the map with the same filters
 // all state lives here in the browser, the page passes in the slim program list
 // the chips reuse FilterControls and the cards reuse ProgramCard, so they match /map
@@ -49,7 +50,7 @@ function toggle<T>(list: T[], value: T): T[] {
  * Must remain a Client Component because search text, chips and sorting are
  * local state. Filtering uses the same `visiblePrograms` function as the map,
  * so both pages always agree on what a chip means. The search text is not sent
- * to the map: its url only understands topic, province, year and today.
+ * to the map: its url only understands topic, province, year, today and confirmed.
  *
  * @example
  * ```tsx
@@ -64,6 +65,7 @@ export function ProgramsIndex({ programs }: ProgramsIndexProps) {
     const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
     const [query, setQuery] = useState("");
     const [sort, setSort] = useState<SortKey>("year");
+    const hasToday = useMemo(() => programs.some((program) => program.era === "today"), [programs]);
 
     // same filter as the map first, then the search, then the sort
     const shown = useMemo(() => {
@@ -72,9 +74,14 @@ export function ProgramsIndex({ programs }: ProgramsIndexProps) {
     }, [programs, filters, query, sort]);
 
     const searching = query.trim() !== "";
-    const hasFilters = filters.topics.length > 0 || filters.provinces.length > 0 || filters.today || searching;
+    const hasFilters =
+        filters.topics.length > 0 ||
+        filters.provinces.length > 0 ||
+        (hasToday && filters.today) ||
+        filters.confirmed ||
+        searching;
 
-    // the map reads topic, province and today from its url, the search text is not part of it
+    // the map reads topic, province, today and confirmed from its url, not the search text
     const mapQuery = toQueryString(filters);
     const mapHref = mapQuery ? `/map?${mapQuery}` : "/map";
 
@@ -122,12 +129,15 @@ export function ProgramsIndex({ programs }: ProgramsIndexProps) {
                     topics={filters.topics}
                     provinces={filters.provinces}
                     today={filters.today}
+                    confirmed={filters.confirmed}
+                    showToday={hasToday}
                     hasFilters={hasFilters}
                     onToggleTopic={(topic: Topic) => setFilters((current) => ({ ...current, topics: toggle(current.topics, topic) }))}
                     onToggleProvince={(province: Province) =>
                         setFilters((current) => ({ ...current, provinces: toggle(current.provinces, province) }))
                     }
                     onToggleToday={() => setFilters((current) => ({ ...current, today: !current.today }))}
+                    onToggleConfirmed={() => setFilters((current) => ({ ...current, confirmed: !current.confirmed }))}
                     onClear={clearAll}
                 />
             </div>

@@ -3,9 +3,11 @@
 // "/?topic=land&province=laguna" are out there. this helper turns such a query
 // into the new "/map?..." address. it returns null when "/" has no filters,
 // which means the landing page should simply show
+// change in this version (c2): confirmed is a filter key too, so /?confirmed=1 opens the confirmed map
 
 // the only query keys the explorer understands (see use-filter-state)
-const FILTER_KEYS = ["year", "topic", "province", "today"] as const;
+// the order here is the order they appear in the redirect, same as toQueryString
+const FILTER_KEYS = ["year", "topic", "province", "today", "confirmed"] as const;
 
 export type RawParams = Record<string, string | string[] | undefined>;
 

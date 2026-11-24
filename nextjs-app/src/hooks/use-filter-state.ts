@@ -3,6 +3,7 @@
 // change in this version: added "sel" (the selected program slug)
 // sel is kept apart from the filters, so selecting a program never recomputes the filters
 // (and so never refits the map)
+// change in this version (c2): added toggleConfirmed for the confirmed only switch
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -58,6 +59,7 @@ export function useFilterState() {
     toggleProvince: (province: Province) =>
       write({ ...filters, provinces: toggle(filters.provinces, province) }, selected),
     toggleToday: () => write({ ...filters, today: !filters.today }, selected),
+    toggleConfirmed: () => write({ ...filters, confirmed: !filters.confirmed }, selected),
     clearAll: () => write(EMPTY_FILTERS, selected),
   };
 }

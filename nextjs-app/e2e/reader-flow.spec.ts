@@ -56,6 +56,12 @@ test.describe("landing page", () => {
     await expect(page.getByRole("button", { name: "Land", exact: true })).toHaveAttribute("aria-pressed", "true");
   });
 
+  test("a confirmed-only shared link redirects to the map", async ({ page }) => {
+    await page.goto("/?confirmed=1");
+    await expect(page).toHaveURL(/\/map\?confirmed=1$/);
+    await expect(page.getByRole("switch", { name: "Confirmed only" })).toHaveAttribute("aria-checked", "true");
+  });
+
   test("offers no sign-in, sign-up or admin link", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("link", { name: /sign in|sign up|log in|login|admin/i })).toHaveCount(0);
@@ -70,6 +76,39 @@ test.describe("explorer", () => {
     // exact: true, or "Map of programs" also matches
     await expect(page.getByRole("region", { name: "Programs", exact: true }).getByRole("link")).toHaveCount(MARTIAL_LAW_PROGRAMS);
     await expect(page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Map" })).toHaveAttribute("aria-current", "page");
+  });
+
+  test("hides the today layer controls when no today programs exist", async ({ page }) => {
+    await page.goto("/map");
+    await expect(page.getByRole("switch", { name: "Show today's echoes" })).toHaveCount(0);
+    await expect(page.getByText("Year filters martial-law programs only.", { exact: true })).toHaveCount(0);
+    await page.getByText("Map key", { exact: true }).click();
+    await expect(page.getByText("Square: a program from today (round is martial law)", { exact: true })).toHaveCount(0);
+
+    await page.goto("/programs");
+    await expect(page.getByRole("switch", { name: "Show today's echoes" })).toHaveCount(0);
+    await expect(page.getByText("Adds programs from today that echo the older ones.", { exact: true })).toHaveCount(0);
+  });
+
+  test("confirmed only filters programs and round-trips through the URL", async ({ page }) => {
+    await page.goto("/map?confirmed=1");
+    const confirmedSwitch = page.getByRole("switch", { name: "Confirmed only" });
+    await expect(confirmedSwitch).toHaveAttribute("aria-checked", "true");
+
+    const list = page.getByRole("region", { name: "Programs", exact: true });
+    const cards = list.locator("article");
+    const confirmedCount = await cards.count();
+    expect(confirmedCount).toBeGreaterThan(0);
+    await expect(page.getByTestId("result-count").locator("strong")).toHaveText(String(confirmedCount));
+    for (const card of await cards.all()) {
+      await expect(card.getByText("Confirmed", { exact: true })).toBeVisible();
+    }
+
+    await page.reload();
+    await expect(page.getByRole("switch", { name: "Confirmed only" })).toHaveAttribute("aria-checked", "true");
+    await page.getByRole("switch", { name: "Confirmed only" }).click();
+    await expect(page).toHaveURL(/\/map$/);
+    await expect(page.getByTestId("result-count").locator("strong")).toHaveText(String(MARTIAL_LAW_PROGRAMS));
   });
 
   test("filters by topic, keeps the url state and the count matches the list", async ({ page }) => {
@@ -168,5 +207,11 @@ test.describe("phone viewport", () => {
     await expect(page).toHaveURL(/topic=land/);
     await page.keyboard.press("Escape");
     await expect(dialog).toBeHidden();
+  });
+
+  test("a stale today url does not count as a visible filter", async ({ page }) => {
+    await page.goto("/map?today=1");
+    await expect(page.getByRole("button", { name: "Filters", exact: true })).toBeVisible();
+    await expect(page.getByTestId("result-count").locator("strong")).toHaveText(String(MARTIAL_LAW_PROGRAMS));
   });
 });

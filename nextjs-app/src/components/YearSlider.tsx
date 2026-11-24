@@ -2,8 +2,9 @@
 //   slider with tick labels that sit under the real thumb positions
 //   previous / next year buttons and an "all years" button (year = null)
 //   a note that the year only filters martial-law programs
-// change in this version: the thumb and track styles are tailwind classes here,
-// not css in globals.css, sizes use px because the root font is 18px
+// change in this version (c1): the note only shows when showNote is true
+// the thumb and track styles are tailwind classes here, not css in globals.css,
+// sizes use px because the root font is 18px
 // the result count lives in the filter bar now, not here
 "use client";
 
@@ -48,9 +49,9 @@ const RANGE_MOZ = [
   "[&::-moz-range-thumb]:shadow-[0_0_0_1px_#78716c]",
 ].join(" ");
 
-type Props = { year: number | null; onChange: (year: number | null) => void };
+type Props = { year: number | null; onChange: (year: number | null) => void; showNote: boolean };
 
-export function YearSlider({ year, onChange }: Props) {
+export function YearSlider({ year, onChange, showNote }: Props) {
   const id = useId();
   const noYear = year === null;
 
@@ -113,7 +114,7 @@ export function YearSlider({ year, onChange }: Props) {
           All years
         </Button>
       </div>
-      <p className="text-sm text-stone-700">Year filters martial-law programs only.</p>
+      {showNote && <p className="text-sm text-stone-700">Year filters martial-law programs only.</p>}
     </div>
   );
 }

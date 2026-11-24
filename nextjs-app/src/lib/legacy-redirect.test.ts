@@ -18,4 +18,11 @@ describe("legacyRedirect", () => {
     expect(legacyRedirect({ topic: "land,support" })).toBe("/map?topic=land,support");
     expect(legacyRedirect({ topic: ["land", "markets"] })).toBe("/map?topic=land");
   });
+
+  it("sends the confirmed key to the map, last in the order", () => {
+    expect(legacyRedirect({ confirmed: "1" })).toBe("/map?confirmed=1");
+    expect(legacyRedirect({ confirmed: "1", today: "1", year: "1980" })).toBe(
+      "/map?year=1980&today=1&confirmed=1",
+    );
+  });
 });

@@ -7,6 +7,9 @@
 //   selection lives in the url as ?sel=<slug>
 // accessibility (c6.2): focus moves into the preview and the sheet when they open,
 // escape closes them, and focus returns to the control that opened them
+// change in this version
+//   c1: hides the today layer controls when no today program exists
+//   c2: wires confirmed only into filtering and the active-filter count
 "use client";
 
 import dynamic from "next/dynamic";
@@ -32,9 +35,20 @@ const PinMap = dynamic(() => import("./PinMap"), {
 type View = "list" | "map";
 
 export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
-  const { filters, selected, setSelected, setYear, toggleTopic, toggleProvince, toggleToday, clearAll } = useFilterState();
+  const {
+    filters,
+    selected,
+    setSelected,
+    setYear,
+    toggleTopic,
+    toggleProvince,
+    toggleToday,
+    toggleConfirmed,
+    clearAll,
+  } = useFilterState();
   const visible = useMemo(() => visiblePrograms(programs, filters), [programs, filters]);
   const selectedProgram = useMemo(() => visible.find((program) => program.slug === selected) ?? null, [visible, selected]);
+  const hasToday = useMemo(() => programs.some((program) => program.era === "today"), [programs]);
 
   const [view, setView] = useState<View>("list"); // phone only, desktop shows both
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -43,7 +57,12 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
   const moveFocus = useRef(false);
   const filtersButton = useRef<HTMLButtonElement>(null);
 
-  const activeCount = filters.topics.length + filters.provinces.length + (filters.year !== null ? 1 : 0) + (filters.today ? 1 : 0);
+  const activeCount =
+    filters.topics.length +
+    filters.provinces.length +
+    (filters.year !== null ? 1 : 0) +
+    (hasToday && filters.today ? 1 : 0) +
+    (filters.confirmed ? 1 : 0);
   const hasFilters = activeCount > 0;
   const countText = visible.length === 1 ? "program" : "programs";
 
@@ -115,10 +134,13 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
       topics={filters.topics}
       provinces={filters.provinces}
       today={filters.today}
+      confirmed={filters.confirmed}
+      showToday={hasToday}
       hasFilters={showClear && hasFilters}
       onToggleTopic={toggleTopic}
       onToggleProvince={toggleProvince}
       onToggleToday={toggleToday}
+      onToggleConfirmed={toggleConfirmed}
       onClear={clearAll}
     />
   );
@@ -129,7 +151,7 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
       <div className="sticky top-0 z-30 -mx-4 space-y-2 border-b border-stone-200 bg-background/95 px-4 py-2 backdrop-blur lg:static lg:mx-0 lg:px-0">
         <div className="hidden gap-x-8 lg:grid lg:grid-cols-[minmax(0,1fr)_26rem]">
           {controls("row", true)}
-          <YearSlider year={filters.year} onChange={setYear} />
+          <YearSlider year={filters.year} onChange={setYear} showNote={hasToday} />
         </div>
         <div className="flex items-center justify-between gap-3">
           <button
@@ -198,7 +220,7 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
               <PreviewCard program={selectedProgram} containerRef={previewRef} onClose={() => closePreview(true)} />
             )}
           </div>
-          <Legend />
+          <Legend showToday={hasToday} />
         </div>
       </div>
 
@@ -223,7 +245,7 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
 
       <FilterSheet open={sheetOpen} resultCount={visible.length} hasFilters={hasFilters} onClose={closeSheet} onClear={clearAll}>
         {controls("stack", false)}
-        <YearSlider year={filters.year} onChange={setYear} />
+        <YearSlider year={filters.year} onChange={setYear} showNote={hasToday} />
       </FilterSheet>
     </div>
   );

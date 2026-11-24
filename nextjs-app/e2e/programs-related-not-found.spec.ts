@@ -59,6 +59,26 @@ test.describe("programs index", () => {
             "href",
             /province=quezon/,
         );
+        await page.getByRole("button", { name: "Clear filters" }).click();
+        await expect(chip).toHaveAttribute("aria-pressed", "false");
+        expect(await shownCount(page)).toBe(before);
+    });
+
+    test("confirmed only filters the list and carries the filter to the map", async ({ page }) => {
+        const before = await shownCount(page);
+        const confirmedSwitch = page.getByRole("switch", { name: "Confirmed only" });
+        await confirmedSwitch.click();
+        await expect(confirmedSwitch).toHaveAttribute("aria-checked", "true");
+
+        const cards = page.locator("section[aria-labelledby] article");
+        const count = await shownCount(page);
+        expect(count).toBeGreaterThan(0);
+        expect(count).toBeLessThan(before);
+        await expect(cards).toHaveCount(count);
+        for (const card of await cards.all()) {
+            await expect(card.getByText("Confirmed", { exact: true })).toBeVisible();
+        }
+        await expect(page.getByRole("link", { name: "See on the map" })).toHaveAttribute("href", "/map?confirmed=1");
     });
 
 });

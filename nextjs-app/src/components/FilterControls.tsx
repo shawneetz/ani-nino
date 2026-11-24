@@ -1,9 +1,10 @@
-// what this file does: topic, layer and province filter chips
-// change in this version (c3.2)
+// what this file does: topic, province, show and layer filter controls
+// change in this version
+//   c1: hides the today layer when there are no today programs, and keeps clear in its own row
+//   c2: adds the confirmed only switch
 //   layout "row" puts labels and chips inline for the desktop filter bar
 //   layout "stack" is the roomy version used inside the phone filter sheet
-//   the layer switch is now "show today's echoes" with a one-line hint
-// every chip is at least 44px tall so it is easy to tap on a phone
+// every chip and switch is at least 44px tall so it is easy to tap on a phone
 "use client";
 
 import { useId } from "react";
@@ -13,11 +14,14 @@ type Props = {
   topics: Topic[];
   provinces: Province[];
   today: boolean;
+  confirmed: boolean;
   hasFilters: boolean;
+  showToday: boolean;
   layout?: "row" | "stack";
   onToggleTopic: (topic: Topic) => void;
   onToggleProvince: (province: Province) => void;
   onToggleToday: () => void;
+  onToggleConfirmed: () => void;
   onClear: () => void;
 };
 
@@ -34,6 +38,43 @@ function Chip({ label, pressed, color = "#44403c", onClick }: { label: string; p
     >
       {label}
     </button>
+  );
+}
+
+// full class names for each switch tone, tailwind only sees whole strings
+const SWITCH_TONES = {
+  accent: { on: "border-accent bg-accent text-white", off: "border-accent bg-white text-stone-900" },
+  confirmed: { on: "border-emerald-700 bg-emerald-700 text-white", off: "border-emerald-700 bg-white text-stone-900" },
+} as const;
+
+function Switch({
+  label,
+  hint,
+  checked,
+  tone,
+  onClick,
+}: {
+  label: string;
+  hint: string;
+  checked: boolean;
+  tone: keyof typeof SWITCH_TONES;
+  onClick: () => void;
+}) {
+  const hintId = useId();
+  return (
+    <>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        aria-describedby={hintId}
+        onClick={onClick}
+        className={`tap-target rounded-full border-2 px-4 text-base ${checked ? SWITCH_TONES[tone].on : SWITCH_TONES[tone].off}`}
+      >
+        {label}
+      </button>
+      <span id={hintId} className="text-sm text-stone-700">{hint}</span>
+    </>
   );
 }
 
@@ -64,27 +105,37 @@ export function FilterControls({ layout = "stack", ...props }: Props) {
         </div>
       </div>
 
-      <div role="group" aria-labelledby={`${uid}-layer`} className={group}>
-        <span id={`${uid}-layer`} className={label}>Layer</span>
-        {/* a real on/off switch, adds the echo programs of today to the map */}
-        <button
-          type="button"
-          role="switch"
-          aria-checked={props.today}
-          aria-describedby={`${uid}-hint`}
-          onClick={props.onToggleToday}
-          style={props.today ? { borderColor: "#b45309", backgroundColor: "#b45309", color: "#fff" } : { borderColor: "#b45309" }}
-          className="tap-target rounded-full border-2 px-4 text-base"
-        >
-          Show today&apos;s echoes
-        </button>
-        <span id={`${uid}-hint`} className="text-sm text-stone-700">Adds programs from today that echo the older ones.</span>
-        {props.hasFilters && (
+      <div role="group" aria-labelledby={`${uid}-show`} className={group}>
+        <span id={`${uid}-show`} className={label}>Show</span>
+        <Switch
+          label="Confirmed only"
+          hint="Programs checked against their sources."
+          checked={props.confirmed}
+          tone="confirmed"
+          onClick={props.onToggleConfirmed}
+        />
+      </div>
+
+      {props.showToday && (
+        <div role="group" aria-labelledby={`${uid}-layer`} className={group}>
+          <span id={`${uid}-layer`} className={label}>Layer</span>
+          <Switch
+            label="Show today's echoes"
+            hint="Adds programs from today that echo the older ones."
+            checked={props.today}
+            tone="accent"
+            onClick={props.onToggleToday}
+          />
+        </div>
+      )}
+
+      {props.hasFilters && (
+        <div>
           <button type="button" onClick={props.onClear} className="tap-target text-base text-stone-700 underline underline-offset-2">
             Clear filters
           </button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

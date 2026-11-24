@@ -6,6 +6,7 @@ import {
   PROVINCE_KEYS,
   TOPIC_KEYS,
   type Era,
+  type ProgramStatus,
   type Province,
   type Topic,
 } from "./vocab";
@@ -15,12 +16,19 @@ export type Filterable = {
   endYear?: number | null;
   topic: Topic;
   era?: Era; // missing means "martial_law"
+  status?: ProgramStatus; // only read by the confirmed only filter
   places: { province: Province }[];
 };
 
-// "today" is the switch that adds the echo layer to the map.
-export type Filters = { year: number | null; topics: Topic[]; provinces: Province[]; today: boolean };
-export const EMPTY_FILTERS: Filters = { year: null, topics: [], provinces: [], today: false };
+// "today" is the switch that adds the echo layer; "confirmed" keeps only checked programs.
+export type Filters = {
+  year: number | null;
+  topics: Topic[];
+  provinces: Province[];
+  today: boolean;
+  confirmed: boolean;
+};
+export const EMPTY_FILTERS: Filters = { year: null, topics: [], provinces: [], today: false, confirmed: false };
 
 export function isActiveInYear(p: Filterable, year: number): boolean {
   return p.startYear <= year && year <= (p.endYear ?? LAST_YEAR);
@@ -34,6 +42,8 @@ export function visiblePrograms<T extends Filterable>(programs: T[], f: Filters)
     if (isToday && !f.today) return false;
     // The year slider covers martial law only, so it never hides today programs.
     if (!isToday && f.year !== null && !isActiveInYear(p, f.year)) return false;
+    // Missing status is not confirmed.
+    if (f.confirmed && p.status !== "confirmed") return false;
     if (f.topics.length > 0 && !f.topics.includes(p.topic)) return false;
     if (f.provinces.length > 0 && !p.places.some((place) => f.provinces.includes(place.province))) {
       return false;
@@ -70,6 +80,7 @@ export function parseFilters(params: URLSearchParams): Filters {
     topics: pickKeys(params.get("topic"), TOPIC_KEYS),
     provinces: pickKeys(params.get("province"), PROVINCE_KEYS),
     today: params.get("today") === "1",
+    confirmed: params.get("confirmed") === "1",
   };
 }
 
@@ -79,5 +90,6 @@ export function toQueryString(f: Filters): string {
   if (f.topics.length > 0) params.set("topic", f.topics.join(","));
   if (f.provinces.length > 0) params.set("province", f.provinces.join(","));
   if (f.today) params.set("today", "1");
+  if (f.confirmed) params.set("confirmed", "1");
   return params.toString().replace(/%2C/g, ",");
 }
