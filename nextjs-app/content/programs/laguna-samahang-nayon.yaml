@@ -1,38 +1,42 @@
 # what this file does: program page for samahang nayon farmer associations (pd 175, loi 23)
-# it stays "still checking" because no laguna counts were found
+# status is confirmed: each claim below was checked against the linked sources
 # b5 (2026-11-25): dropped the region iv counts, the museum table labels regions by number only and never says which provinces region iv covered
 # b6 (2026-11-25): voice, length and abbreviation pass, the first sentence now stands alone
+# b10 (2026-11-25): confirmed after opening the sources, promise now says pd 175 is the decree the rules implement
+# the laguna counts are still missing, the happened text says so
+# lead for contributors: the searca and uplbca pila social laboratory study (1973 to 1974) is unverified
 slug: laguna-samahang-nayon
 title: Samahang Nayon farmer associations in Laguna
 when: 1973 onward
 topic: groups
-status: checking
+status: confirmed
 startYear: 1973
 endYear: null
 places:
   - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
   - { name: Victoria, province: laguna, lat: 14.225, lng: 121.325, approximate: true }
-promised: "Each barrio would form a Samahang Nayon, an association of small farmers meant to pool savings, credit and marketing. Presidential Decree (PD) 175 (April 14, 1973) created the system, and Letter of Implementation 23 (July 9, 1973) set the rules."
+promised: "Each barrio would form a Samahang Nayon, an association of small farmers meant to pool savings, credit and marketing. Letter of Implementation 23 (July 9, 1973) set the rules, implementing Presidential Decree (PD) 175 (April 14, 1973)."
 happened: "Members of a Samahang Nayon farmers' association had to finish pre-membership training, pledge improved farming and savings, and pay fees. A Barrio Guarantee Fund guaranteed the land payments of members under PD 27. PD 27's text says no title is issued until the tenant is a full member of a recognized cooperative. The Martial Law Museum article goes further and says membership came before even the certificate. It also says some farmers avoided joining because of the money obligations. The article counts associations by region number only, and no Laguna figure has been found."
-question: "Find Laguna counts of associations and members. The SEARCA and UPLBCA Pila Social Laboratory study (1973 to 1974) is an unverified lead."
+checkedOn: "2026-11-25"
 sources:
   - title: Presidential Decree No. 27
     publisher: Official Gazette (text on Lawphil)
     voice: official
+    cite: "October 21, 1972. No title is issued until the tenant-farmer is a full-fledged member of a recognized farmers' cooperative."
     url: "https://www.lawphil.net/statutes/presdecs/pd1972/pd_27_1972.html"
-    accessed: "2026-11-05"
+    accessed: "2026-11-25"
     backs: context
   - title: Letter of Implementation No. 23, Regulations on Samahang Nayon and Kilusang Bayan
     publisher: Supreme Court E-Library (Official Gazette text)
     voice: official
     cite: "July 9, 1973. Implements PD 175."
     url: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/33/22666"
-    accessed: "2026-11-05"
+    accessed: "2026-11-25"
     backs: promise
   - title: "The Marcos Agrarian Reform Program: Promises and Contradictions"
     publisher: Martial Law Museum
     voice: independent
     cite: "Table 2, registered Samahang Nayon and members 1974 to 1979, from LUSSA 1982. Regions are numbered I to XII and not defined."
     url: "https://martiallawmuseum.ph/?p=1149"
-    accessed: "2026-11-05"
+    accessed: "2026-11-25"
     backs: happened

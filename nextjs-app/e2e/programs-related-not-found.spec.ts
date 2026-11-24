@@ -1,9 +1,11 @@
 // what this file does: end-to-end checks for u19, u17 and u23
 //   programs index: list, count, search, empty state, filter chips and the map link
-//   related programs: a few links, never the page itself, never echo links
+//   related programs: a few links, never the page itself
 //   not found: 404 status, message, both buttons and the shared header and footer
 // nothing here hardcodes how many programs exist, counts are compared to what is on screen
 // so adding a program in content/ never breaks these tests
+// change in this version (b11): removed the today's echoes switch test and the echo link test,
+// no today program exists any more, the echo rule is covered by related.test.ts
 import { expect, test, type Page } from "@playwright/test";
 
 /**
@@ -59,12 +61,6 @@ test.describe("programs index", () => {
         );
     });
 
-    test("today's echoes switch adds programs", async ({ page }) => {
-        const before = await shownCount(page);
-        await page.getByRole("switch", { name: "Show today's echoes" }).click();
-        expect(await shownCount(page)).toBeGreaterThan(before);
-        await expect(page.getByRole("link", { name: "See on the map" })).toHaveAttribute("href", /today=1/);
-    });
 });
 
 test.describe("related programs", () => {
@@ -77,14 +73,6 @@ test.describe("related programs", () => {
         for (const href of await links.evaluateAll((nodes) => nodes.map((node) => node.getAttribute("href")))) {
             expect(href).not.toBe("/programs/laguna-operation-land-transfer");
         }
-    });
-
-    test("leaves out programs already shown as echo links", async ({ page }) => {
-        await page.goto("/programs/laguna-lake-fishpens");
-        // the echo is listed under "past and present"
-        await expect(page.locator("#echoes").getByRole("link", { name: "Laguna de Bay fishpens today" })).toBeVisible();
-        // and must not repeat under related programs
-        await expect(page.locator('#related a[href="/programs/laguna-lake-fishpens-today"]')).toHaveCount(0);
     });
 
     test("a related link opens that program", async ({ page }) => {
