@@ -7,6 +7,7 @@ import {
   LAST_YEAR,
   PROGRAM_STATUS_KEYS,
   PROVINCE_KEYS,
+  SCOPE_KEYS,
   TODAY_FIRST_YEAR,
   TODAY_LAST_YEAR,
   ERA_KEYS,
@@ -135,15 +136,16 @@ const chartSourceSchema = sourceSchema.required({ url: true, accessed: true });
  * @remarks
  * `kind` decides how the number is drawn. A `"bar"` (the default) is a bar.
  * A `"target"` is a labeled line across the chart, for example a goal.
- * Every point, bar or target, carries its own single source.
+ * Every point, bar or target, carries a scope and its own single source.
  */
 export const chartPointSchema = z.strictObject({
   label: text,
   value: z.number(),
   // "bar" is a drawn bar. "target" is a labeled line across the chart (for example a goal)
-  // every point, bar or target, carries its own single source
+  // every point, bar or target, carries a scope and its own single source
   kind: z.enum(["bar", "target"]).default("bar"),
   qualifier: z.enum(["exact", "approx", "at_most", "at_least"]).default("exact"),
+  scope: z.enum(SCOPE_KEYS),
   source: chartSourceSchema,
   note: text.optional(),
 });
@@ -154,23 +156,34 @@ export type ChartPoint = z.infer<typeof chartPointSchema>;
  * Validates one chart file in `content/charts/`.
  *
  * @remarks
- * A chart may have no points yet. Once it has points, at least one must be a
- * bar, because target lines need something to be compared with. The old
- * `goal` field is no longer accepted, use a point with `kind: target`.
+ * A chart may have no points yet. Once it has points, it needs at least two
+ * bars or one bar and a target line. The old `goal` field is no longer accepted,
+ * use a point with `kind: target`.
  */
 export const chartSchema = z
   .strictObject({
     id: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
     title: text,
+    question: text,
     description: text.optional(),
     unit: z.string().default(""),
     caveat: text.optional(),
+    sameTotal: z.boolean().default(false),
     points: z.array(chartPointSchema),
   })
   .superRefine((chart, ctx) => {
-    // target lines need something to be compared with
-    if (chart.points.length > 0 && !chart.points.some((point) => point.kind === "bar")) {
+    if (chart.points.length === 0) return;
+
+    const bars = chart.points.filter((point) => point.kind === "bar").length;
+    const targets = chart.points.length - bars;
+    if (bars === 0) {
       ctx.addIssue({ code: "custom", message: "a chart needs at least one bar, not only targets", path: ["points"] });
+    } else if (bars === 1 && targets === 0) {
+      ctx.addIssue({
+        code: "custom",
+        message: "a chart needs at least two bars or one bar and a target",
+        path: ["points"],
+      });
     }
   });
 /** A chart as written in yaml, after validation. */

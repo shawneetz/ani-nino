@@ -72,3 +72,12 @@ export const GAP_KINDS = {
 } as const;
 export type GapKind = keyof typeof GAP_KINDS;
 export const GAP_KIND_KEYS = Object.keys(GAP_KINDS) as [GapKind, ...GapKind[]];
+
+export const SCOPES = {
+  national: { label: "National", blurb: "Covers the whole country." },
+  region: { label: "Region", blurb: "Covers a region or group of provinces." },
+  province: { label: "Province", blurb: "Covers one province." },
+  town: { label: "Town", blurb: "Covers one town or city." },
+} as const;
+export type Scope = keyof typeof SCOPES;
+export const SCOPE_KEYS = Object.keys(SCOPES) as [Scope, ...Scope[]];

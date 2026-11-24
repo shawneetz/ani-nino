@@ -69,7 +69,7 @@ function HeldTopicPage({ topic }: { topic: HeldTopic }) {
         <p className="max-w-[68ch] text-lg leading-relaxed text-stone-800">{topic.reason}</p>
       </div>
       <div className="flex flex-wrap gap-3">
-        <ButtonLink href="/sources">See what is not known yet</ButtonLink>
+        <ButtonLink href="/sources#held-topics">See what is not known yet</ButtonLink>
         <ButtonLink href="/map" variant="secondary">
           Explore the map
         </ButtonLink>

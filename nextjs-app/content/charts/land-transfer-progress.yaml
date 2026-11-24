@@ -4,6 +4,7 @@
 # every number is listed once, so 210,054 no longer repeats
 id: land-transfer-progress
 title: "Land transfer: goal versus certificates issued"
+question: How did certificates issued compare with the original and revised targets?
 description: What the government aimed for compared with what its own records show.
 unit: tenants
 caveat: Government counts show what was counted, not who was left out. The target fell after landholdings of seven hectares and below were set aside.
@@ -11,6 +12,7 @@ points:
   - label: "Certificates issued by January 1976"
     value: 210054
     qualifier: exact
+    scope: national
     source: &removing_roadblocks
       title: Removing roadblocks
       publisher: The Republic (issue of May 16 to June 15, 1976)
@@ -22,11 +24,13 @@ points:
     kind: target
     value: 914914
     qualifier: exact
+    scope: national
     note: "The original target was 914,914 tenants on 1,422,988 hectares."
     source: *removing_roadblocks
   - label: "Revised target"
     kind: target
     value: 393778
     qualifier: exact
+    scope: national
     note: "After landholdings of seven hectares and below were set aside, coverage fell to 393,778 tenants. The report calls the certificates 53 percent of the target."
     source: *removing_roadblocks  

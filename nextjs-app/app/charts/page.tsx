@@ -14,17 +14,18 @@ export const metadata: Metadata = {
 };
 
 /**
- * Renders the charts page: an intro, jump links and one card per chart.
+ * Renders the charts page: an intro, jump links and one card per chart with data.
  *
  * @remarks
  * Server Component. Charts are read from `content/charts/` and validated by
  * `loadContent`, so a broken chart file fails the build instead of reaching
  * the page. The page reads no request data, so Next.js builds it as a static
- * page. The jump links only show when there is more than one chart, and each
- * one points to the `chart-<id>` anchor on a `ChartCard`.
+ * page. Empty charts are valid content placeholders but are not rendered;
+ * jump links point only to charts that have data.
  */
 export default async function ChartsPage() {
   const charts = await getCharts();
+  const visibleCharts = charts.filter((chart) => chart.points.length > 0);
 
   return (
     <Container as="main" width="prose" className="space-y-6 py-6">
@@ -37,10 +38,10 @@ export default async function ChartsPage() {
       </div>
 
       {/* jump links, only useful when there is more than one chart */}
-      {charts.length > 1 && (
+      {visibleCharts.length > 1 && (
         <nav aria-label="Jump to a chart">
           <ul className="flex flex-wrap gap-2">
-            {charts.map((chart) => (
+            {visibleCharts.map((chart) => (
               <li key={chart.id}>
                 <a
                   href={`#chart-${chart.id}`}
@@ -54,8 +55,8 @@ export default async function ChartsPage() {
         </nav>
       )}
 
-      {charts.length === 0 && <p className="text-base text-stone-700">No charts have been added yet.</p>}
-      {charts.map((chart) => <ChartCard key={chart.id} chart={chart} />)}
+      {visibleCharts.length === 0 && <p className="text-base text-stone-700">No charts have been added yet.</p>}
+      {visibleCharts.map((chart) => <ChartCard key={chart.id} chart={chart} />)}
     </Container>
   );
 }

@@ -6,6 +6,7 @@
 // the bars are a picture of the table, so screen readers skip the picture and read the table
 import { chartParts, labelSide, percentOf } from "@/lib/chart-data";
 import type { Chart, ChartPoint } from "@/lib/content-schema";
+import { ScopeChip } from "./ScopeChip";
 import { VoiceChip } from "./VoiceChip";
 
 /**
@@ -63,6 +64,7 @@ export function ChartCard({ chart }: ChartCardProps) {
       <h2 id={`chart-${chart.id}-heading`} className="text-2xl font-semibold tracking-tight text-stone-900">
         {chart.title}
       </h2>
+      <p className="mt-1 max-w-[68ch] text-base font-medium leading-relaxed text-stone-800">{chart.question}</p>
       {chart.description && (
         <p className="mt-1 max-w-[68ch] text-lg leading-relaxed text-stone-800">{chart.description}</p>
       )}
@@ -71,6 +73,11 @@ export function ChartCard({ chart }: ChartCardProps) {
         <p className="mt-4 text-base text-stone-700">Data not added yet. Every number needs a source link first.</p>
       ) : (
         <>
+          {chart.sameTotal && (
+            <p className="mt-4 max-w-[68ch] rounded-card border border-stone-200 bg-stone-50 p-3 text-base leading-relaxed text-stone-800">
+              These bars are two reports of roughly the same total. They are not added together.
+            </p>
+          )}
           <div aria-hidden="true" className="mt-5">
             {/* label rows: one per target, each label sits beside its own line */}
             {targets.length > 0 && (
@@ -150,7 +157,12 @@ export function ChartCard({ chart }: ChartCardProps) {
                       {/* words, not just a dashed line, tell target rows apart */}
                       {point.kind === "target" && <span className="block text-sm text-stone-700">Target line</span>}
                     </td>
-                    <td className="py-3 pr-4 font-medium text-stone-900">{formatValue(point)}</td>
+                    <td className="py-3 pr-4">
+                      <div className="flex flex-wrap items-center gap-2 font-medium text-stone-900">
+                        <span>{formatValue(point)}</span>
+                        <ScopeChip scope={point.scope} />
+                      </div>
+                    </td>
                     <td className="py-3">
                       <a
                         href={point.source.url}

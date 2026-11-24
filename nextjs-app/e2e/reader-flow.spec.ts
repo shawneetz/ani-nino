@@ -171,6 +171,53 @@ test.describe("sources anchors", () => {
     await page.goto("/sources#gap-cavite-not-covered");
     await expect(page.locator("#gap-cavite-not-covered")).toBeVisible();
   });
+
+  test("held topics are searchable and the old question and gap anchors remain", async ({ page }) => {
+    await page.goto("/sources#held-topics");
+    await expect(page.getByRole("heading", { name: "Held topics" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "See the held files" })).toHaveAttribute("href", /content\/holding$/);
+    await expect(page.getByRole("group", { name: "Open on a page" })).toBeVisible();
+    await expect(page.getByRole("group", { name: "Missing from the whole site" })).toBeVisible();
+
+    await page.getByRole("searchbox", { name: "Search" }).fill("Laiban and Kaliwa dam plans");
+    await expect(page.locator("#held-topics li")).toHaveCount(1);
+    await expect(page.getByTestId("sources-count")).toContainText("1 held topic");
+
+    await page.getByRole("group", { name: "Filter sources by label" }).getByRole("button", { name: /Government/ }).click();
+    await expect(page.locator("#held-topics li")).toHaveCount(1);
+    await page.getByRole("button", { name: "Clear search and label" }).first().click();
+
+    await page.goto("/sources#questions");
+    await expect(page.locator("#questions")).toBeVisible();
+    await page.goto("/sources#gaps");
+    await expect(page.locator("#gaps")).toBeVisible();
+    await page.goto("/sources#gap-cavite-not-covered");
+    await expect(page.locator("#gap-cavite-not-covered")).toBeVisible();
+  });
+
+  test("held program pages link to the held topics section", async ({ page }) => {
+    await page.goto("/programs/laguna-kkk");
+    await expect(page.getByRole("link", { name: "See what is not known yet" })).toHaveAttribute("href", "/sources#held-topics");
+  });
+});
+
+test.describe("charts", () => {
+  test("each chart states its question and scopes every data row", async ({ page }) => {
+    await page.goto("/charts");
+    const cards = page.locator('article[id^="chart-"]');
+    await expect(cards).toHaveCount(3);
+
+    for (const card of await cards.all()) {
+      await expect(card.locator("h2 + p")).toHaveText(/\S+/);
+      const rows = card.locator("table tbody tr");
+      expect(await rows.count()).toBeGreaterThan(0);
+      for (const row of await rows.all()) {
+        await expect(row.getByText("National", { exact: true })).toBeVisible();
+      }
+    }
+
+    await expect(page.getByText("These bars are two reports of roughly the same total. They are not added together.")).toBeVisible();
+  });
 });
 
 test.describe("phone viewport", () => {

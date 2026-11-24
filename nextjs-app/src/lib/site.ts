@@ -2,6 +2,7 @@
 // github is the only way to contribute in v1, so every link here must point to a real repo
 // "map" lives at /map (the landing page owns "/"), and "programs" lists every program
 // featured and featured_gaps feed the landing page, plus two general github links
+// change in this version (c3): added HOLDING_URL, the github folder of held topics
 
 /**
  * Site-wide text used by the header, metadata and the landing page.
@@ -82,6 +83,8 @@ export const FEATURED_GAPS = [
 export const ISSUES_URL = `${REPO_URL}/issues/new/choose`;
 /** Lists the program files on GitHub. */
 export const CONTENT_URL = `${REPO_URL}/tree/${BRANCH}/content/programs`;
+/** Lists the held topic files on GitHub, linked from the held topics section on /sources. */
+export const HOLDING_URL = `${REPO_URL}/tree/${BRANCH}/content/holding`;
 
 /**
  * Builds the GitHub link that edits one program file.

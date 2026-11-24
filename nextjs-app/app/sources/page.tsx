@@ -3,14 +3,17 @@
 // and hands them to the client SourcesBrowser, which owns search, the label filter
 // and the sticky in-page nav
 // content is read at build time, so the page is static
+// change in this version (c3): also passes the held topics and the github folder link
 import type { Metadata } from "next";
 import { Container } from "@/components/Container";
 import { SourcesBrowser, type GapItem, type OpenQuestionItem } from "@/components/SourcesBrowser";
 import { getGaps, getPrograms, getSources } from "@/lib/content";
+import { HELD_TOPICS } from "@/lib/held-topics";
+import { HOLDING_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Sources",
-  description: "Source labels, open questions, research gaps and every source used on the site.",
+  description: "Source labels, what is not known yet, held topics and every source used on the site.",
 };
 
 /**
@@ -46,10 +49,16 @@ export default async function SourcesPage() {
       <div className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight text-stone-950">Sources</h1>
         <p className="max-w-[68ch] text-lg leading-relaxed text-stone-800">
-          This page lists source labels, unchecked material, research gaps and every source used on the site.
+          This page lists source labels, what is not known yet, topics held back and every source used on the site.
         </p>
       </div>
-      <SourcesBrowser openQuestions={openQuestions} gaps={gapItems} sources={sources} />
+      <SourcesBrowser
+        openQuestions={openQuestions}
+        gaps={gapItems}
+        heldTopics={HELD_TOPICS}
+        holdingUrl={HOLDING_URL}
+        sources={sources}
+      />
     </Container>
   );
 }

@@ -3,16 +3,19 @@
 # b7 (2026-11-25): second source now has its real headline, and both sources are labeled independent
 # (news reports, same label as on the program page, so the sources page shows one label per source)
 # b9 (2026-11-25): labels now say "report 1" and "report 2", the caveat says they are not additive
-# "nationwide" moved from the labels into the notes until the scope chip lands in c4
+# c4 adds national scope chips and the same-total note without changing the existing citations or caveat
 id: coconut-levy-collections
 title: Coconut levy collected
+question: How do two reports describe total coconut levy collections?
 caveat: These are two reports of roughly the same nationwide total. They are not two amounts to add together. Collection figures say nothing about how the money was spent. Quezon was believed to be the biggest contributor, but no Quezon-only figure was found. The Inquirer article behind the second report adds that critics put the total much higher.
 description: Amounts collected from coconut farmers through the levy, as two reports of roughly the same total.
 unit: million pesos
+sameTotal: true
 points:
   - label: "Report 1: 1973 to 1983"
     value: 9695
     qualifier: exact
+    scope: national
     note: "Nationwide figure from the PCGG, as reported by the Inquirer."
     source:
       title: Quezon governor backs Marcos, but wants assurance coco levy fund will be returned to farmers
@@ -24,6 +27,7 @@ points:
   - label: "Report 2: nine years of the levy"
     value: 9600
     qualifier: approx
+    scope: national
     note: "Nationwide figure. A state audit found about 9.6 billion pesos collected over the nine years the copra tax was enforced."
     source:
       title: "Coco levy 'biggest joke to hit century'"

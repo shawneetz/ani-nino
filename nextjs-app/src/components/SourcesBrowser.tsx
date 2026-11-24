@@ -1,14 +1,15 @@
 // what this file does: the interactive body of the /sources page
 //   a sticky bar holds in-page links, a search box and a label filter
-//   search narrows open questions, gaps and sources together
+//   search narrows open questions, gaps, held topics and sources together
 //   the label filter only narrows the "all sources" list (a label describes a source)
-//   every gap has id="gap-<id>", so links like /sources#gap-cavite-not-covered land on it
+//   every gap has id="gap-<id>", and held topics have #held-topics
 // the page passes plain data in, so this file never reads content itself
 "use client";
 
 import Link from "next/link";
 import { useId, useMemo, useState } from "react";
 import type { Source } from "@/lib/content-schema";
+import type { HeldTopic } from "@/lib/held-topics";
 import { matchesSearch } from "@/lib/source-search";
 import { GAP_KINDS, VOICES, VOICE_KEYS, type GapKind, type Voice } from "@/lib/vocab";
 import { SourceList } from "./SourceList";
@@ -52,14 +53,16 @@ export type SourceItem = Source & { usedIn: string[] };
 interface SourcesBrowserProps {
     openQuestions: OpenQuestionItem[];
     gaps: GapItem[];
+    heldTopics: readonly HeldTopic[];
+    holdingUrl: string;
     sources: SourceItem[];
 }
 
 // in-page links shown in the sticky bar
 const SECTION_LINKS = [
     { href: "#labels", label: "Labels" },
-    { href: "#questions", label: "Open questions" },
-    { href: "#gaps", label: "Gaps" },
+    { href: "#not-known", label: "Not known yet" },
+    { href: "#held-topics", label: "Held topics" },
     { href: "#all-sources", label: "All sources" },
 ] as const;
 
@@ -73,9 +76,9 @@ const EMPTY = "text-base text-stone-700";
  * @remarks
  * Must remain a Client Component because search text and the label filter are
  * local state. The first render shows everything, so the server html already
- * contains every gap anchor and hash links work before any script runs.
+ * contains every gap and held-topic anchor before any script runs.
  */
-export function SourcesBrowser({ openQuestions, gaps, sources }: SourcesBrowserProps) {
+export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, sources }: SourcesBrowserProps) {
     const searchId = useId();
     const [query, setQuery] = useState("");
     const [voice, setVoice] = useState<Voice | null>(null);
@@ -91,6 +94,10 @@ export function SourcesBrowser({ openQuestions, gaps, sources }: SourcesBrowserP
                 matchesSearch([gap.title, gap.description, GAP_KINDS[gap.kind], gap.programTitle], query),
             ),
         [gaps, query],
+    );
+    const shownHeldTopics = useMemo(
+        () => heldTopics.filter((topic) => matchesSearch([topic.title, topic.reason], query)),
+        [heldTopics, query],
     );
     // label filter first, then search
     const shownSources = useMemo(
@@ -151,7 +158,7 @@ export function SourcesBrowser({ openQuestions, gaps, sources }: SourcesBrowserP
                             type="search"
                             value={query}
                             onChange={(event) => setQuery(event.target.value)}
-                            placeholder="Title, publisher or program"
+                            placeholder="Title, question, reason, publisher or program"
                             className="mt-1 min-h-[44px] w-full rounded-lg border border-stone-400 bg-white px-3 text-base text-stone-900 placeholder:text-stone-600"
                         />
                     </div>
@@ -192,7 +199,9 @@ export function SourcesBrowser({ openQuestions, gaps, sources }: SourcesBrowserP
                 {/* live result counts, announced politely to screen readers */}
                 <p role="status" data-testid="sources-count" className="text-sm text-stone-700">
                     {shownQuestions.length} open {shownQuestions.length === 1 ? "question" : "questions"}, {shownGaps.length}{" "}
-                    {shownGaps.length === 1 ? "gap" : "gaps"}, {shownSources.length} {shownSources.length === 1 ? "source" : "sources"}
+                    {shownGaps.length === 1 ? "gap" : "gaps"}, {shownHeldTopics.length}{" "}
+                    {shownHeldTopics.length === 1 ? "held topic" : "held topics"}, {shownSources.length}{" "}
+                    {shownSources.length === 1 ? "source" : "sources"}
                     {voice !== null && ". The label filter only changes the source list."}
                 </p>
             </div>
@@ -213,50 +222,82 @@ export function SourcesBrowser({ openQuestions, gaps, sources }: SourcesBrowserP
                 </dl>
             </section>
 
-            {/* open questions: programs that are still being checked */}
-            <section id="questions" aria-labelledby="questions-heading" className="scroll-mt-48 space-y-3">
-                <h2 id="questions-heading" className={H2}>Open questions</h2>
-                {shownQuestions.length === 0 ? (
-                    <p className={EMPTY}>{searching ? "No open questions match your search." : "No open questions."}</p>
-                ) : (
-                    <ul className="space-y-3">
-                        {shownQuestions.map((item) => (
-                            <li key={item.slug} className="text-base">
-                                <Link href={`/programs/${item.slug}`} className="font-medium underline underline-offset-2">
-                                    {item.title}
-                                </Link>
-                                <p className="max-w-[68ch] text-stone-700">{item.question}</p>
-                            </li>
-                        ))}
-                    </ul>
-                )}
+            {/* questions and gaps remain separately anchored, but share one section */}
+            <section id="not-known" aria-labelledby="not-known-heading" className="scroll-mt-48 space-y-5">
+                <h2 id="not-known-heading" className={H2}>What is not known yet</h2>
+                <div
+                    id="questions"
+                    role="group"
+                    aria-labelledby="questions-heading"
+                    className="scroll-mt-48 space-y-3"
+                >
+                    <h3 id="questions-heading" className="text-xl font-semibold text-stone-900">Open on a page</h3>
+                    {shownQuestions.length === 0 ? (
+                        <p className={EMPTY}>{searching ? "No open questions match your search." : "No open questions."}</p>
+                    ) : (
+                        <ul className="space-y-3">
+                            {shownQuestions.map((item) => (
+                                <li key={item.slug} className="text-base">
+                                    <Link href={`/programs/${item.slug}`} className="font-medium underline underline-offset-2">
+                                        {item.title}
+                                    </Link>
+                                    <p className="max-w-[68ch] text-stone-700">{item.question}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+
+                <div id="gaps" role="group" aria-labelledby="gaps-heading" className="scroll-mt-48 space-y-3">
+                    <h3 id="gaps-heading" className="text-xl font-semibold text-stone-900">Missing from the whole site</h3>
+                    {shownGaps.length === 0 ? (
+                        <p className={EMPTY}>{searching ? "No gaps match your search." : "No gaps have been added."}</p>
+                    ) : (
+                        <ul className="space-y-4">
+                            {shownGaps.map((gap) => (
+                                // the id matches links such as /sources#gap-cavite-not-covered
+                                <li key={gap.id} id={`gap-${gap.id}`} className="scroll-mt-48 text-base">
+                                    <span className="font-medium text-stone-900">{gap.title}</span>{" "}
+                                    <span className="text-stone-600">({GAP_KINDS[gap.kind]})</span>
+                                    <p className="max-w-[68ch] text-stone-700">{gap.description}</p>
+                                    {gap.programSlug && gap.programTitle && (
+                                        <Link
+                                            href={`/programs/${gap.programSlug}`}
+                                            className="tap-target inline-flex items-center text-base underline underline-offset-2"
+                                        >
+                                            Related program: {gap.programTitle}
+                                        </Link>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
             </section>
 
-            {/* gaps: each one carries its own anchor so other pages can link straight to it */}
-            <section id="gaps" aria-labelledby="gaps-heading" className="scroll-mt-48 space-y-3">
-                <h2 id="gaps-heading" className={H2}>Research gaps</h2>
-                {shownGaps.length === 0 ? (
-                    <p className={EMPTY}>{searching ? "No gaps match your search." : "No gaps have been added."}</p>
+            <section id="held-topics" aria-labelledby="held-topics-heading" className="scroll-mt-48 space-y-3">
+                <h2 id="held-topics-heading" className={H2}>Held topics</h2>
+                <p className="max-w-[68ch] text-base text-stone-700">
+                    These topics are researched but not published; each one names what evidence is missing.
+                </p>
+                {shownHeldTopics.length === 0 ? (
+                    <p className={EMPTY}>{searching ? "No held topics match your search." : "No topics are held."}</p>
                 ) : (
                     <ul className="space-y-4">
-                        {shownGaps.map((gap) => (
-                            // the id matches links such as /sources#gap-cavite-not-covered
-                            <li key={gap.id} id={`gap-${gap.id}`} className="scroll-mt-48 text-base">
-                                <span className="font-medium text-stone-900">{gap.title}</span>{" "}
-                                <span className="text-stone-600">({GAP_KINDS[gap.kind]})</span>
-                                <p className="max-w-[68ch] text-stone-700">{gap.description}</p>
-                                {gap.programSlug && gap.programTitle && (
-                                    <Link
-                                        href={`/programs/${gap.programSlug}`}
-                                        className="tap-target inline-flex items-center text-base underline underline-offset-2"
-                                    >
-                                        Related program: {gap.programTitle}
-                                    </Link>
-                                )}
+                        {shownHeldTopics.map((topic) => (
+                            <li key={topic.slug} className="text-base">
+                                <Link href={`/programs/${topic.slug}`} className="font-medium underline underline-offset-2">
+                                    {topic.title}
+                                </Link>
+                                <p className="max-w-[68ch] text-stone-700">{topic.reason}</p>
                             </li>
                         ))}
                     </ul>
                 )}
+                <a href={holdingUrl} target="_blank" rel="noopener noreferrer" className="tap-target inline-flex items-center text-base underline underline-offset-2">
+                    See the held files
+                    <span className="sr-only"> (opens in a new tab)</span>
+                </a>
             </section>
 
             {/* all sources: grouped by label, filtered by the chips and the search box */}

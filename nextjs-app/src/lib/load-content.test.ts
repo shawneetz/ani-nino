@@ -47,7 +47,12 @@ describe("loadContent", () => {
     const directory = await makeContentDirectory({
       "programs/late.yaml": programYaml({ slug: "late", title: "Late", startYear: 1980 }),
       "programs/early.yaml": programYaml({ slug: "early", title: "Early" }),
-      "charts/test-chart.yaml": stringify({ id: "test-chart", title: "A chart", points: [] }),
+      "charts/test-chart.yaml": stringify({
+        id: "test-chart",
+        title: "A chart",
+        question: "What does this chart show?",
+        points: [],
+      }),
       "gaps.yaml": stringify([{ id: "gap-1", kind: "method", title: "A gap", description: "Missing." }]),
     });
     const content = await loadContent(directory);
