@@ -1,5 +1,6 @@
-# What this file does: NEW program page for UPLB and IRRI land acquisition and resettlement in Bay and Los Baños.
-# It stays "still checking" because the number of displaced families and what became of them were not found.
+# what this file does: program page for uplb and irri land acquisition and resettlement in bay and los baños
+# it stays "still checking" because the number of displaced families and what became of them were not found
+# b6 (2026-11-25): voice, length and abbreviation pass, removed a first person sentence
 slug: laguna-uplb-land-acquisition
 title: UPLB and IRRI land acquisition in Bay and Los Baños
 when: 1974 onward
@@ -10,8 +11,8 @@ endYear: null
 places:
   - { name: Los Baños, province: laguna, lat: 14.1699, lng: 121.2431, approximate: true }
   - { name: Bay, province: laguna, lat: 14.1833, lng: 121.2833, approximate: true }
-promised: "PD 457 (May 15, 1974) let UPLB buy or expropriate private farms to expand research for UPLB and IRRI, with funds and resettlement for tenant-tillers and landless occupants who chose homelots."
-happened: "PD 729 (June 5, 1975) created the Institute of Plant Breeding at UPLB. LOI 905 (March 28, 1979) allowed more acquisitions by sale or expropriation. It also funded resettlement sites in Bay and Los Baños for dispossessed tenant-tillers and landless workers, to be built as Bagong Lipunan Sites and Services projects with homelot titles. PD 457's schedule of owners includes Luis A. Yulo; I could not tell whether those parcels were in Laguna. How many families were displaced, and what they received, is not yet known."
+promised: "Presidential Decree (PD) 457 (May 15, 1974) let the University of the Philippines Los Baños (UPLB) buy or expropriate private farms to expand research for UPLB and the International Rice Research Institute, with funds and resettlement for tenant-tillers and landless occupants who chose homelots."
+happened: "Presidential Decree 729 (June 5, 1975) created the Institute of Plant Breeding at UPLB. Letter of Instructions 905 (March 28, 1979) allowed more acquisitions by sale or expropriation. It also funded resettlement sites in Bay and Los Baños for dispossessed tenant-tillers and landless workers, to be built as Bagong Lipunan Sites and Services projects with homelot titles. PD 457's schedule of owners includes Luis A. Yulo; it is not known whether those parcels were in Laguna. How many families were displaced, and what they received, is not yet known."
 question: "Find the number of families displaced, the resettlement sites actually built, and any UPLB or tenant account."
 sources:
   - title: Presidential Decree No. 457

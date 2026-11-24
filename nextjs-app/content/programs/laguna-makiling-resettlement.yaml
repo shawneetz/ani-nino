@@ -1,6 +1,7 @@
-# What this file does: NEW program page for the Mt. Makiling kainginero resettlement.
-# The resettlement site was in Sampaloc, Quezon. Add that pin once its coordinates are sourced.
-# It stays "still checking" because the number of families resettled was not found.
+# what this file does: program page for the mt. makiling kainginero resettlement
+# the resettlement site was in sampaloc, quezon, add that pin once its coordinates are sourced
+# it stays "still checking" because the number of families resettled was not found
+# b6 (2026-11-25): voice, length and abbreviation pass
 slug: laguna-makiling-resettlement
 title: Mt. Makiling kainginero resettlement
 when: 1976 onward
@@ -10,8 +11,8 @@ startYear: 1976
 endYear: null
 places:
   - { name: Mt. Makiling Forest Reserve, province: laguna, lat: 14.14, lng: 121.195, approximate: true }
-promised: "Proclamation 1540 (April 12, 1976) reserved 760 hectares of public land in Sampaloc, Quezon for resettlement. Executive Order 494 (January 6, 1978) created a Makiling Kainginero Resettlement Committee chaired by UPLB to plan and run it."
-happened: "The order told the committee to clear the resettlement area of trees, except those needed for riverbank protection. Money from the harvested timber went to the area's development, with UPLB as trustee. The area was cut out of the timber concession of the International Hardwood and Veneer Company of the Philippines. How many families were moved, and what became of them, has not been found."
+promised: "Proclamation 1540 (April 12, 1976) reserved 760 hectares of public land in Sampaloc, Quezon for resettlement. Executive Order 494 (January 6, 1978) created a Makiling Kainginero Resettlement Committee chaired by the University of the Philippines Los Baños (UPLB) to plan and run it."
+happened: "Executive Order 494 told the Makiling resettlement committee to clear the area of trees, except those needed for riverbank protection. Money from the harvested timber went to the area's development, with UPLB as trustee. The area was cut out of the timber concession of the International Hardwood and Veneer Company of the Philippines. How many families were moved, and what became of them, has not been found."
 question: "Find the number of kainginero families resettled, and any account from the settlers or UPLB."
 sources:
   - title: Proclamation No. 1540

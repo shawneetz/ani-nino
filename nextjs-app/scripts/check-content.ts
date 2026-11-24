@@ -1,13 +1,15 @@
-// What this file does: `pnpm content:check` validates every file in content/.
-// It prints a summary and exits with code 1 when any content is invalid.
-// It only WARNS about the repo placeholder and the confirmed-program audit,
-// so those can never break the build. Run `pnpm content:audit` for the strict check.
+// what this file does: `pnpm content:check` validates every file in content/
+// it prints a summary and exits with code 1 when any content is invalid
+// it only warns about the repo placeholder, the confirmed audit and the style audit,
+// so those can never break the build, run `pnpm content:audit` for the strict check
 // change in this version (b4a): validates moved targets and held slugs against content
+// change in this version (b5a): shows the style audit as warnings
 import { readdir } from "node:fs/promises";
 import { auditConfirmed } from "../src/lib/confirmed-audit";
 import { ContentError, loadContent } from "../src/lib/load-content";
 import { isRepoConfigured } from "../src/lib/site";
 import { slugProblems } from "../src/lib/slug-check";
+import { auditStyle } from "../src/lib/style-audit";
 
 // file name stems of held yaml files; a missing folder means there are no held files
 async function holdingFiles(): Promise<string[]> {
@@ -63,10 +65,13 @@ async function main() {
       process.exit(1);
     }
 
-    // Show honesty problems as warnings here. `pnpm content:audit` makes them fail.
+    // show honesty and style problems as warnings here, `pnpm content:audit` makes them fail
     const audit = auditConfirmed(programs);
     audit.problems.forEach((problem) => console.warn(`WARN (confirmed audit): ${problem}`));
     audit.warnings.forEach((warning) => console.warn(`WARN: ${warning}`));
+    const style = auditStyle(programs);
+    style.problems.forEach((problem) => console.warn(`WARN (style audit): ${problem}`));
+    style.warnings.forEach((warning) => console.warn(`WARN: ${warning}`));
   } catch (error) {
     if (error instanceof ContentError) {
       console.error(`FAILED: ${error.issues.length} problem(s)`);

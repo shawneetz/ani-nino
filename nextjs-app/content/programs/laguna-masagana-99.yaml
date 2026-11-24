@@ -1,8 +1,9 @@
-# What this file does: program page for Masagana 99 rice credit, with the Laguna angle (UPLB).
-# It stays "still checking" because Laguna-only loan and repayment figures were not found.
+# what this file does: program page for masagana 99 rice credit, with the laguna angle (uplb)
+# it stays "still checking" because laguna-only loan and repayment figures were not found
+# b6 (2026-11-25): when now matches the years (1973 to 1984), voice, length and abbreviation pass
 slug: laguna-masagana-99
 title: Masagana 99 rice credit in Laguna
-when: 1973 onward
+when: 1973 to 1984
 topic: support
 status: checking
 startYear: 1973
@@ -12,8 +13,8 @@ places:
   - { name: Calamba, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
   - { name: Santa Cruz, province: laguna, lat: 14.2811, lng: 121.4144, approximate: true }
 promised: "Loans, seed, fertilizer and chemicals for farmers who adopted high-yielding rice, aiming at 99 cavans of palay per hectare, up from about 40."
-happened: "Masagana 99 began on May 21, 1973. The government tapped academics and scientists, many from UPLB, to design and run it. Nationally, about 400,000 farmers borrowed in the first phase (May to October 1973) and about 530,000 in the third (May to October 1974). By the 14th phase (November 1979 to April 1980) only 54,250 borrowed. Repayment fell as well; the Charts page shows the table figures, and sources disagree on exact rates. National Scientist Emil Javier, as reported by Rappler, put the share of small rice farmers who could borrow at 3.7 percent by 1980. The program stopped in 1984. Laguna-only loan and repayment figures have not been found."
-question: "Find Laguna loan and repayment figures from rural banks, PNB or the Agricultural Credit Administration, and a study of how Laguna farmers experienced the program."
+happened: "Masagana 99 began on May 21, 1973. The government tapped academics and scientists, many from the University of the Philippines Los Baños, to design and run it. Nationally, about 400,000 farmers borrowed in the first phase (May to October 1973) and about 530,000 in the third (May to October 1974). By the 14th phase (November 1979 to April 1980) only 54,250 borrowed. Repayment fell as well; the Charts page shows the table figures, and sources disagree on exact rates. National Scientist Emil Javier, as reported by Rappler, put the share of small rice farmers who could borrow at 3.7 percent by 1980. The program stopped in 1984. Laguna-only loan and repayment figures have not been found."
+question: "Find Laguna loan and repayment figures from rural banks, the Philippine National Bank or the Agricultural Credit Administration, and a study of how Laguna farmers experienced the program."
 sources:
   - title: "'Success' of Masagana 99 all in Imee's head (UP researchers)"
     publisher: UP Diktadura archive

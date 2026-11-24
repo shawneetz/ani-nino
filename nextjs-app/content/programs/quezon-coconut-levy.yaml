@@ -1,5 +1,6 @@
-# What this file does: program page for the coconut levy, with the Quezon angle.
-# It stays "still checking" because no Quezon-only collection figures were found.
+# what this file does: program page for the coconut levy, with the quezon angle
+# it stays "still checking" because no quezon-only collection figures were found
+# b6 (2026-11-25): voice, length and abbreviation pass, removed the "in your notes" leak from the question
 slug: quezon-coconut-levy
 title: The coconut levy in Quezon
 when: 1973 onward
@@ -11,9 +12,9 @@ places:
   - { name: Lucena, province: quezon, lat: 13.9373, lng: 121.6171, approximate: true }
   - { name: Tayabas, province: quezon, lat: 14.0261, lng: 121.5914, approximate: true }
   - { name: Sariaya, province: quezon, lat: 13.9631, lng: 121.5253, approximate: true }
-promised: "PD 276 (August 20, 1973) set a levy of 15 pesos per 100 kilos of copra on every first sale. It fed a Coconut Consumers Stabilization Fund to subsidize coconut-based consumer goods. Later decrees (PD 961 and PD 1468) said the funds were owned by coconut farmers."
-happened: "Farmers paid the levy when they sold copra, from 1973 to 1982, and at one point it reached 100 pesos per 100 kilos. Inquirer reports say Quezon farmers were believed to be the biggest contributors. The PCGG said 9.695 billion pesos was collected from 1973 to 1983. Where the money went, and what Quezon farmers got back, is still being checked."
-question: "Find how much was collected in Quezon alone (PCA or COA records). Also check the 2021 coco levy trust fund law (RA 11524), which is in your notes but which I did not verify."
+promised: "Presidential Decree (PD) 276 (August 20, 1973) set a levy of 15 pesos per 100 kilos of copra on every first sale. It fed a Coconut Consumers Stabilization Fund to subsidize coconut-based consumer goods. Later decrees (PD 961 and PD 1468) said the funds were owned by coconut farmers."
+happened: "Farmers paid the coconut levy when they sold copra, from 1973 to 1982, and at one point it reached 100 pesos per 100 kilos. Inquirer reports say Quezon farmers were believed to be the biggest contributors. The Presidential Commission on Good Government said 9.695 billion pesos was collected from 1973 to 1983. Where the money went, and what Quezon farmers got back, is still being checked."
+question: "Find how much was collected in Quezon alone, from Philippine Coconut Authority or Commission on Audit records."
 since:
   - year: 2001
     text: "The Supreme Court, voting 10 to 5, declared the coconut levy funds public and owned by the government."
