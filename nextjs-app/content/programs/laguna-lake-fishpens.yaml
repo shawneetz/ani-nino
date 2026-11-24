@@ -1,7 +1,7 @@
-# What this file does: program page for Laguna de Bay fishpens and the rules around them.
-# Status is "confirmed": all 6 sources verified on 2026-11-15.
-# PD 813 link updated to LLDA implemented-laws page; FAO, UNU and AgEcon titles confirmed.
-# Who held the 1970s permits is still unknown, and gaps.yaml tracks that.
+# what this file does: program page for laguna de bay fishpens and the rules around them
+# status is confirmed: all sources were opened and checked
+# b4 (2026-11-25): absorbed the rizal lakeshore page, added the cardona pin and the 2017 cardona pen, rechecked the date
+# who held the 1970s permits is still unknown, and gaps.yaml tracks that
 slug: laguna-lake-fishpens
 title: Laguna de Bay fishpens
 when: 1970s onward
@@ -13,19 +13,20 @@ places:
   - { name: Santa Cruz lakeshore, province: laguna, lat: 14.2811, lng: 121.4144, approximate: true }
   - { name: Bay lakeshore, province: laguna, lat: 14.1833, lng: 121.2833, approximate: true }
   - { name: Calamba lakeshore, province: laguna, lat: 14.2117, lng: 121.1653, approximate: true }
+  - { name: Cardona lakeshore, province: rizal, lat: 14.4864, lng: 121.2275, approximate: true }
 promised: "The Laguna Lake Development Authority (LLDA) was given wider powers over the lake so it could be developed for fish, water and other uses. In 1984 the government said its policy was to democratize the lake's benefits by giving marginal users a chance to own, manage and run fishpens."
 happened: "LLDA set up its first pilot fishpen at Looc, Cardona, Rizal, around 1970 to 1971. A survey counted 993 pens covering 4,802 hectares by 1973. FAO figures show pen area growing from 40 hectares in 1971 to about 30,000 hectares by 1983. A United Nations University review says the early, uncontrolled pens clashed with small fishermen, who said the pens cut their fishing area. It adds that all of the rise in the lake's revenue from 1968 to 1973 went to pen owners. On October 9, 1978 a presidential directive ordered unpermitted fishpens destroyed and new permits suspended. Letter of Instructions 769 (November 16, 1978) set the rules for removing or restructuring pens. Letter of Instructions 1399 (April 11, 1984) ordered excess pen areas turned over to small fishermen's cooperatives, up to 30 hectares each. Who held the 1970s permits is not yet known."
-checkedOn: "2026-11-05"
+checkedOn: "2026-11-25"
 since:
   - year: 2017
-    text: "The DENR and LLDA began dismantling big fish pens and cages in the lake, after a presidential order to give small fishermen access to their traditional fishing grounds."
+    text: "The DENR and LLDA began dismantling big fish pens and cages in the lake, starting with a 100-hectare pen off Cardona, Rizal, after a presidential order to open traditional fishing grounds to small fishermen."
     source:
       title: Gov't starts dismantling fish pens in Laguna de Bay
       publisher: Philippine Daily Inquirer
       voice: independent
       cite: "January 27, 2017."
       url: "https://newsinfo.inquirer.net/865905/govt-starts-dismantling-fish-pens-in-laguna-de-bay"
-      accessed: "2026-11-05"
+      accessed: "2026-11-25"
 sources:
   - title: Presidential Decree No. 813, amending Republic Act No. 4850 and granting additional powers to the Laguna Lake Development Authority
     publisher: Laguna Lake Development Authority (Implemented Laws)

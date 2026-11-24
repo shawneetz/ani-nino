@@ -1,5 +1,6 @@
-# What this file does: lists research gaps shown on the Sources page.
-# Updated 2026-11-05 after the research round. Each "program" must match an existing program slug.
+# what this file does: lists research gaps shown on the sources page
+# each "program" must match a live program slug, a gap that points at a held slug fails content:check
+# change in this version (b1): removed the laiban gap, its program moved to content/holding
 - id: no-farmer-interviews
   kind: method
   title: No interviews with farmers from the martial-law era
@@ -42,11 +43,6 @@
   title: What the "Laguna Coalition" in the 2012 coco levy case represented
   description: Not found in this research round.
   program: quezon-coconut-levy
-- id: laiban-martial-law-impact
-  kind: data_missing
-  title: Effect of the Laiban plans on Dumagat communities before 1986
-  description: The project was conceived in 1979, but no source on displacement or consultation before 1986 has been found. The PCIJ chronology is a lead.
-  program: rizal-kaliwa-laiban-dam
 - id: uplb-displacement-numbers
   kind: data_missing
   title: Families displaced by UPLB and IRRI land acquisition
