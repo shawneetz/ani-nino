@@ -10,6 +10,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
+import { ButtonLink } from "@/components/Button";
+import { Container } from "@/components/Container";
 import { ContributeLinks } from "@/components/ContributeLinks";
 import { JumpSelect, PageRail, type NavItem } from "@/components/PageNav";
 import { ProgramHeader } from "@/components/ProgramHeader";
@@ -21,6 +23,7 @@ import { SourceList } from "@/components/SourceList";
 import { VideoEmbed } from "@/components/VideoEmbed";
 import { getProgram, getPrograms } from "@/lib/content";
 import { toExplorerProgram } from "@/lib/explorer-types";
+import { heldTopic, type HeldTopic } from "@/lib/held-topics";
 import { programDescription } from "@/lib/program-description";
 import { relatedPrograms } from "@/lib/related";
 
@@ -31,9 +34,13 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const program = await getProgram((await params).slug);
+  const { slug } = await params;
+  const program = await getProgram(slug);
   // description is the first sentence of "happened", trimmed to 160 characters
-  return program ? { title: program.title, description: programDescription(program.happened) } : {};
+  if (program) return { title: program.title, description: programDescription(program.happened) };
+  // a held page is not meant to be found in search
+  const held = heldTopic(slug);
+  return held ? { title: held.title, robots: { index: false, follow: false } } : {};
 }
 
 // shared section wrapper: gives each section an anchor id for the page nav
@@ -48,10 +55,38 @@ function Block({ id, title, children }: { id: string; title: string; children: R
   );
 }
 
+// short page for a topic that was researched but is not published
+// c3 changes the sources link to /sources#held-topics
+function HeldTopicPage({ topic }: { topic: HeldTopic }) {
+  return (
+    <Container as="main" width="prose" className="space-y-6 py-12">
+      <div className="space-y-3">
+        <p className="text-base font-medium uppercase tracking-wide text-accent-strong">Held topic</p>
+        <h1 className="text-3xl font-bold tracking-tight text-stone-950">{topic.title}</h1>
+        <p className="max-w-[68ch] text-lg leading-relaxed text-stone-800">
+          This topic is researched but not published yet.
+        </p>
+        <p className="max-w-[68ch] text-lg leading-relaxed text-stone-800">{topic.reason}</p>
+      </div>
+      <div className="flex flex-wrap gap-3">
+        <ButtonLink href="/sources">See what is not known yet</ButtonLink>
+        <ButtonLink href="/map" variant="secondary">
+          Explore the map
+        </ButtonLink>
+      </div>
+    </Container>
+  );
+}
+
 export default async function ProgramPage({ params }: Props) {
   const { slug } = await params;
   const program = await getProgram(slug);
-  if (!program) notFound();
+  if (!program) {
+    // a held slug gets its own short page, anything else is a real 404
+    const held = heldTopic(slug);
+    if (held) return <HeldTopicPage topic={held} />;
+    notFound();
+  }
 
   const all = await getPrograms();
   // past/present links: the older program this one echoes, and today's echoes of this one

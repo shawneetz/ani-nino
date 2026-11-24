@@ -2,9 +2,30 @@
 // It prints a summary and exits with code 1 when any content is invalid.
 // It only WARNS about the repo placeholder and the confirmed-program audit,
 // so those can never break the build. Run `pnpm content:audit` for the strict check.
+// change in this version (b4a): validates moved targets and held slugs against content
+import { readdir } from "node:fs/promises";
 import { auditConfirmed } from "../src/lib/confirmed-audit";
 import { ContentError, loadContent } from "../src/lib/load-content";
 import { isRepoConfigured } from "../src/lib/site";
+import { slugProblems } from "../src/lib/slug-check";
+
+// file name stems of held yaml files; a missing folder means there are no held files
+async function holdingFiles(): Promise<string[]> {
+  try {
+    const names = await readdir("content/holding");
+    return names.filter((name) => name.endsWith(".yaml")).map((name) => name.replace(/\.yaml$/, ""));
+  } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      error.code === "ENOENT"
+    ) {
+      return [];
+    }
+    throw error;
+  }
+}
 
 async function main() {
   try {
@@ -29,6 +50,17 @@ async function main() {
       console.warn(
         "WARN: REPO_OWNER in src/lib/site.ts is still YOUR-NAME. All GitHub contribution links are broken.",
       );
+    }
+
+    // old urls must keep working, so a bad moved or held entry stops the build
+    const slugIssues = slugProblems(
+      programs.map((program) => program.slug),
+      await holdingFiles(),
+    );
+    if (slugIssues.length > 0) {
+      console.error(`FAILED: ${slugIssues.length} slug problem(s)`);
+      slugIssues.forEach((issue) => console.error(`  - ${issue}`));
+      process.exit(1);
     }
 
     // Show honesty problems as warnings here. `pnpm content:audit` makes them fail.

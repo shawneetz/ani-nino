@@ -1,6 +1,8 @@
 // What this file does: enables the Next.js features the app needs.
 // Tailwind runs through postcss.config.mjs, the standard setup that works on Vercel.
+// redirects are built from the moved map, so old program links keep working
 import type { NextConfig } from "next";
+import { MOVED } from "./src/lib/moved";
 
 // "standalone" output is only needed for Docker-style hosting. Vercel does not use it.
 // It also makes Windows builds fail (EPERM) because it creates symlinks.
@@ -15,6 +17,13 @@ const nextConfig: NextConfig = {
   // with the server code if any page ever reads them at run time.
   outputFileTracingIncludes: {
     "/**/*": ["./content/**/*"],
+  },
+  async redirects() {
+    return Object.entries(MOVED).map(([from, to]) => ({
+      source: `/programs/${from}`,
+      destination: `/programs/${to}`,
+      permanent: true,
+    }));
   },
 };
 
