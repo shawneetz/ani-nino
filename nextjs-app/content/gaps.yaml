@@ -1,6 +1,10 @@
 # what this file does: lists research gaps shown on the sources page
+# a gap is something a reader could wrongly assume the site covers, a program question stays on its page
 # each "program" must match a live program slug, a gap that points at a held slug fails content:check
 # change in this version (b1): removed the laiban gap, its program moved to content/holding
+# change in this version (b8): kept seven gaps, added region-scope, reworded cavite-not-covered without a count
+# removed because they repeat a program question: fishpen permits, laguna coalition lead (now in the coconut levy question),
+# uplb displacement numbers, makiling resettlement outcomes
 - id: no-farmer-interviews
   kind: method
   title: No interviews with farmers from the martial-law era
@@ -11,18 +15,17 @@
   description: Links between a martial-law program and later events are the author's reading, not established findings.
 - id: cavite-not-covered
   kind: scope
-  title: Cavite has no program pages yet
-  description: Cavite is one of the five provinces on the map, but no program there has been researched yet.
+  title: Cavite is thinly covered
+  description: Cavite is one of the five provinces on the map, but few of its programs have a source that says what happened to farmers or fisherfolk there. Topics without such a source are held back.
+- id: region-scope
+  kind: scope
+  title: Region IV was wider than CALABARZON
+  description: In the martial-law years, Region IV (Southern Tagalog) also held Mindoro, Marinduque, Romblon and Palawan. A regional figure from that time is not a CALABARZON figure, and this site does not use one as a local number.
 - id: laguna-land-transfer-numbers
   kind: data_missing
   title: No Laguna figures for land actually transferred
   description: National counts were found (210,054 certificates by January 1976). Laguna counts of tenants covered, certificates issued and titles awarded have not been found. A 1991 UPLB thesis on Calamba and Los Baños land use is an unread lead.
   program: laguna-operation-land-transfer
-- id: laguna-fishpen-permits
-  kind: data_missing
-  title: Fishpen permit holders on Laguna de Bay
-  description: A 1973 survey counted 993 pens on 4,802 hectares. Who held the permits in the 1970s is not yet known.
-  program: laguna-lake-fishpens
 - id: coconut-levy-flow
   kind: unverified
   title: Where the coconut levy money went
@@ -38,18 +41,3 @@
   title: Whether Hacienda Yulo was ever covered by PD 27
   description: Only advocacy sources say the estate was exempt. A DAR or court record is needed. The Yulo hacienda in Floridablanca, Pampanga is a different estate.
   program: laguna-hacienda-yulo
-- id: laguna-coalition-lead
-  kind: unverified
-  title: What the "Laguna Coalition" in the 2012 coco levy case represented
-  description: Not found in this research round.
-  program: quezon-coconut-levy
-- id: uplb-displacement-numbers
-  kind: data_missing
-  title: Families displaced by UPLB and IRRI land acquisition
-  description: PD 457 and LOI 905 are documented, but the number of families displaced and the resettlement sites built are not.
-  program: laguna-uplb-land-acquisition
-- id: makiling-resettlement-outcomes
-  kind: data_missing
-  title: Outcome of the Makiling kainginero resettlement
-  description: Proclamation 1540 and Executive Order 494 are documented, but the number of families resettled in Sampaloc and what became of them are not.
-  program: laguna-makiling-resettlement

@@ -1,6 +1,7 @@
 # what this file does: program page for hacienda yulo (canlubang sugar estate) and land reform
 # it stays "still checking" because the exemption claim comes only from advocacy sources
 # b6 (2026-11-25): voice, length and abbreviation pass, the question keeps one task
+# b7 (2026-11-25): licas source now has its real headline, date and url, placeholder cite removed
 slug: laguna-hacienda-yulo
 title: Hacienda Yulo and land reform in Laguna
 when: 1972 onward
@@ -61,10 +62,10 @@ sources:
     url: "https://www.bulatlat.com/?p=115977"
     accessed: "2026-11-05"
     backs: happened
-  - title: Hacienda Yulo farmers appeal to government to include the land in agrarian reform
+  - title: Filipino farmers decry continuing landlessness, mark 1987 massacre of protesting peasants
     publisher: LiCAS News
     voice: independent
-    cite: "Reports the 1991 denial of the CARP petition and the DAR finding. Headline not captured; check before publishing."
-    url: "https://philippines.licas.news/?p=157740"
-    accessed: "2026-11-05"
+    cite: "January 22, 2021. Reports the 1991 denial of the CARP petition and the earlier DAR finding that the land is highly suitable for agriculture."
+    url: "https://philippines.licas.news/2021/01/22/filipino-farmers-decry-continuing-landlessness-mark-1987-massacre-of-protesting-peasants/"
+    accessed: "2026-11-25"
     backs: happened

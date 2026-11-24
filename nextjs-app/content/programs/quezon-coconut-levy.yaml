@@ -1,6 +1,8 @@
 # what this file does: program page for the coconut levy, with the quezon angle
 # it stays "still checking" because no quezon-only collection figures were found
 # b6 (2026-11-25): voice, length and abbreviation pass, removed the "in your notes" leak from the question
+# b7 (2026-11-25): pd 276 now has a url, a cite and an accessed date
+# b8 (2026-11-25): the "laguna coalition" lead moved here from gaps.yaml, as a second sentence in the question
 slug: quezon-coconut-levy
 title: The coconut levy in Quezon
 when: 1973 onward
@@ -14,7 +16,7 @@ places:
   - { name: Sariaya, province: quezon, lat: 13.9631, lng: 121.5253, approximate: true }
 promised: "Presidential Decree (PD) 276 (August 20, 1973) set a levy of 15 pesos per 100 kilos of copra on every first sale. It fed a Coconut Consumers Stabilization Fund to subsidize coconut-based consumer goods. Later decrees (PD 961 and PD 1468) said the funds were owned by coconut farmers."
 happened: "Farmers paid the coconut levy when they sold copra, from 1973 to 1982, and at one point it reached 100 pesos per 100 kilos. Inquirer reports say Quezon farmers were believed to be the biggest contributors. The Presidential Commission on Good Government said 9.695 billion pesos was collected from 1973 to 1983. Where the money went, and what Quezon farmers got back, is still being checked."
-question: "Find how much was collected in Quezon alone, from Philippine Coconut Authority or Commission on Audit records."
+question: "Find how much was collected in Quezon alone, from Philippine Coconut Authority or Commission on Audit records. A second lead: what the \"Laguna Coalition\" named in the 2012 coco levy case represented."
 since:
   - year: 2001
     text: "The Supreme Court, voting 10 to 5, declared the coconut levy funds public and owned by the government."
@@ -35,8 +37,11 @@ since:
       accessed: "2026-11-05"
 sources:
   - title: Presidential Decree No. 276
-    publisher: Official Gazette
+    publisher: Official Gazette (text on Lawphil)
     voice: official
+    cite: "August 20, 1973. Establishes the Coconut Consumers Stabilization Fund and the levy."
+    url: "https://lawphil.net/statutes/presdecs/pd1973/pd_276_1973.html"
+    accessed: "2026-11-25"
     backs: promise
   - title: "Blue Bar Coconut Phil. v. Tantuico Jr., G.R. No. L-47051 (1988)"
     publisher: Supreme Court decision (ChanRobles)
