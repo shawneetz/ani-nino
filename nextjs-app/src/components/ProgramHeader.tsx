@@ -1,40 +1,41 @@
-// what this file does: the top of a program page 
-// shows a large title, years, topic, a large status tag, the "checked on" date
-// and the copy link button, so a reader can share the page right away
+// what this file does: the top of a program page
+// a kicker (topic and years), a large serif title, the dateline strip and the copy link button
 // it is a server component, only the copy button runs in the browser
+// change in this version (e5): editorial header, a 2px ink rule opens the page
+// the lead sentence is not shown here, it lives in the record panel so the text is never repeated
 import type { Program } from "@/lib/content-schema";
 import { yearRange } from "@/lib/filter";
 import { TOPICS } from "@/lib/vocab";
 import { CopyLinkButton } from "./CopyLinkButton";
-import { StatusTag } from "./StatusTag";
+import { Dateline } from "./Dateline";
+import { Kicker } from "./Kicker";
 
 // only the fields the header needs, so it stays easy to test and reuse
 type Props = {
-    program: Pick<Program, "title" | "topic" | "era" | "status" | "checkedOn" | "startYear" | "endYear">;
+  program: Pick<Program, "title" | "topic" | "era" | "status" | "checkedOn" | "startYear" | "endYear" | "places">;
 };
 
 export function ProgramHeader({ program }: Props) {
-    const topic = TOPICS[program.topic];
+  const topic = TOPICS[program.topic];
 
-    return (
-        <header className="space-y-3">
-            <h1 className="text-3xl font-bold leading-tight tracking-tight text-stone-950 sm:text-4xl">
-                {program.title}
-            </h1>
+  return (
+    <header className="space-y-4 border-t-2 border-ink pt-4">
+      <Kicker>
+        {/* the topic color depends on the data, so it stays inline */}
+        <span style={{ color: topic.color }}>{topic.label}</span> · {yearRange(program)}
+        {/* marks echo programs so they are not mistaken for martial-law ones */}
+        {program.era === "today" && " · Today"}
+      </Kicker>
 
-            {/* years, topic, era and status in one wrapping row */}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-lg text-stone-700">
-                <span>{yearRange(program)}</span>
-                <span className="font-medium" style={{ color: topic.color }}>{topic.label}</span>
-                {/* marks echo programs so they are not mistaken for martial-law ones */}
-                {program.era === "today" && <span className="font-medium text-amber-800">Today</span>}
-                <StatusTag status={program.status} size="large" />
-                {program.checkedOn && <span>Checked on {program.checkedOn}</span>}
-            </div>
+      <h1 className="font-serif text-[clamp(2.25rem,5vw,3.5rem)] font-bold leading-tight tracking-tight text-stone-950">
+        {program.title}
+      </h1>
 
-            <div>
-                <CopyLinkButton />
-            </div>
-        </header>
-    );
+      <Dateline status={program.status} checkedOn={program.checkedOn} placeCount={program.places.length} />
+
+      <div>
+        <CopyLinkButton />
+      </div>
+    </header>
+  );
 }

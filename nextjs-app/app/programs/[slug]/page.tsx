@@ -7,9 +7,13 @@
 //   u18: the contribute panel owns its own anchor
 //   c5: new "cite this page" section after sources, and a canonical url in the metadata
 //   c8: the two echo blocks no longer use first person, they say "This project reads ..."
-// the echo blocks stay hidden when no program uses them
-//   c10: print styles. in print the back link, jump bar, video, related programs and
+//   c10: print styles, in print the back link, jump bar, video, related programs and
 //        contribute panel are hidden, and the page is one column so a long page prints in about 3 pages
+//   e5: editorial layout
+//       section headings are serif with a 2px ink top rule (no numbering)
+//       the header has a kicker and a dateline, the record has a large lead sentence
+//       the held topic page uses the same kicker and serif type
+// the echo blocks stay hidden when no program uses them
 // all component imports use PascalCase file names
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -19,6 +23,7 @@ import { ButtonLink } from "@/components/Button";
 import { CiteBlock } from "@/components/CiteBlock";
 import { Container } from "@/components/Container";
 import { ContributeLinks } from "@/components/ContributeLinks";
+import { Kicker } from "@/components/Kicker";
 import { JumpSelect, PageRail, type NavItem } from "@/components/PageNav";
 import { ProgramHeader } from "@/components/ProgramHeader";
 import { ProgramMiniMap } from "@/components/ProgramMiniMap";
@@ -58,6 +63,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 // shared section wrapper: gives each section an anchor id for the page nav
+// a 2px ink rule opens the section and the heading is serif
 // className is for extra classes, for example print:hidden on a section that paper does not need
 function Block({
   id,
@@ -71,8 +77,12 @@ function Block({
   children: ReactNode;
 }) {
   return (
-    <section id={id} aria-labelledby={`${id}-heading`} className={`scroll-mt-24 space-y-3 ${className}`}>
-      <h2 id={`${id}-heading`} className="text-2xl font-semibold text-stone-900">
+    <section
+      id={id}
+      aria-labelledby={`${id}-heading`}
+      className={`scroll-mt-24 space-y-3 border-t-2 border-ink pt-4 ${className}`}
+    >
+      <h2 id={`${id}-heading`} className="font-serif text-2xl font-semibold text-stone-950">
         {title}
       </h2>
       {children}
@@ -85,13 +95,13 @@ function Block({
 function HeldTopicPage({ topic }: { topic: HeldTopic }) {
   return (
     <Container as="main" width="prose" className="space-y-6 py-12">
-      <div className="space-y-3">
-        <p className="text-base font-medium uppercase tracking-wide text-accent-strong">Held topic</p>
-        <h1 className="text-3xl font-bold tracking-tight text-stone-950">{topic.title}</h1>
-        <p className="max-w-[68ch] text-lg leading-relaxed text-stone-800">
+      <div className="space-y-3 border-t-2 border-ink pt-4">
+        <Kicker>Held topic</Kicker>
+        <h1 className="font-serif text-3xl font-bold tracking-tight text-stone-950">{topic.title}</h1>
+        <p className="max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800">
           This topic is researched but not published yet.
         </p>
-        <p className="max-w-[68ch] text-lg leading-relaxed text-stone-800">{topic.reason}</p>
+        <p className="max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800">{topic.reason}</p>
       </div>
       <div className="flex flex-wrap gap-3">
         <ButtonLink href="/sources#held-topics">See what is not known yet</ButtonLink>
@@ -144,7 +154,7 @@ export default async function ProgramPage({ params }: Props) {
       <div className="max-w-3xl space-y-8">
         <Link
           href="/map"
-          className="tap-target inline-flex items-center text-base underline underline-offset-2 print:hidden"
+          className="tap-target inline-flex items-center font-sans text-base underline underline-offset-2 print:hidden"
         >
           Back to the map
         </Link>
@@ -152,14 +162,14 @@ export default async function ProgramPage({ params }: Props) {
         <ProgramHeader program={program} />
 
         {/* phones only: a jump menu that stays at the top while the reader scrolls */}
-        <div className="sticky top-0 z-20 -mx-4 border-b border-stone-200 bg-background/95 px-4 py-2 backdrop-blur lg:hidden print:hidden">
+        <div className="sticky top-0 z-20 -mx-4 border-b border-stone-400 bg-background/95 px-4 py-2 backdrop-blur lg:hidden print:hidden">
           <JumpSelect items={nav} />
         </div>
 
         {/* promise vs record, then who says so */}
         <RecordPanels promised={program.promised} happened={program.happened} sources={program.sources} />
 
-        {/* stronger open-question box right after the record */}
+        {/* flat open-question note right after the record */}
         {question && <CheckingBox question={question} />}
 
         {/* what came after: year, text, linked source, publisher, access date and voice label for each entry */}
@@ -171,15 +181,17 @@ export default async function ProgramPage({ params }: Props) {
 
         {/* the past/present links share one anchor so the nav can jump to them */}
         {(origin || echoes.length > 0) && (
-          <div id="echoes" className="scroll-mt-24 space-y-8">
+          <div id="echoes" className="scroll-mt-24 space-y-8 border-t-2 border-ink pt-4">
             {/* today program -> the martial-law program it echoes */}
             {origin && (
               <section className="space-y-2">
-                <h2 className="text-lg font-semibold">Echoes an older program</h2>
-                <p>
+                <h2 className="font-serif text-xl font-semibold text-stone-950">Echoes an older program</h2>
+                <p className="font-serif text-lg leading-relaxed text-stone-800">
                   This connects to{" "}
-                  <Link href={`/programs/${origin.slug}`} className="underline underline-offset-2">{origin.title}</Link>.
-                  This project reads the link as interpretation, not an established finding.
+                  <Link href={`/programs/${origin.slug}`} className="underline underline-offset-2">
+                    {origin.title}
+                  </Link>
+                  . This project reads the link as interpretation, not an established finding.
                 </p>
               </section>
             )}
@@ -187,15 +199,19 @@ export default async function ProgramPage({ params }: Props) {
             {/* martial-law program -> today programs that echo it */}
             {echoes.length > 0 && (
               <section className="space-y-2">
-                <h2 className="text-lg font-semibold">Echoed today</h2>
-                <ul className="list-disc space-y-1 pl-5">
+                <h2 className="font-serif text-xl font-semibold text-stone-950">Echoed today</h2>
+                <ul className="list-disc space-y-1 pl-5 font-serif text-lg text-stone-800">
                   {echoes.map((item) => (
                     <li key={item.slug}>
-                      <Link href={`/programs/${item.slug}`} className="underline underline-offset-2">{item.title}</Link>
+                      <Link href={`/programs/${item.slug}`} className="underline underline-offset-2">
+                        {item.title}
+                      </Link>
                     </li>
                   ))}
                 </ul>
-                <p className="text-sm text-stone-700">This project reads these links as interpretation, not established findings.</p>
+                <p className="font-sans text-sm text-stone-700">
+                  This project reads these links as interpretation, not established findings.
+                </p>
               </section>
             )}
           </div>
