@@ -4,8 +4,12 @@
 // entries are sorted by year, so the order never depends on the yaml order
 // change in this version (c8): the publisher and "Accessed <date>" now show next to each source,
 // because these sources are not in the Sources list of the page, so this is the only place a reader sees them
+// change in this version (c10): in print the source url follows its linked title
 import type { Program } from "@/lib/content-schema";
 import { VoiceChip } from "./VoiceChip";
+
+// print only: writes the link address after the link text, "attr(href)" reads it from the link
+const PRINT_URL = "print:after:break-all print:after:content-['_('attr(href)')']";
 
 /**
  * Renders the dated "what came after" entries of a program.
@@ -37,7 +41,7 @@ export function SinceTimeline({ items }: { items: Program["since"] }) {
                 href={item.source.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="tap-target inline-flex items-center underline underline-offset-2"
+                className={`tap-target inline-flex items-center underline underline-offset-2 ${PRINT_URL}`}
               >
                 {item.source.title}
                 {/* tells screen reader users the link leaves the site */}

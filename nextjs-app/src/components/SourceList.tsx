@@ -1,5 +1,7 @@
 // What this file does: lists sources with their label, publisher, citation and access date.
 // The title is normal reading size and the details are at least 15px.
+// change in this version (c10): in print each linked title is followed by its url,
+// because a printed page cannot be clicked
 import type { Source } from "@/lib/content-schema";
 import { VoiceChip } from "./VoiceChip";
 
@@ -8,6 +10,9 @@ const BACKS_LABELS = {
   happened: "Backs what happened",
   context: "Background",
 } as const;
+
+// print only: writes the link address after the link text, "attr(href)" reads it from the link
+const PRINT_URL = "print:after:break-all print:after:content-['_('attr(href)')']";
 
 // "usedIn" is added by the sources page to show where a source appears.
 type Item = Source & { usedIn?: string[] };
@@ -18,7 +23,12 @@ export function SourceList({ sources }: { sources: Item[] }) {
       {sources.map((source) => (
         <li key={`${source.title}-${source.url ?? source.publisher}`} className="text-base leading-relaxed text-stone-800">
           {source.url ? (
-            <a href={source.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+            <a
+              href={source.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`underline underline-offset-2 ${PRINT_URL}`}
+            >
               {source.title}
             </a>
           ) : (

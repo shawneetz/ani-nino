@@ -61,3 +61,11 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* print fallback: external source urls are useful when a page is saved as PDF */
+@media print {
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    overflow-wrap: anywhere;
+  }
+}

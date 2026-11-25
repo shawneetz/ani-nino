@@ -3,6 +3,7 @@
 // it uses the shared Card and ButtonLink, so every button is 44px tall and
 // opens github in a new tab
 // it owns the "contribute" anchor, so the page does not need a wrapper
+// change in this version (c10): hidden in print, buttons do nothing on paper
 import { editUrl, issueUrl, sourceIssueUrl } from "@/lib/site";
 import { ButtonLink } from "./Button";
 import { Card } from "./Card";
@@ -16,7 +17,7 @@ export function ContributeLinks({ slug }: { slug: string }) {
   ];
 
   return (
-    <section id="contribute" aria-labelledby="contribute-heading" className="scroll-mt-24">
+    <section id="contribute" aria-labelledby="contribute-heading" className="scroll-mt-24 print:hidden">
       <Card className="space-y-3">
         <h2 id="contribute-heading" className="text-2xl font-semibold text-stone-900">
           Help improve this page

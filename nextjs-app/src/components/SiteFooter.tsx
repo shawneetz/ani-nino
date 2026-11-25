@@ -1,5 +1,6 @@
 // what this file does: shows the shared footer with links in three groups
 // (explore, evidence, project) and the github link
+// change in this version (c10): hidden in print
 import Link from "next/link";
 import { REPO_URL, SITE } from "@/lib/site";
 
@@ -39,7 +40,7 @@ const LINK = "tap-target inline-flex items-center underline underline-offset-2";
  */
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-stone-200 bg-white">
+    <footer className="mt-auto border-t border-stone-200 bg-white print:hidden">
       <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 text-base text-stone-700 sm:grid-cols-[1fr_auto]">
         <p className="max-w-[48ch] leading-relaxed">
           {SITE.title}: an educational project. Sources are labeled; open questions are shown.

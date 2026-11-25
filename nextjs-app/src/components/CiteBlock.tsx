@@ -1,6 +1,7 @@
 // what this file does: the "cite this page" box on a program page
 // it shows the citation line and a button that copies exactly that line
 // the line is built on the server and passed in as a prop
+// change in this version (c10): the citation stays in print, only the copy button is hidden
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -45,7 +46,7 @@ export function CiteBlock({ text }: CiteBlockProps) {
       >
         {text}
       </p>
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3 print:hidden">
         <Button variant="secondary" onClick={copy}>
           {label}
         </Button>

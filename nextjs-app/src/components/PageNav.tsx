@@ -1,5 +1,8 @@
 // what this file does: "on this page" navigation for program pages
 // PageRail is a sticky side list on desktop, JumpSelect is a compact dropdown on phones
+// change in this version (c10): both are hidden in print
+// the rail uses the "!" form because it already sets display with lg:block,
+// so print:hidden alone could lose on a wide page
 "use client";
 
 export type NavItem = { id: string; label: string };
@@ -16,7 +19,7 @@ function jumpTo(id: string) {
 
 export function PageRail({ items }: { items: NavItem[] }) {
   return (
-    <nav aria-label="On this page" className="sticky top-6 hidden self-start lg:block">
+    <nav aria-label="On this page" className="sticky top-6 hidden self-start lg:block print:hidden!">
       <p className="mb-2 text-base font-semibold text-stone-900">On this page</p>
       <ul className="space-y-1 border-l-2 border-stone-200">
         {items.map((item) => (
@@ -40,7 +43,7 @@ export function PageRail({ items }: { items: NavItem[] }) {
 
 export function JumpSelect({ items }: { items: NavItem[] }) {
   return (
-    <div className="lg:hidden">
+    <div className="lg:hidden print:hidden">
       <label htmlFor="jump-select" className="sr-only">
         Jump to a section
       </label>

@@ -3,6 +3,8 @@
 // the map code is loaded only when the block is close to the screen,
 // so readers who never scroll down do not download maplibre
 // it reuses PinMap in embedded mode, so markers look the same as on /map
+// change in this version (c10): in print the map is hidden and the places list stays,
+// the grid falls back to one column so the list does not sit in a half empty row
 "use client";
 
 import dynamic from "next/dynamic";
@@ -44,9 +46,9 @@ export function ProgramMiniMap({ program }: { program: ExplorerProgram }) {
 
     return (
         // stacked on phones, map and list side by side from 768px
-        <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_16rem]">
+        <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_16rem] print:block!">
             {/* PinMap fills its parent, so the parent needs a position and a height */}
-            <div ref={box} className="relative h-80 md:h-96">
+            <div ref={box} className="relative h-80 md:h-96 print:hidden">
                 {near ? <PinMap programs={programs} embedded /> : <MapPlaceholder />}
             </div>
 
@@ -61,7 +63,7 @@ export function ProgramMiniMap({ program }: { program: ExplorerProgram }) {
                     ))}
                 </ul>
                 {hasApproximate && (
-                    <p className="text-base text-stone-700">A dashed marker means the place is approximate.</p>
+                    <p className="text-base text-stone-700 print:hidden">A dashed marker means the place is approximate.</p>
                 )}
             </div>
         </div>

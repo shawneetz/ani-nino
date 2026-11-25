@@ -4,6 +4,9 @@
 // it is a server component and loads no maplibre code (the map lives at /map)
 // old shared links such as "/?topic=land" are redirected to "/map?topic=land"
 // note: reading searchparams makes this page render on request instead of at build time
+// change in this version (c9)
+//   province tiles show the count and its status ("1 program, still checking")
+//   a one-line held topics note sits under the numbers strip, only when topics are held
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -18,7 +21,8 @@ import { VoiceChip } from "@/components/VoiceChip";
 import type { Gap, Program } from "@/lib/content-schema";
 import { getGaps, getPrograms, getSources } from "@/lib/content";
 import { EMPTY_FILTERS, visiblePrograms } from "@/lib/filter";
-import { landingStats } from "@/lib/landing-stats";
+import { HELD_TOPICS } from "@/lib/held-topics";
+import { landingStats, provinceTileText } from "@/lib/landing-stats";
 import { legacyRedirect, type RawParams } from "@/lib/legacy-redirect";
 import { CONTENT_URL, FEATURED, FEATURED_GAPS, ISSUES_URL, SITE } from "@/lib/site";
 import {
@@ -88,7 +92,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
       </section>
 
       {/* numbers strip: computed when the page is built, so it never goes out of date */}
-      <section aria-label="The site in numbers">
+      <section aria-label="The site in numbers" className="space-y-3">
         <dl className="grid grid-cols-2 gap-3 md:grid-cols-4">
           {numbers.map((item) => (
             <Card key={item.label}>
@@ -97,6 +101,15 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
             </Card>
           ))}
         </dl>
+        {/* held topics note: one line, only when some topics are held back */}
+        {HELD_TOPICS.length > 0 && (
+          <p className="max-w-[68ch] text-base leading-relaxed text-stone-700">
+            Topics that do not yet have a sourced effect are held back.{" "}
+            <Link href="/sources#held-topics" className="tap-target inline-flex items-center underline underline-offset-2">
+              See the held topics
+            </Link>
+          </p>
+        )}
       </section>
 
       {/* how to read: explains labels before the reader meets them */}
@@ -174,8 +187,9 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                   className="tap-target flex h-full flex-col rounded-card border border-stone-200 bg-white p-4 hover:border-stone-400"
                 >
                   <span className="text-xl font-semibold text-stone-900">{PROVINCE_LABELS[province]}</span>
+                  {/* the words say how solid the coverage is, "no program yet" is only for an empty province */}
                   <span className="text-base text-stone-700">
-                    {count > 0 ? `${count} ${count === 1 ? "program" : "programs"}` : "No program yet"}
+                    {provinceTileText(count, stats.confirmedCounts[province])}
                   </span>
                   {count === 0 && <span className="text-sm text-stone-700 underline underline-offset-2">Why?</span>}
                 </Link>

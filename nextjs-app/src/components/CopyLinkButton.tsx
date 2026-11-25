@@ -1,5 +1,7 @@
 // what this file does: a button that copies the current page link
 // it shows a visible "copied" confirmation and announces it to screen readers
+// change in this version (c10): hidden in print, the page address is not needed on paper
+// (the cite block keeps the address in print)
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -43,7 +45,7 @@ export function CopyLinkButton() {
     <button
       type="button"
       onClick={copy}
-      className={`inline-flex min-h-[44px] items-center rounded-lg border px-4 text-base font-medium focus-visible:outline focus-visible:outline-2 ${color}`}
+      className={`inline-flex min-h-[44px] items-center rounded-lg border px-4 text-base font-medium focus-visible:outline focus-visible:outline-2 print:hidden ${color}`}
     >
       {label}
       {/* live region so the result is announced */}

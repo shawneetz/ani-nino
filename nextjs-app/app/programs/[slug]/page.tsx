@@ -8,6 +8,8 @@
 //   c5: new "cite this page" section after sources, and a canonical url in the metadata
 //   c8: the two echo blocks no longer use first person, they say "This project reads ..."
 // the echo blocks stay hidden when no program uses them
+//   c10: print styles. in print the back link, jump bar, video, related programs and
+//        contribute panel are hidden, and the page is one column so a long page prints in about 3 pages
 // all component imports use PascalCase file names
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -56,9 +58,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 // shared section wrapper: gives each section an anchor id for the page nav
-function Block({ id, title, children }: { id: string; title: string; children: ReactNode }) {
+// className is for extra classes, for example print:hidden on a section that paper does not need
+function Block({
+  id,
+  title,
+  className = "",
+  children,
+}: {
+  id: string;
+  title: string;
+  className?: string;
+  children: ReactNode;
+}) {
   return (
-    <section id={id} aria-labelledby={`${id}-heading`} className="scroll-mt-24 space-y-3">
+    <section id={id} aria-labelledby={`${id}-heading`} className={`scroll-mt-24 space-y-3 ${className}`}>
       <h2 id={`${id}-heading`} className="text-2xl font-semibold text-stone-900">
         {title}
       </h2>
@@ -124,16 +137,22 @@ export default async function ProgramPage({ params }: Props) {
 
   return (
     // on desktop the content and the sticky rail sit side by side
-    <main id="main" className="mx-auto max-w-6xl px-4 py-6 lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-10">
+    <main
+      id="main"
+      className="mx-auto max-w-6xl px-4 py-6 lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-10 print:block!"
+    >
       <div className="max-w-3xl space-y-8">
-        <Link href="/map" className="tap-target inline-flex items-center text-base underline underline-offset-2">
+        <Link
+          href="/map"
+          className="tap-target inline-flex items-center text-base underline underline-offset-2 print:hidden"
+        >
           Back to the map
         </Link>
 
         <ProgramHeader program={program} />
 
         {/* phones only: a jump menu that stays at the top while the reader scrolls */}
-        <div className="sticky top-0 z-20 -mx-4 border-b border-stone-200 bg-background/95 px-4 py-2 backdrop-blur lg:hidden">
+        <div className="sticky top-0 z-20 -mx-4 border-b border-stone-200 bg-background/95 px-4 py-2 backdrop-blur lg:hidden print:hidden">
           <JumpSelect items={nav} />
         </div>
 
@@ -183,7 +202,7 @@ export default async function ProgramPage({ params }: Props) {
         )}
 
         {program.video && (
-          <Block id="video" title="Video">
+          <Block id="video" title="Video" className="print:hidden">
             <VideoEmbed video={program.video} />
           </Block>
         )}
@@ -208,7 +227,7 @@ export default async function ProgramPage({ params }: Props) {
 
         {/* related programs replace the old previous and next links */}
         {related.length > 0 && (
-          <Block id="related" title="Related programs">
+          <Block id="related" title="Related programs" className="print:hidden">
             <RelatedPrograms items={related} />
           </Block>
         )}
