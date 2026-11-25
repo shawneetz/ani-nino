@@ -1,7 +1,8 @@
-// what this file does: shows the shared footer with links in three groups
-// (explore, evidence, project) and the github link
-// change in this version (c10): hidden in print
-// change in this version (c11): light text uses stone-700 or darker
+// what this file does: shows the shared footer as a colophon
+// one line about the project, then three link groups (explore, evidence, project) and the github link
+// change in this version (e2): editorial colophon, sits on paper with a hairline top rule
+// light text uses stone-700 or darker
+// hidden in print, and not rendered on /map once the route groups land (stage m1)
 import Link from "next/link";
 import { REPO_URL, SITE } from "@/lib/site";
 
@@ -31,25 +32,26 @@ const GROUPS = [
 ] as const;
 
 // shared link look: 44px tall so it is easy to tap
-const LINK = "tap-target inline-flex items-center underline underline-offset-2";
+const LINK = "tap-target inline-flex items-center font-sans underline underline-offset-2 hover:text-ink";
 
 /**
- * Renders the site footer with a short note and grouped links.
+ * Renders the site footer with a short colophon line and grouped links.
  *
  * @remarks
  * Server Component. It has no state, so no client code is shipped for it.
  */
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-stone-200 bg-white print:hidden">
+    <footer className="mt-auto border-t border-stone-400 bg-paper print:hidden">
       <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 text-base text-stone-700 sm:grid-cols-[1fr_auto]">
-        <p className="max-w-[48ch] leading-relaxed">
+        {/* the colophon line, set in serif like the end matter of a book */}
+        <p className="max-w-[48ch] font-serif leading-relaxed">
           {SITE.title}: an educational project. Sources are labeled; open questions are shown.
         </p>
         <nav aria-label="Footer" className="grid grid-cols-2 gap-x-10 gap-y-4 sm:grid-cols-3">
           {GROUPS.map((group) => (
             <div key={group.title}>
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-stone-700">{group.title}</h2>
+              <h2 className="font-sans text-sm font-semibold uppercase tracking-kicker text-stone-700">{group.title}</h2>
               <ul>
                 {group.links.map((link) => (
                   <li key={link.href}>
