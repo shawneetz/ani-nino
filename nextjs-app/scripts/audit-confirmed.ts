@@ -3,7 +3,9 @@
 // it exits with code 1 if any problem is found
 // it is not part of `build`, so it can never block a deploy, run it by hand before you launch
 // change in this version (b5a): added the style audit
+// change in this version (c6): added the glossary audit (warnings only)
 import { auditConfirmed } from "../src/lib/confirmed-audit";
+import { auditGlossary } from "../src/lib/glossary-audit";
 import { loadContent } from "../src/lib/load-content";
 import { auditStyle } from "../src/lib/style-audit";
 
@@ -11,8 +13,9 @@ async function main() {
   const { programs } = await loadContent("content");
   const confirmed = auditConfirmed(programs);
   const style = auditStyle(programs);
+  const glossary = auditGlossary(programs);
 
-  const warnings = [...confirmed.warnings, ...style.warnings];
+  const warnings = [...confirmed.warnings, ...style.warnings, ...glossary.warnings];
   const problems = [
     ...confirmed.problems.map((problem) => `(confirmed) ${problem}`),
     ...style.problems.map((problem) => `(style) ${problem}`),

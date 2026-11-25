@@ -4,7 +4,9 @@
 // and the sticky in-page nav
 // content is read at build time, so the page is static
 // change in this version (c3): also passes the held topics and the github folder link
+// change in this version (c6): the intro links to the glossary on the About page
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Container } from "@/components/Container";
 import { SourcesBrowser, type GapItem, type OpenQuestionItem } from "@/components/SourcesBrowser";
 import { getGaps, getPrograms, getSources } from "@/lib/content";
@@ -50,6 +52,11 @@ export default async function SourcesPage() {
         <h1 className="text-3xl font-bold tracking-tight text-stone-950">Sources</h1>
         <p className="max-w-[68ch] text-lg leading-relaxed text-stone-800">
           This page lists source labels, what is not known yet, topics held back and every source used on the site.
+          Short forms such as PD and DAR are explained in the{" "}
+          <Link href="/about#glossary" className="underline underline-offset-2">
+            glossary
+          </Link>
+          .
         </p>
       </div>
       <SourcesBrowser

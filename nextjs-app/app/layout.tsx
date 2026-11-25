@@ -1,17 +1,15 @@
 // What this file does: sets the shared page shell, navigation, footer and metadata.
+// change in this version (c5): the site url now comes from SITE_URL in site.ts
 import type { Metadata } from "next";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { SITE } from "@/lib/site";
+import { SITE, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : "http://localhost:3000";
 const title = `${SITE.title}: ${SITE.subtitle}`;
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
   title: { default: title, template: `%s | ${SITE.title}` },
   description: SITE.description,
   openGraph: { title, description: SITE.description, type: "website", locale: "en_PH" },

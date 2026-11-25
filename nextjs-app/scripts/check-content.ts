@@ -5,7 +5,9 @@
 // change in this version (b4a): validates moved targets and held slugs against content
 // change in this version (b5a): shows the style audit as warnings
 import { readdir } from "node:fs/promises";
+// change in this version (c6): shows the glossary audit as warnings
 import { auditConfirmed } from "../src/lib/confirmed-audit";
+import { auditGlossary } from "../src/lib/glossary-audit";
 import { ContentError, loadContent } from "../src/lib/load-content";
 import { isRepoConfigured } from "../src/lib/site";
 import { slugProblems } from "../src/lib/slug-check";
@@ -72,6 +74,8 @@ async function main() {
     const style = auditStyle(programs);
     style.problems.forEach((problem) => console.warn(`WARN (style audit): ${problem}`));
     style.warnings.forEach((warning) => console.warn(`WARN: ${warning}`));
+    const glossary = auditGlossary(programs);
+    glossary.warnings.forEach((warning) => console.warn(`WARN (glossary): ${warning}`));
   } catch (error) {
     if (error instanceof ContentError) {
       console.error(`FAILED: ${error.issues.length} problem(s)`);

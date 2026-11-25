@@ -2,6 +2,8 @@
 //   order: short narrative, method, where to start, how to contribute
 //   the narrative numbers come from landingStats, so they never go out of date
 //   the "where to start" box reuses FEATURED from site.ts, the same picks as the landing page
+//   the glossary section renders GLOSSARY from src/lib/glossary.ts
+// change in this version (c6): added the glossary section
 // contributions are github only in v1, so this page never mentions accounts on this site
 // it is a server component and ships no client code
 import type { Metadata } from "next";
@@ -15,6 +17,7 @@ import type { Program } from "@/lib/content-schema";
 import { getPrograms, getSources } from "@/lib/content";
 import { yearRange } from "@/lib/filter";
 import { firstSentence } from "@/lib/first-sentence";
+import { GLOSSARY } from "@/lib/glossary";
 import { landingStats } from "@/lib/landing-stats";
 import { CONTENT_URL, FEATURED, ISSUES_URL, REPO_URL, SITE } from "@/lib/site";
 
@@ -130,6 +133,20 @@ export default async function AboutPage() {
             </ul>
           </div>
         </Card>
+      </Section>
+
+      {/* glossary: short forms in plain words */}
+      <Section id="glossary" title="Glossary" intro="Short forms used on program pages, in plain words.">
+        <dl className="max-w-[68ch] space-y-4">
+          {GLOSSARY.map((entry) => (
+            <div key={entry.term}>
+              <dt className="text-lg font-semibold text-stone-900">
+                {entry.term}: {entry.name}
+              </dt>
+              <dd className="text-lg leading-relaxed text-stone-800">{entry.meaning}</dd>
+            </div>
+          ))}
+        </dl>
       </Section>
 
       {/* contribute: github only in v1, so no sign-in wording here */}

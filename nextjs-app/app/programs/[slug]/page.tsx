@@ -5,12 +5,14 @@
 //   u16: a sticky jump select for phones (the desktop rail was already in place)
 //   u17: related programs use the RelatedPrograms component
 //   u18: the contribute panel owns its own anchor
+//   c5: new "cite this page" section after sources, and a canonical url in the metadata
 // all component imports use PascalCase file names
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { ButtonLink } from "@/components/Button";
+import { CiteBlock } from "@/components/CiteBlock";
 import { Container } from "@/components/Container";
 import { ContributeLinks } from "@/components/ContributeLinks";
 import { JumpSelect, PageRail, type NavItem } from "@/components/PageNav";
@@ -21,11 +23,13 @@ import { RelatedPrograms } from "@/components/RelatedPrograms";
 import { SinceTimeline } from "@/components/SinceTimeline";
 import { SourceList } from "@/components/SourceList";
 import { VideoEmbed } from "@/components/VideoEmbed";
+import { citationText } from "@/lib/citation";
 import { getProgram, getPrograms } from "@/lib/content";
 import { toExplorerProgram } from "@/lib/explorer-types";
 import { heldTopic, type HeldTopic } from "@/lib/held-topics";
 import { programDescription } from "@/lib/program-description";
 import { relatedPrograms } from "@/lib/related";
+import { SITE_URL } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -37,7 +41,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const program = await getProgram(slug);
   // description is the first sentence of "happened", trimmed to 160 characters
-  if (program) return { title: program.title, description: programDescription(program.happened) };
+  if (program) {
+    return {
+      title: program.title,
+      description: programDescription(program.happened),
+      alternates: { canonical: `/programs/${program.slug}` },
+    };
+  }
   // a held page is not meant to be found in search
   const held = heldTopic(slug);
   return held ? { title: held.title, robots: { index: false, follow: false } } : {};
@@ -96,6 +106,7 @@ export default async function ProgramPage({ params }: Props) {
   const related = relatedPrograms(program, all);
   // the open question only shows while the program is still being checked
   const question = program.status === "checking" ? program.question : undefined;
+  const citation = citationText(program, SITE_URL);
 
   // build the nav from the sections that actually render
   const nav: NavItem[] = [{ id: "record", label: "Promise and record" }];
@@ -105,6 +116,7 @@ export default async function ProgramPage({ params }: Props) {
   if (program.video) nav.push({ id: "video", label: "Video" });
   nav.push({ id: "where", label: "Where" });
   if (program.sources.length > 0) nav.push({ id: "sources", label: "Sources" });
+  nav.push({ id: "cite", label: "Cite this page" });
   nav.push({ id: "contribute", label: "Help improve this page" });
   if (related.length > 0) nav.push({ id: "related", label: "Related programs" });
 
@@ -184,6 +196,10 @@ export default async function ProgramPage({ params }: Props) {
             <SourceList sources={program.sources} />
           </Block>
         )}
+
+        <Block id="cite" title="Cite this page">
+          <CiteBlock text={citation} />
+        </Block>
 
         {/* github only panel, it carries its own anchor */}
         <ContributeLinks slug={program.slug} />

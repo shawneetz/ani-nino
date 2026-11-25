@@ -3,6 +3,8 @@
 // "map" lives at /map (the landing page owns "/"), and "programs" lists every program
 // featured and featured_gaps feed the landing page, plus two general github links
 // change in this version (c3): added HOLDING_URL, the github folder of held topics
+// change in this version (c5): added SITE_URL, moved here from layout.tsx so the
+// program page can build the citation url on the server
 
 /**
  * Site-wide text used by the header, metadata and the landing page.
@@ -14,6 +16,18 @@ export const SITE = {
   description:
     "An evidence-labeled map of martial-law farm programs in CALABARZON, 1972 to 1986: what each promised, what the record shows, and who says so.",
 } as const;
+
+/**
+ * The public address of the site, with no trailing slash.
+ *
+ * @remarks
+ * Read from a server-only env var, so a client component cannot see it.
+ * Build any text that needs it (such as the citation) on the server and pass
+ * the finished text down as a prop.
+ */
+export const SITE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "http://localhost:3000";
 
 /** GitHub account that owns the repository. */
 export const REPO_OWNER = "shawneetz";
