@@ -1,29 +1,43 @@
 /* what this file does: sets the app's colors, fonts, size scale and shared rules
+   it holds tokens and a few global rules only, all component styles live in the tsx files
    the root font size is 18px, so every rem-based size (text-sm, p-4, ...) grows
    about 12% with no edits in other files, maplibre's stylesheet is loaded
    from a cdn inside PinMap.tsx, not imported here
-   change in this version: removed the .year-range styles, they now live in
-   YearSlider.tsx as tailwind classes, so this file only holds global rules */
+   change in this version (e1): editorial tokens
+     paper and ink colors, system serif and sans stacks (no web font download),
+     a kicker letter spacing token and a tabular numerals utility */
 @import "tailwindcss";
 
+/* paper and ink, the page sits on paper like a printed reading page */
 :root {
   color-scheme: light;
-  --background: #fafaf9;
-  --foreground: #171717;
+  --background: #f8f5ee;
+  --foreground: #1c1917;
 }
 
+/* these also give bg-paper, text-ink and border-ink classes */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-paper: var(--background);
+  --color-ink: var(--foreground);
 }
 
 /* design tokens, tailwind turns these into classes such as
-   text-accent, rounded-card and py-section */
+   text-accent, rounded-card, py-section, font-serif and tracking-kicker */
 @theme {
   --color-accent: #b45309;
   --color-accent-strong: #92400e;
   --radius-card: 0.75rem;
   --spacing-section: 2rem;
+
+  /* serif for titles, lead sentences, record text and numerals */
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  /* sans for chips, buttons, tags, labels, filters and the map */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* wide spacing used by kickers and uppercase tags */
+  --tracking-kicker: 0.14em;
 }
 
 /* bigger base size, 1rem is now 18px so text-sm is about 15.75px */
@@ -34,13 +48,18 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* a shared minimum touch size (44px) for buttons, chips and links */
 @utility tap-target {
   min-height: 44px;
   min-width: 44px;
+}
+
+/* same-width digits so years, counts and figures line up in columns */
+@utility figures {
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* one visible focus ring for every keyboard user */
@@ -64,6 +83,10 @@ body {
 
 /* print fallback: external source urls are useful when a page is saved as PDF */
 @media print {
+  /* plain white paper saves ink */
+  body {
+    background: #fff;
+  }
   a[href^="http"]::after {
     content: " (" attr(href) ")";
     overflow-wrap: anywhere;
