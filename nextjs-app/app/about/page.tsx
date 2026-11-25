@@ -1,9 +1,12 @@
 // what this file does: the /about page
-//   order: short narrative, method, where to start, how to contribute
+//   order: why this site exists, using this site, method, limits, where to start, glossary, contribute
 //   the narrative numbers come from landingStats, so they never go out of date
+//   the thin province list in "limits" is also computed from landingStats
 //   the "where to start" box reuses FEATURED from site.ts, the same picks as the landing page
 //   the glossary section renders GLOSSARY from src/lib/glossary.ts
-// change in this version (c6): added the glossary section
+// change in this version (c7): new "using" and "limits" sections, method is now five reader rules,
+//   the dashed marker bullet moved into "using", and the page description was updated
+// section ids: story, using, method, limits, where-to-start, glossary, contribute
 // contributions are github only in v1, so this page never mentions accounts on this site
 // it is a server component and ships no client code
 import type { Metadata } from "next";
@@ -20,10 +23,12 @@ import { firstSentence } from "@/lib/first-sentence";
 import { GLOSSARY } from "@/lib/glossary";
 import { landingStats } from "@/lib/landing-stats";
 import { CONTENT_URL, FEATURED, ISSUES_URL, REPO_URL, SITE } from "@/lib/site";
+import { PROVINCE_KEYS, PROVINCE_LABELS } from "@/lib/vocab";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Why this site exists, how each claim is checked, where to start and how to help.",
+  description:
+    "Why this site exists, how to use and cite it, how each claim is checked, what it does not cover, where to start and how to help.",
 };
 
 // the other places a first-time reader can start, besides the featured programs
@@ -36,12 +41,22 @@ const OTHER_STARTS = [
 // shared look for link rows, so the box stays consistent
 const LINK = "tap-target inline-flex items-center text-lg font-semibold underline underline-offset-4";
 
+// shared look for inline links inside the reading text
+const INLINE_LINK = "underline underline-offset-2";
+
+// shared look for the bullet lists, so every section matches
+const LIST = "max-w-[68ch] list-disc space-y-2 pl-5 text-lg leading-relaxed text-stone-800";
+
+// a province with this many programs or fewer is called thin
+const THIN_MAX = 1;
+
 /**
  * Renders the about page.
  *
  * @remarks
  * Server Component. Programs and sources are read once at build time. A slug in
  * `FEATURED` that does not match a program is skipped, so a typo never breaks the page.
+ * The list of thin provinces is counted from the content, so it never goes out of date.
  */
 export default async function AboutPage() {
   const [programs, sources] = await Promise.all([getPrograms(), getSources()]);
@@ -50,6 +65,11 @@ export default async function AboutPage() {
   // featured picks, in the order listed in site.ts
   const featured = FEATURED.map((slug) => programs.find((program) => program.slug === slug)).filter(
     (program): program is Program => program !== undefined,
+  );
+
+  // provinces with one program or none, for example "Cavite has no program"
+  const thinProvinces = PROVINCE_KEYS.filter((province) => stats.provinceCounts[province] <= THIN_MAX).map(
+    (province) => `${PROVINCE_LABELS[province]} has ${stats.provinceCounts[province] === 0 ? "no program" : "one program"}`,
   );
 
   return (
@@ -77,25 +97,79 @@ export default async function AboutPage() {
         </div>
       </Section>
 
-      {/* method: the rules every page follows */}
-      <Section id="method" title="Method">
-        <ul className="max-w-[68ch] list-disc space-y-2 pl-5 text-lg leading-relaxed text-stone-800">
-          <li>Every claim comes from a source, and every source is labeled by who is speaking.</li>
+      {/* using: five short bullets, one for each thing a reader needs to do */}
+      <Section id="using" title="Using this site">
+        <ul className={LIST}>
           <li>
-            A confirmed program was checked against its sources on the date shown. A program marked still checking
-            shows its open question.
+            <strong>Read the labels.</strong> Every source says who is speaking. A label is not a verdict on whether
+            the source is right. See{" "}
+            <Link href="/sources#labels" className={INLINE_LINK}>
+              Source labels
+            </Link>
+            .
           </li>
-          <li>A dashed marker on the map means the place is approximate.</li>
-          <li>Connections between past and present are interpretation, not established findings.</li>
-          <li>No farmers from the martial-law era were interviewed, so their own accounts are missing.</li>
+          <li>
+            <strong>Read the map key.</strong> A solid marker is a confirmed program, a hollow marker is still being
+            checked, and a dashed border means the place is approximate. The full key is under the map.
+          </li>
+          <li>
+            <strong>Filter to confirmed pages.</strong> Switch on Confirmed only on the{" "}
+            <Link href="/map" className={INLINE_LINK}>
+              map
+            </Link>{" "}
+            or in the{" "}
+            <Link href="/programs" className={INLINE_LINK}>
+              programs list
+            </Link>{" "}
+            to see only programs checked against their sources.
+          </li>
+          <li>
+            <strong>Cite a page.</strong> Each program page ends with a Cite this page box. The line you copy says
+            whether the page is confirmed or still being checked.
+          </li>
+          <li>
+            <strong>Report an error.</strong> Each program page has a Report a problem button. It opens a short form
+            on GitHub with the program already filled in.
+          </li>
         </ul>
-        <p className="max-w-[68ch] text-lg leading-relaxed text-stone-800">
-          See{" "}
-          <Link href="/sources" className="underline underline-offset-2">
-            Sources
-          </Link>{" "}
-          for the labels, open questions and every source.
-        </p>
+      </Section>
+
+      {/* method: the five rules a page follows before it goes live */}
+      <Section id="method" title="Method">
+        <ol className="max-w-[68ch] list-decimal space-y-2 pl-5 text-lg leading-relaxed text-stone-800">
+          <li>Every claim has a source link with an access date, and every source has a label.</li>
+          <li>A page names at least one place in Batangas, Cavite, Laguna, Quezon or Rizal.</li>
+          <li>
+            A source must say what happened to farmers or fisherfolk there. A law that only names a place is not
+            enough.
+          </li>
+          <li>
+            Region IV in the martial-law years was wider than CALABARZON. It also held Mindoro, Marinduque, Romblon
+            and Palawan, so a regional figure from then is not used as a local number.
+          </li>
+          <li>
+            Confirmed means every claim was checked against an opened source on the date shown. It does not mean the
+            record is complete.
+          </li>
+        </ol>
+      </Section>
+
+      {/* limits: what the site cannot tell you, province counts come from the content */}
+      <Section id="limits" title="Limits">
+        <ul className={LIST}>
+          <li>No farmers from the martial-law era were interviewed, so their own accounts are missing.</li>
+          {thinProvinces.length > 0 && (
+            <li>
+              Coverage is thin in some provinces: {thinProvinces.join("; ")}. Topics without a source on what
+              happened to farmers or fisherfolk are held back. See{" "}
+              <Link href="/sources#held-topics" className={INLINE_LINK}>
+                Held topics
+              </Link>
+              .
+            </li>
+          )}
+          <li>Connections between past and present are interpretation, not established findings.</li>
+        </ul>
       </Section>
 
       {/* where to start: featured programs first, then the other ways in */}

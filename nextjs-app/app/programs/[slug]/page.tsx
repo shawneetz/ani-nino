@@ -6,6 +6,8 @@
 //   u17: related programs use the RelatedPrograms component
 //   u18: the contribute panel owns its own anchor
 //   c5: new "cite this page" section after sources, and a canonical url in the metadata
+//   c8: the two echo blocks no longer use first person, they say "This project reads ..."
+// the echo blocks stay hidden when no program uses them
 // all component imports use PascalCase file names
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -66,7 +68,7 @@ function Block({ id, title, children }: { id: string; title: string; children: R
 }
 
 // short page for a topic that was researched but is not published
-// c3 changes the sources link to /sources#held-topics
+// the sources link goes to the held topics section
 function HeldTopicPage({ topic }: { topic: HeldTopic }) {
   return (
     <Container as="main" width="prose" className="space-y-6 py-12">
@@ -141,7 +143,7 @@ export default async function ProgramPage({ params }: Props) {
         {/* stronger open-question box right after the record */}
         {question && <CheckingBox question={question} />}
 
-        {/* what came after: year, text, linked source and voice label for each entry */}
+        {/* what came after: year, text, linked source, publisher, access date and voice label for each entry */}
         {program.since.length > 0 && (
           <Block id="after" title="What came after">
             <SinceTimeline items={program.since} />
@@ -158,7 +160,7 @@ export default async function ProgramPage({ params }: Props) {
                 <p>
                   This connects to{" "}
                   <Link href={`/programs/${origin.slug}`} className="underline underline-offset-2">{origin.title}</Link>.
-                  The link is my interpretation, not an established finding.
+                  This project reads the link as interpretation, not an established finding.
                 </p>
               </section>
             )}
@@ -174,7 +176,7 @@ export default async function ProgramPage({ params }: Props) {
                     </li>
                   ))}
                 </ul>
-                <p className="text-sm text-stone-600">These links are my interpretation, not established findings.</p>
+                <p className="text-sm text-stone-600">This project reads these links as interpretation, not established findings.</p>
               </section>
             )}
           </div>
