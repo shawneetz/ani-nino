@@ -103,7 +103,7 @@ export function ProgramsIndex({ programs }: ProgramsIndexProps) {
                             value={query}
                             onChange={(event) => setQuery(event.target.value)}
                             placeholder="Title or place"
-                            className="mt-1 min-h-[44px] w-full rounded-lg border border-stone-400 bg-white px-3 text-base text-stone-900 placeholder:text-stone-600"
+                            className="mt-1 min-h-[44px] w-full rounded-lg border border-stone-400 bg-white px-3 text-base text-stone-900 placeholder:text-stone-700"
                         />
                     </div>
                     <div>

@@ -159,7 +159,7 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
                             value={query}
                             onChange={(event) => setQuery(event.target.value)}
                             placeholder="Title, question, reason, publisher or program"
-                            className="mt-1 min-h-[44px] w-full rounded-lg border border-stone-400 bg-white px-3 text-base text-stone-900 placeholder:text-stone-600"
+                            className="mt-1 min-h-[44px] w-full rounded-lg border border-stone-400 bg-white px-3 text-base text-stone-900 placeholder:text-stone-700"
                         />
                     </div>
                     {hasFilters && (
@@ -258,7 +258,7 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
                                 // the id matches links such as /sources#gap-cavite-not-covered
                                 <li key={gap.id} id={`gap-${gap.id}`} className="scroll-mt-48 text-base">
                                     <span className="font-medium text-stone-900">{gap.title}</span>{" "}
-                                    <span className="text-stone-600">({GAP_KINDS[gap.kind]})</span>
+                                    <span className="text-stone-700">({GAP_KINDS[gap.kind]})</span>
                                     <p className="max-w-[68ch] text-stone-700">{gap.description}</p>
                                     {gap.programSlug && gap.programTitle && (
                                         <Link

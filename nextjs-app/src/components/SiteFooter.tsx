@@ -1,6 +1,7 @@
 // what this file does: shows the shared footer with links in three groups
 // (explore, evidence, project) and the github link
 // change in this version (c10): hidden in print
+// change in this version (c11): light text uses stone-700 or darker
 import Link from "next/link";
 import { REPO_URL, SITE } from "@/lib/site";
 
@@ -48,7 +49,7 @@ export function SiteFooter() {
         <nav aria-label="Footer" className="grid grid-cols-2 gap-x-10 gap-y-4 sm:grid-cols-3">
           {GROUPS.map((group) => (
             <div key={group.title}>
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-stone-600">{group.title}</h2>
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-stone-700">{group.title}</h2>
               <ul>
                 {group.links.map((link) => (
                   <li key={link.href}>

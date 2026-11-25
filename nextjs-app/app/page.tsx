@@ -214,7 +214,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
           <div className="grid gap-3 md:grid-cols-3">
             {featuredGaps.map((gap) => (
               <Card key={gap.id}>
-                <p className="text-sm font-medium uppercase tracking-wide text-stone-600">{GAP_KINDS[gap.kind]}</p>
+                <p className="text-sm font-medium uppercase tracking-wide text-stone-700">{GAP_KINDS[gap.kind]}</p>
                 <h3 className="mt-1 text-lg font-semibold leading-snug">{gap.title}</h3>
                 <p className="mt-2 leading-relaxed text-stone-800">{gap.description}</p>
                 {gap.program && titleBySlug.has(gap.program) && (

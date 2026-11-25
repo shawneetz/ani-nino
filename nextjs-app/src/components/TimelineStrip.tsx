@@ -14,7 +14,7 @@ export function TimelineStrip({ programs }: { programs: Program[] }) {
   return (
     <div>
       {/* axis labels. hidden from screen readers because each row states its own years */}
-      <div aria-hidden="true" className="flex justify-between px-2 pb-1 text-sm text-stone-600">
+      <div aria-hidden="true" className="flex justify-between px-2 pb-1 text-sm text-stone-700">
         <span>{FIRST_YEAR}</span>
         <span>{MIDDLE_YEAR}</span>
         <span>{LAST_YEAR}</span>

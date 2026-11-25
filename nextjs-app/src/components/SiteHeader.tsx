@@ -2,6 +2,7 @@
 // at the top of every page. To rename the site, change SITE in src/lib/site.ts
 // and the title in app/layout.tsx.
 // change in this version (c10): hidden in print, a printed page does not need a menu
+// change in this version (c11): light text uses stone-700 or darker
 import Link from "next/link";
 import { SiteNav } from "@/components/SiteNav";
 import { SITE } from "@/lib/site";
@@ -14,7 +15,7 @@ export function SiteHeader() {
         <Link href="/" className="tap-target flex flex-wrap items-baseline gap-x-2 tracking-tight text-stone-950">
           <span className="text-xl font-bold">{SITE.title}</span>
           {/* The tagline wraps on narrow phones instead of being cut off. */}
-          <span className="text-base text-stone-600">{SITE.tagline}</span>
+          <span className="text-base text-stone-700">{SITE.tagline}</span>
         </Link>
         <SiteNav />
       </div>

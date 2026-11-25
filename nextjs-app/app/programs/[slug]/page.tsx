@@ -195,7 +195,7 @@ export default async function ProgramPage({ params }: Props) {
                     </li>
                   ))}
                 </ul>
-                <p className="text-sm text-stone-600">This project reads these links as interpretation, not established findings.</p>
+                <p className="text-sm text-stone-700">This project reads these links as interpretation, not established findings.</p>
               </section>
             )}
           </div>

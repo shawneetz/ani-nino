@@ -18,7 +18,7 @@ export default async function MapPage() {
   return (
     <Container as="main" width="wide" className="space-y-2 py-3">
       <h1 className="text-xl font-semibold text-stone-900">Explore the map</h1>
-      <Suspense fallback={<p className="text-sm text-stone-600">Loading the map...</p>}>
+      <Suspense fallback={<p className="text-sm text-stone-700">Loading the map...</p>}>
         <Explorer programs={programs} />
       </Suspense>
     </Container>
