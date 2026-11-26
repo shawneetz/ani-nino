@@ -5,9 +5,11 @@
 // content is read at build time, so the page is static
 // change in this version (c3): also passes the held topics and the github folder link
 // change in this version (c6): the intro links to the glossary on the About page
+// change in this version (e7): editorial header with a kicker, a serif title and a 2px ink rule
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/Container";
+import { Kicker } from "@/components/Kicker";
 import { SourcesBrowser, type GapItem, type OpenQuestionItem } from "@/components/SourcesBrowser";
 import { getGaps, getPrograms, getSources } from "@/lib/content";
 import { HELD_TOPICS } from "@/lib/held-topics";
@@ -47,10 +49,13 @@ export default async function SourcesPage() {
   }));
 
   return (
-    <Container as="main" width="prose" className="space-y-4 py-6">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight text-stone-950">Sources</h1>
-        <p className="max-w-[68ch] text-lg leading-relaxed text-stone-800">
+    <Container as="main" width="prose" className="space-y-6 py-8">
+      <header className="space-y-3 border-t-2 border-ink pt-4">
+        <Kicker>Evidence</Kicker>
+        <h1 className="font-serif text-[clamp(2.25rem,5vw,3.5rem)] font-bold leading-tight tracking-tight text-stone-950">
+          Sources
+        </h1>
+        <p className="max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800">
           This page lists source labels, what is not known yet, topics held back and every source used on the site.
           Short forms such as PD and DAR are explained in the{" "}
           <Link href="/about#glossary" className="underline underline-offset-2">
@@ -58,7 +63,7 @@ export default async function SourcesPage() {
           </Link>
           .
         </p>
-      </div>
+      </header>
       <SourcesBrowser
         openQuestions={openQuestions}
         gaps={gapItems}
