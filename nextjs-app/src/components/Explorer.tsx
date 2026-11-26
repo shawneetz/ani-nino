@@ -6,7 +6,7 @@
 //   results panel (m4): the count, the filter controls and the list, a left panel on desktop, the top strip
 //     and the list view on phones, there is only one count in the page
 //   time bar (m6): the year slider, bottom-left on desktop, inside the filter sheet on phones
-//   map key (m9): bottom-right, above the phone toggle
+//   map key (m9): bottom-right, above the zoom buttons
 //   place preview (m7): opens over the map, to the right of the panel on desktop
 //   phone toggle (m8): a map | list switch at the bottom, the map stays mounted so it keeps its tiles
 // pin or "show on map" selects a program, "open program" leaves the page, selection lives in the url as ?sel=<slug>
@@ -15,12 +15,16 @@
 // change in this version (m2): full-bleed shell
 //   the h1 is visually hidden, the main element now comes from the map layout
 //   the old sticky filter bar, the list column and the fixed height calc are gone
+// change in this version (m3): the map gets fit padding from useMapPadding,
+//   so pins land in the part of the map the panel, time bar and toggle do not cover
+//   the map key moved up so it never sits on the zoom buttons
 "use client";
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFilterState } from "@/hooks/use-filter-state";
+import { useMapPadding } from "@/hooks/use-map-padding";
 import type { ExplorerProgram } from "@/lib/explorer-types";
 import { visiblePrograms } from "@/lib/filter";
 import { LAYER } from "@/lib/map-layers";
@@ -55,6 +59,8 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
   const visible = useMemo(() => visiblePrograms(programs, filters), [programs, filters]);
   const selectedProgram = useMemo(() => visible.find((program) => program.slug === selected) ?? null, [visible, selected]);
   const hasToday = useMemo(() => programs.some((program) => program.era === "today"), [programs]);
+  // how much of each map edge the floating pieces cover at this screen width
+  const fitPadding = useMapPadding();
 
   const [view, setView] = useState<View>("list"); // phone only, desktop shows both
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -165,6 +171,7 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
           selectedSlug={selectedProgram?.slug ?? null}
           onSelect={(slug) => select(slug, false)}
           onClear={() => closePreview(false)}
+          fitPadding={fitPadding}
         />
       </div>
 
@@ -242,8 +249,11 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
       </div>
 
       {/* layer: map key (temporary, m9 replaces it), anchored by its bottom edge so it opens upward
-          on phones it sits above the toggle */}
-      <div className={`absolute bottom-16 right-3 w-72 max-w-[calc(100%-1.5rem)] lg:bottom-3 ${LAYER.panel}`}>
+          it always clears the zoom buttons that sit at the bottom-right from 640px up
+            phone: no zoom buttons, so it sits just above the toggle
+            640px to 1024px: the zoom buttons are lifted above the toggle, so the key goes above them
+            1024px and up: the toggle is gone, the zoom buttons sit at the bottom edge */}
+      <div className={`absolute bottom-16 right-3 w-72 max-w-[calc(100%-1.5rem)] sm:bottom-48 lg:bottom-32 ${LAYER.panel}`}>
         <Legend showToday={hasToday} />
       </div>
 

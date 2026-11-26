@@ -8,6 +8,13 @@
 //   embedded markers are plain divs (the places list beside the map says the same thing)
 //   embedded maps use cooperative gestures, so a swipe on a phone still scrolls the page
 //   onSelect, onClear, provinces and selectedSlug are optional now
+// change in this version (m3): fit padding and zoom buttons
+//   fitPadding keeps pins out from under the floating panel, chips, time bar and toggle
+//   it is read from a ref, so a resize changes where the next fit lands but never refits on its own
+//   every fit is capped at zoom 11 (MAX_FIT_ZOOM) and the padding is clamped to the canvas size
+//   the zoom buttons sit at the bottom-right and only exist from 640px up, pinch works everywhere
+//   the mini-map keeps its zoom buttons at the top-right
+//   map.resize() runs whenever the padding changes, for example when the results panel collapses
 // maplibre is loaded from a cdn at runtime instead of being bundled by next.js,
 // because next's bundler breaks maplibre's web worker ("worker failed to load")
 // the version and optional integrity hashes live in src/lib/map-config.ts
@@ -17,6 +24,7 @@ import type * as MapLibre from "maplibre-gl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ExplorerProgram } from "@/lib/explorer-types";
 import { yearRange } from "@/lib/filter";
+import { clampPadding, DEFAULT_FIT_PADDING, MAX_FIT_ZOOM, type FitPadding } from "@/lib/fit-padding";
 import { groupPlaces, type PlaceGroup } from "@/lib/group-places";
 import {
   MAP_CENTER,
@@ -43,6 +51,9 @@ const PIN_DOT = "box-border flex h-[28px] w-[28px] items-center justify-center t
 // the ring and the raised layer are toggled for the selected program
 const PIN_RING = "shadow-[0_0_0_3px_#fff,0_0_0_6px_#171717]";
 const PIN_RAISED = "z-[2]";
+
+// zoom buttons only exist from this width, the same as tailwind's sm breakpoint
+const ZOOM_BUTTONS_QUERY = "(min-width: 640px)";
 
 // a stable empty list, a new [] on every render would rebuild the markers every time
 const NO_PROVINCES: Province[] = [];
@@ -89,18 +100,26 @@ function loadMapLibre(): Promise<MapLibreLib> {
   return loading;
 }
 
-// moves the map to show the points, padding 60px and never closer than zoom 11
+// moves the map to show the points, inside the padding and never closer than MAX_FIT_ZOOM
+// the padding is clamped to the canvas first, maplibre throws when it is bigger than the canvas
 // options are built without undefined values, maplibre would copy them over its defaults
-function fitPoints(lib: MapLibreLib, map: MapLibre.Map, points: Point[], animate: boolean) {
+function fitPoints(lib: MapLibreLib, map: MapLibre.Map, points: Point[], padding: FitPadding, animate: boolean) {
   if (points.length === 0) return; // no results: keep the current view
+  const canvas = map.getContainer();
+  const safe = clampPadding(padding, canvas.clientWidth, canvas.clientHeight);
   const motion = animate ? {} : { duration: 0 };
   if (points.length === 1) {
-    map.easeTo({ center: points[0], zoom: Math.min(Math.max(map.getZoom(), 9.5), 11), ...motion });
+    map.easeTo({
+      center: points[0],
+      zoom: Math.min(Math.max(map.getZoom(), 9.5), MAX_FIT_ZOOM),
+      padding: safe,
+      ...motion,
+    });
     return;
   }
   const bounds = new lib.LngLatBounds(points[0], points[0]);
   points.forEach((point) => bounds.extend(point));
-  map.fitBounds(bounds, { padding: 60, maxZoom: 11, ...motion });
+  map.fitBounds(bounds, { padding: safe, maxZoom: MAX_FIT_ZOOM, ...motion });
 }
 
 type Props = {
@@ -111,6 +130,8 @@ type Props = {
   onClear?: () => void;
   // true for the small map on a program page: no clicks on markers, gentler gestures
   embedded?: boolean;
+  // pixels of each edge covered by floating pieces, the pins are fitted inside what is left
+  fitPadding?: FitPadding;
 };
 
 export default function PinMap({
@@ -120,6 +141,7 @@ export default function PinMap({
   onSelect,
   onClear,
   embedded = false,
+  fitPadding = DEFAULT_FIT_PADDING,
 }: Props) {
   const box = useRef<HTMLDivElement>(null);
   const panel = useRef<HTMLDivElement>(null);
@@ -130,6 +152,8 @@ export default function PinMap({
   const pickerTrigger = useRef<HTMLElement | null>(null);
   // latest callbacks, so markers never need to be rebuilt when the parent re-renders
   const handlers = useRef({ onSelect, onClear });
+  // latest padding, read when a fit runs, so a resize never causes a refit by itself
+  const paddingRef = useRef(fitPadding);
 
   const [lib, setLib] = useState<MapLibreLib | null>(null);
   const [map, setMap] = useState<MapLibre.Map | null>(null);
@@ -140,9 +164,15 @@ export default function PinMap({
     handlers.current = { onSelect, onClear };
   });
 
+  useEffect(() => {
+    paddingRef.current = fitPadding;
+  });
+
   const groups = useMemo(() => groupPlaces(programs, provinces), [programs, provinces]);
   // the fit only reruns when the set of spots changes, not on every render
   const pointsKey = useMemo(() => groups.map((group) => group.key).join("|"), [groups]);
+  // a plain string, so the resize effect below only runs when a side really changes
+  const paddingKey = `${fitPadding.top},${fitPadding.right},${fitPadding.bottom},${fitPadding.left}`;
   const pickerGroup = groups.find((group) => group.key === pickerKey) ?? null;
 
   useEffect(() => {
@@ -158,7 +188,7 @@ export default function PinMap({
         return;
       }
       map.resize();
-      fitPoints(lib, map, points, animate);
+      fitPoints(lib, map, points, paddingRef.current, animate);
     },
     [lib, map],
   );
@@ -189,7 +219,24 @@ export default function PinMap({
       // on a long page, ctrl-scroll or two fingers zoom the map, so the page stays scrollable
       cooperativeGestures: embedded,
     });
-    instance.addControl(new lib.NavigationControl({ showCompass: false }), "top-right");
+
+    // zoom buttons: the mini-map keeps them top-right, the big map has them bottom-right from 640px up
+    // under 640px they are left out, pinch and double tap still zoom
+    let zoomControl: MapLibre.NavigationControl | null = null;
+    const wide = window.matchMedia(ZOOM_BUTTONS_QUERY);
+    const syncZoomControl = () => {
+      const wanted = embedded || wide.matches;
+      if (wanted && !zoomControl) {
+        zoomControl = new lib.NavigationControl({ showCompass: false });
+        instance.addControl(zoomControl, embedded ? "top-right" : "bottom-right");
+      } else if (!wanted && zoomControl) {
+        instance.removeControl(zoomControl);
+        zoomControl = null;
+      }
+    };
+    syncZoomControl();
+    wide.addEventListener("change", syncZoomControl);
+
     // tapping empty map closes the preview and the picker
     instance.on("click", () => {
       handlers.current.onClear?.();
@@ -197,6 +244,7 @@ export default function PinMap({
     });
     setMap(instance);
     return () => {
+      wide.removeEventListener("change", syncZoomControl);
       instance.remove();
       setMap(null);
     };
@@ -217,6 +265,13 @@ export default function PinMap({
     observer.observe(box.current);
     return () => observer.disconnect();
   }, [map, fit]);
+
+  // step 3b: tell maplibre when the padding changes, for example when the results panel collapses
+  // this only resizes, it does not move the view, so the reader's position is never lost
+  useEffect(() => {
+    if (!map || !box.current || box.current.clientWidth === 0) return;
+    map.resize();
+  }, [map, paddingKey]);
 
   // step 4: rebuild the markers when the spots change
   useEffect(() => {
@@ -312,7 +367,12 @@ export default function PinMap({
   }, [pickerKey, closePicker]);
 
   return (
-    <div className="absolute inset-0">
+    // on the big map, the bottom-right zoom buttons are lifted above the phone toggle from 640px to 1024px
+    <div
+      className={`absolute inset-0 ${
+        embedded ? "" : "[&_.maplibregl-ctrl-bottom-right]:mb-16 lg:[&_.maplibregl-ctrl-bottom-right]:mb-0"
+      }`}
+    >
       <div
         ref={box}
         role="region"
