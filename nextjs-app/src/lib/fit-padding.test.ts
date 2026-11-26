@@ -18,6 +18,16 @@ describe("mapPadding", () => {
     expect(mapPadding(2000).left).toBe(504);
   });
 
+  it("frees the left side when the panel is collapsed on desktop", () => {
+    expect(mapPadding(1440, false).left).toBe(40);
+    // the other sides do not change
+    expect(mapPadding(1440, false).bottom).toBe(mapPadding(1440).bottom);
+  });
+
+  it("ignores the panel state on a phone", () => {
+    expect(mapPadding(390, false)).toEqual(mapPadding(390, true));
+  });
+
   it("leaves the sides free on a phone and keeps room top and bottom", () => {
     const phone = mapPadding(390);
     expect(phone.left).toBe(phone.right);
