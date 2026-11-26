@@ -78,6 +78,7 @@ export const SCOPES = {
   region: { label: "Region", blurb: "Covers a region or group of provinces." },
   province: { label: "Province", blurb: "Covers one province." },
   town: { label: "Town", blurb: "Covers one town or city." },
+  place: { label: "Place", blurb: "Covers a named place such as a lake or an estate." },
 } as const;
 export type Scope = keyof typeof SCOPES;
 export const SCOPE_KEYS = Object.keys(SCOPES) as [Scope, ...Scope[]];

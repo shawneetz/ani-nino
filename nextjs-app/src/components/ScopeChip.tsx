@@ -1,4 +1,4 @@
-// what this file does: labels how far a number reaches (National, Region, Province, Town)
+// what this file does: labels how far a number reaches (National, Region, Province, Town, Place)
 // a neutral outline tag, same look as VoiceChip so every tag on a reading page matches
 // change in this version (e3): small rectangle tag, uppercase text, thin border, wide letter spacing
 // the text is 15px or larger

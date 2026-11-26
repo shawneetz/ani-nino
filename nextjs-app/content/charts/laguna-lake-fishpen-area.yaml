@@ -1,0 +1,38 @@
+# what this file does: the fourth chart, pen area on Laguna de Bay in 1971, 1973 and 1983.
+id: laguna-lake-fishpen-area
+title: Fishpen area on Laguna de Bay
+question: How did pen area on Laguna de Bay change from 1971 to 1983?
+description: Area covered by fishpens on the lake in three years, from two studies.
+unit: hectares
+caveat: These figures are pen area on the lake, not the number of fisherfolk affected. The 1971 and 1983 figures come from one FAO paper and the 1973 figure from a separate study.
+points:
+  - label: "Pen area, 1971"
+    value: 40
+    qualifier: exact
+    scope: place
+    note: "FAO gives the area as 40 hectares in 1971."
+    source: &fao_fishpens
+      title: "Milkfish culture in pens: an assessment of its contribution to overall fishery production of Laguna de Bay (M. N. Delmendo)"
+      publisher: FAO
+      voice: independent
+      cite: "FAO document AG162E, 1987."
+      url: "https://www.fao.org/4/ag162e/AG162E01.htm"
+      accessed: "2026-11-26"
+  - label: "Pen area, 1973"
+    value: 4802
+    qualifier: exact
+    scope: place
+    note: "993 pens in the lake in 1973."
+    source:
+      title: "A Socio-Economic Study of Fish Pen Aquaculture in Laguna Lake, Philippines (Nicolas and Librero)"
+      publisher: AgEcon Search (Giannini Foundation Miscellaneous series, record 321635)
+      voice: independent
+      cite: "Paper for the 1977 AESSEA meeting, Iloilo."
+      url: "https://ageconsearch.umn.edu/record/321635/files/giannini-misc-767.pdf"
+      accessed: "2026-11-26"
+  - label: "Pen area, 1983"
+    value: 30000
+    qualifier: approx
+    scope: place
+    note: "FAO adds that the area then held steady and peaked at 29,011 hectares in 1985."
+    source: *fao_fishpens

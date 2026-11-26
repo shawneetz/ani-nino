@@ -2,6 +2,7 @@
 # it stays "still checking" because laguna-only loan and repayment figures were not found
 # b6 (2026-11-25): when now matches the years (1973 to 1984), voice, length and abbreviation pass
 # b7 (2026-11-25): the 3.7 percent claim now matches the rappler article (it states it itself, javier is cited for 1974 only), placeholder cite removed
+# p4 (2026-11-26): added the 2022 masagana 150 entry to since
 slug: laguna-masagana-99
 title: Masagana 99 rice credit in Laguna
 when: 1973 to 1984
@@ -16,6 +17,16 @@ places:
 promised: "Loans, seed, fertilizer and chemicals for farmers who adopted high-yielding rice, aiming at 99 cavans of palay per hectare, up from about 40."
 happened: "Masagana 99 began on May 21, 1973. The government tapped academics and scientists, many from the University of the Philippines Los Baños, to design and run it. Nationally, about 400,000 farmers borrowed in the first phase (May to October 1973) and about 530,000 in the third (May to October 1974). By the 14th phase (November 1979 to April 1980) only 54,250 borrowed. Repayment fell as well; the Charts page shows the table figures, and sources disagree on exact rates. Rappler reports that by 1980 only 3.7 percent of small rice farmers were taking out loans. The program stopped in 1984. Laguna-only loan and repayment figures have not been found."
 question: "Find Laguna loan and repayment figures from rural banks, the Philippine National Bank or the Agricultural Credit Administration, and a study of how Laguna farmers experienced the program."
+since:
+  - year: 2022
+    text: "In July 2022 the Department of Agriculture recommended Masagana 150, a new rice program aiming for 150 cavans per hectare. Rappler reported it was not yet approved."
+    source:
+      title: "How Marcos’ proposed Masagana 150 will differ from Masagana 99"
+      publisher: Rappler
+      voice: independent
+      cite: "July 2022."
+      url: "https://www.rappler.com/newsbreak/iq/how-marcos-jr-proposed-masagana-150-differ-masagana-99-program/"
+      accessed: "2026-11-26"
 sources:
   - title: "'Success' of Masagana 99 all in Imee's head (UP researchers)"
     publisher: UP Diktadura archive

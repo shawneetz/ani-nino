@@ -5,6 +5,7 @@
 # change in this version (b8): kept seven gaps, added region-scope, reworded cavite-not-covered without a count
 # removed because they repeat a program question: fishpen permits, laguna coalition lead (now in the coconut levy question),
 # uplb displacement numbers, makiling resettlement outcomes
+# change in this version (p3): the laguna land transfer gap names the 1987 calamba thesis as a second unread lead
 - id: no-farmer-interviews
   kind: method
   title: No interviews with farmers from the martial-law era
@@ -24,7 +25,7 @@
 - id: laguna-land-transfer-numbers
   kind: data_missing
   title: No Laguna figures for land actually transferred
-  description: National counts were found (210,054 certificates by January 1976). Laguna counts of tenants covered, certificates issued and titles awarded have not been found. A 1991 UPLB thesis on Calamba and Los Baños land use is an unread lead.
+  description: National counts were found (210,054 certificates by January 1976). Laguna counts of tenants covered, certificates issued and titles awarded have not been found. Two UPLB theses are unread leads. One is a 1991 study of land ownership in Calamba and Los Baños. The other is a 1987 study of Calamba tenant-farmers under leasehold; its full text is not in the UPLB repository.
   program: laguna-operation-land-transfer
 - id: coconut-levy-flow
   kind: unverified

@@ -45,4 +45,13 @@ describe("chartSchema", () => {
     expect(chartSchema.safeParse(chart([missingScope, point("Two")])).success).toBe(false);
     expect(chartSchema.safeParse({ ...chart([point("One"), point("Two")]), question: undefined }).success).toBe(false);
   });
+
+  it("accepts the place scope", () => {
+    const points = [point("One", "bar", "place"), point("Two", "bar", "place")];
+    expect(chartSchema.safeParse(chart(points)).success).toBe(true);
+  });
+
+  it("rejects a scope that does not exist", () => {
+    expect(chartSchema.safeParse(chart([point("One", "bar", "lake"), point("Two")])).success).toBe(false);
+  });
 });

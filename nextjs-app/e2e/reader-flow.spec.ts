@@ -1,7 +1,10 @@
 // what this file does: describes the reader-flow checks for the landing page, program page, sources and charts
 import { expect, test } from "@playwright/test";
 import { HERO } from "../src/lib/site";
+import { SCOPES } from "../src/lib/vocab";
 import { chartCount, provinceCount } from "./live-programs";
+
+const SCOPE_LABEL = new RegExp(`^(${Object.values(SCOPES).map((scope) => scope.label).join("|")})$`);
 
 test.describe("landing page", () => {
   test("shows the project name and the two hero buttons", async ({ page }) => {
@@ -118,8 +121,19 @@ test.describe("charts", () => {
       const rows = card.locator("table tbody tr");
       expect(await rows.count()).toBeGreaterThan(0);
       for (const row of await rows.all()) {
-        await expect(row.getByText("National", { exact: true })).toBeVisible();
+        await expect(row.getByText(SCOPE_LABEL)).toHaveCount(1);
       }
+    }
+  });
+
+  test("the fishpen area chart has three rows with the Place scope", async ({ page }) => {
+    await page.goto("/charts");
+    const card = page.locator("#chart-laguna-lake-fishpen-area");
+    await expect(card.getByRole("heading", { name: "Fishpen area on Laguna de Bay" })).toBeVisible();
+    const rows = card.locator("table tbody tr");
+    await expect(rows).toHaveCount(3);
+    for (const row of await rows.all()) {
+      await expect(row.getByText("Place", { exact: true })).toBeVisible();
     }
   });
 });
