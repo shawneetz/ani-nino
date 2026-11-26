@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useId, type RefObject } from "react";
+import { useId } from "react";
 import type { ExplorerProgram } from "@/lib/explorer-types";
 import { PROVINCE_LABELS, type Province } from "@/lib/vocab";
-import { PlaceDetails } from "./PlaceDetails";
 import { ResultItem } from "./ResultItem";
 
 export function MapSearch({ query, onQueryChange, hideLabel = false }: { query: string; onQueryChange: (query: string) => void; hideLabel?: boolean }) {
@@ -25,23 +24,20 @@ export function MapSearch({ query, onQueryChange, hideLabel = false }: { query: 
 }
 
 interface ResultsBodyProps {
-  selectedProgram: ExplorerProgram | null;
-  headingRef: RefObject<HTMLHeadingElement | null>;
   programs: ExplorerProgram[];
+  selectedSlug: string | null;
   explainProvinces: Province[];
   onSelect: (slug: string) => void;
-  onBack: () => void;
   onClear: () => void;
 }
 
-export function ResultsBody({ selectedProgram, headingRef, programs, explainProvinces, onSelect, onBack, onClear }: ResultsBodyProps) {
-  if (selectedProgram) return <PlaceDetails program={selectedProgram} headingRef={headingRef} onBack={onBack} />;
+export function ResultsBody({ programs, selectedSlug, explainProvinces, onSelect, onClear }: ResultsBodyProps) {
   return (
     <section aria-label="Programs">
       {programs.length > 0 ? (
         <ul className="divide-y divide-stone-300">
           {programs.map((program) => (
-            <ResultItem key={program.slug} program={program} selected={false} onSelect={onSelect} />
+            <ResultItem key={program.slug} program={program} selected={program.slug === selectedSlug} onSelect={onSelect} />
           ))}
         </ul>
       ) : explainProvinces.length > 0 ? (

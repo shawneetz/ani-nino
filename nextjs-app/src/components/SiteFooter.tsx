@@ -4,6 +4,7 @@
 // light text uses stone-700 or darker
 // hidden in print, and not rendered on /map once the route groups land (stage m1)
 import Link from "next/link";
+import { PAGE_WIDTH } from "@/components/Container";
 import { REPO_URL, SITE } from "@/lib/site";
 
 /**
@@ -43,7 +44,7 @@ const LINK = "tap-target inline-flex items-center font-sans underline underline-
 export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-stone-400 bg-paper print:hidden">
-      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 text-base text-stone-700 sm:grid-cols-[1fr_auto]">
+      <div className={`mx-auto grid ${PAGE_WIDTH} gap-6 px-4 py-6 text-base text-stone-700 sm:grid-cols-[1fr_auto]`}>
         {/* the colophon line, set in serif like the end matter of a book */}
         <p className="max-w-[48ch] font-serif leading-relaxed">
           {SITE.title}: an educational project. Sources are labeled; open questions are shown.

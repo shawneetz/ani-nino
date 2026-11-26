@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, type RefObject } from "react";
+import { useId, useRef } from "react";
 import type { ExplorerProgram } from "@/lib/explorer-types";
 import type { SheetSize } from "@/lib/fit-padding";
 import { LAYER } from "@/lib/map-layers";
@@ -11,13 +11,11 @@ interface BottomSheetProps {
   size: SheetSize;
   onSizeChange: (size: SheetSize) => void;
   programs: ExplorerProgram[];
-  selectedProgram: ExplorerProgram | null;
-  headingRef: RefObject<HTMLHeadingElement | null>;
+  selectedSlug: string | null;
   query: string;
   onQueryChange: (query: string) => void;
   explainProvinces: Province[];
   onSelect: (slug: string) => void;
-  onBack: () => void;
   onClear: () => void;
 }
 
@@ -35,7 +33,7 @@ function step(size: SheetSize, direction: 1 | -1): SheetSize {
   return ORDER[Math.min(ORDER.length - 1, Math.max(0, next))];
 }
 
-export function BottomSheet({ size, onSizeChange, programs, selectedProgram, headingRef, query, onQueryChange, explainProvinces, onSelect, onBack, onClear }: BottomSheetProps) {
+export function BottomSheet({ size, onSizeChange, programs, selectedSlug, query, onQueryChange, explainProvinces, onSelect, onClear }: BottomSheetProps) {
   const bodyId = useId();
   const startY = useRef<number | null>(null);
   const dragged = useRef(false);
@@ -76,11 +74,9 @@ export function BottomSheet({ size, onSizeChange, programs, selectedProgram, hea
         <span aria-hidden="true" className="h-1.5 w-12 rounded-full bg-stone-500" />
       </button>
       <p role="status" data-testid="result-count" className="figures px-4 pb-1 font-sans text-base text-stone-800"><strong>{programs.length}</strong> {countText}</p>
-      {!selectedProgram && (
-        <div className="px-4 pb-2"><MapSearch query={query} onQueryChange={onQueryChange} hideLabel /></div>
-      )}
+      <div className="px-4 pb-2"><MapSearch query={query} onQueryChange={onQueryChange} hideLabel /></div>
       <div id={bodyId} className={`${open ? "block" : "hidden"} min-h-0 flex-1 overflow-y-auto border-t border-stone-200`}>
-        <ResultsBody selectedProgram={selectedProgram} headingRef={headingRef} programs={programs} explainProvinces={explainProvinces} onSelect={onSelect} onBack={onBack} onClear={onClear} />
+        <ResultsBody programs={programs} selectedSlug={selectedSlug} explainProvinces={explainProvinces} onSelect={onSelect} onClear={onClear} />
       </div>
     </aside>
   );

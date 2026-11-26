@@ -29,7 +29,7 @@ export default async function ChartsPage() {
   const visibleCharts = charts.filter((chart) => chart.points.length > 0);
 
   return (
-    <Container as="main" width="prose" className="space-y-8 py-8">
+    <Container as="main" className="space-y-8 py-8">
       {/* header: a heavy rule opens the page like a printed article */}
       <header className="space-y-3 border-t-2 border-ink pt-4">
         <Kicker>Evidence</Kicker>

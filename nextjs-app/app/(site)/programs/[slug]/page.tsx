@@ -94,7 +94,7 @@ function Block({
 // the sources link goes to the held topics section
 function HeldTopicPage({ topic }: { topic: HeldTopic }) {
   return (
-    <Container as="main" width="prose" className="space-y-6 py-12">
+    <Container as="main" className="space-y-6 py-12">
       <div className="space-y-3 border-t-2 border-ink pt-4">
         <Kicker>Held topic</Kicker>
         <h1 className="font-serif text-3xl font-bold tracking-tight text-stone-950">{topic.title}</h1>
@@ -147,11 +147,8 @@ export default async function ProgramPage({ params }: Props) {
 
   return (
     // on desktop the content and the sticky rail sit side by side
-    <main
-      id="main"
-      className="mx-auto max-w-6xl px-4 py-6 lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-10 print:block!"
-    >
-      <div className="max-w-3xl space-y-8">
+    <Container as="main" className="py-6 lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-10 print:block!">
+      <div className="min-w-0 space-y-8">
         <Link
           href="/map"
           className="tap-target inline-flex items-center font-sans text-base underline underline-offset-2 print:hidden"
@@ -251,6 +248,6 @@ export default async function ProgramPage({ params }: Props) {
 
       {/* desktop only sticky rail */}
       <PageRail items={nav} />
-    </main>
+    </Container>
   );
 }

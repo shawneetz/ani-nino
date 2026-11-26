@@ -95,7 +95,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   ];
 
   return (
-    <Container as="main" width="wide" className="space-y-12 py-8">
+    <Container as="main" className="space-y-12 py-8">
       {/* masthead: the project name is the only h1, a heavy rule closes it */}
       <section aria-labelledby="hero-heading" className="space-y-4 border-b-2 border-ink pb-8 pt-2">
         <Kicker>Martial-law farm programs · CALABARZON · 1972 to 1986</Kicker>

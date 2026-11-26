@@ -55,6 +55,15 @@ describe("mapPadding", () => {
   it("ignores the sheet size on desktop", () => {
     expect(mapPadding(1440, true, "half", 900)).toEqual(mapPadding(1440, true, "peek", 900));
   });
+
+  it("frees the drawer width on the right on desktop", () => {
+    expect(mapPadding(1440, true, "peek", 900, true).right).toBe(468);
+    expect(mapPadding(1440, true, "peek", 900, false).right).toBe(72);
+  });
+
+  it("uses half-sheet bottom padding on a phone when the drawer is open", () => {
+    expect(mapPadding(390, true, "peek", 844, true).bottom).toBe(mapPadding(390, true, "half", 844).bottom);
+  });
 });
 
 describe("clampPadding", () => {

@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFilterState } from "@/hooks/use-filter-state";
 import { useIsDesktop } from "@/hooks/use-is-desktop";
+import { useIsWide } from "@/hooks/use-is-wide";
 import { useMapPadding } from "@/hooks/use-map-padding";
 import type { ExplorerProgram } from "@/lib/explorer-types";
 import { visiblePrograms } from "@/lib/filter";
@@ -13,7 +14,9 @@ import { matchesQuery } from "@/lib/program-search";
 import { BottomSheet } from "./BottomSheet";
 import { FilterChips } from "./FilterChips";
 import { Legend } from "./Legend";
+import { ListPill } from "./ListPill";
 import { MapPanel } from "./MapPanel";
+import { PlaceDrawer } from "./PlaceDrawer";
 import { TimeBar } from "./TimeBar";
 
 const PinMap = dynamic(() => import("./PinMap"), {
@@ -22,40 +25,38 @@ const PinMap = dynamic(() => import("./PinMap"), {
 });
 
 const QUERY_DELAY_MS = 250;
+const AFTER_PANEL = "left-[calc(clamp(20rem,30vw,26rem)+1.5rem)]";
 
 export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
   const {
-    filters,
-    selected,
-    query,
-    setSelected,
-    setQuery,
-    setYear,
-    toggleTopic,
-    toggleProvince,
-    toggleToday,
-    toggleConfirmed,
-    clearAll,
-    clearEverything,
+    filters, selected, query, setSelected, setQuery, setYear,
+    toggleTopic, toggleProvince, toggleToday, toggleConfirmed, clearAll, clearEverything,
   } = useFilterState();
 
   const isDesktop = useIsDesktop();
+  const isWide = useIsWide();
   const [text, setText] = useState(query);
   const lastWritten = useRef(query);
   const queryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [panelOpen, setPanelOpen] = useState(true);
-  const [sheetSize, setSheetSize] = useState<SheetSize>(selected ? "half" : "peek");
+  const [sheetSize, setSheetSize] = useState<SheetSize>("peek");
 
   const filtered = useMemo(() => visiblePrograms(programs, filters), [programs, filters]);
   const shown = useMemo(() => filtered.filter((program) => matchesQuery(program, text)), [filtered, text]);
   const selectedProgram = useMemo(() => shown.find((program) => program.slug === selected) ?? null, [shown, selected]);
   const hasToday = useMemo(() => programs.some((program) => program.era === "today"), [programs]);
-  const fitPadding = useMapPadding(panelOpen, sheetSize);
+
+  const drawerOpen = selectedProgram !== null;
+  const panelShown = panelOpen && !(drawerOpen && isWide === false);
+  const fitPadding = useMapPadding(panelShown, sheetSize, drawerOpen);
 
   const trigger = useRef<HTMLElement | null>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const moveFocus = useRef(false);
   const returnTo = useRef<string | null>(null);
+  const pillRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
+  const panelFocus = useRef<"pill" | "panel" | null>(null);
 
   const hasFilters =
     filters.topics.length > 0 ||
@@ -78,8 +79,6 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
       trigger.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       moveFocus.current = true;
       setSelected(slug);
-      setPanelOpen(true);
-      setSheetSize("half");
     },
     [setSelected],
   );
@@ -92,6 +91,21 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
     },
     [selected, setSelected],
   );
+
+  const stepSelected = useCallback(
+    (direction: 1 | -1) => {
+      if (!selectedProgram || shown.length === 0) return;
+      const index = shown.indexOf(selectedProgram);
+      const next = shown[(index + direction + shown.length) % shown.length];
+      setSelected(next.slug);
+    },
+    [shown, selectedProgram, setSelected],
+  );
+
+  const changePanel = (open: boolean) => {
+    panelFocus.current = open ? "panel" : "pill";
+    setPanelOpen(open);
+  };
 
   const handleQueryChange = (value: string) => {
     setText(value);
@@ -122,12 +136,18 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
   }, [selected, selectedProgram, setSelected]);
 
   useEffect(() => {
+    if (panelFocus.current === "pill") pillRef.current?.focus();
+    if (panelFocus.current === "panel") panelRef.current?.focus();
+    panelFocus.current = null;
+  }, [panelOpen]);
+
+  useEffect(() => {
     if (!selectedProgram || !moveFocus.current) return;
     const node = headingRef.current;
     if (!node || node.offsetParent === null) return;
     node.focus();
     moveFocus.current = false;
-  }, [selectedProgram, isDesktop, sheetSize, panelOpen]);
+  }, [selectedProgram]);
 
   useEffect(() => {
     if (selectedProgram || !returnTo.current) return;
@@ -153,7 +173,7 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
     if (!row || row.offsetParent === null) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     row.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
-  }, [selected, isDesktop, sheetSize, panelOpen]);
+  }, [selected, isDesktop, sheetSize, panelShown]);
 
   const renderChips = (showYear: boolean) => (
     <FilterChips
@@ -174,71 +194,86 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
     />
   );
 
-  const freeLeft = panelOpen ? "left-[calc(clamp(20rem,30vw,26rem)+1.5rem)]" : "left-3";
+  const freeLeft = panelShown ? AFTER_PANEL : "left-3";
 
   return (
     <div className="absolute inset-0">
-      <h1 className="sr-only">Explore the map</h1>
-      <div className={`absolute inset-0 ${LAYER.map}`}>
-        <PinMap
-          programs={shown}
-          provinces={filters.provinces}
-          selectedSlug={selectedProgram?.slug ?? null}
-          onSelect={select}
-          onClear={() => closePreview(false)}
-          fitPadding={fitPadding}
-        />
+      <div inert={drawerOpen} className="absolute inset-0">
+        <h1 className="sr-only">Explore the map</h1>
+        <div className={`absolute inset-0 ${LAYER.map}`}>
+          <PinMap
+            programs={shown}
+            provinces={filters.provinces}
+            selectedSlug={selectedProgram?.slug ?? null}
+            onSelect={select}
+            onClear={() => closePreview(false)}
+            fitPadding={fitPadding}
+          />
+        </div>
+
+        {isDesktop === true && (
+          <>
+            {panelShown && (
+              <MapPanel
+                programs={shown}
+                selectedSlug={selectedProgram?.slug ?? null}
+                panelRef={panelRef}
+                query={text}
+                onQueryChange={handleQueryChange}
+                onCollapse={() => changePanel(false)}
+                explainProvinces={explainProvinces}
+                onSelect={select}
+                onClear={clearFiltersAndSearch}
+              />
+            )}
+            <div
+              className={`pointer-events-none absolute right-3 top-3 flex items-center gap-2 ${panelShown ? AFTER_PANEL : "left-3"} ${LAYER.popover}`}
+            >
+              {!panelShown && <ListPill count={shown.length} buttonRef={pillRef} onOpen={() => changePanel(true)} />}
+              <div className="pointer-events-auto w-fit min-w-0">{renderChips(false)}</div>
+            </div>
+            <div className={`pointer-events-none absolute bottom-3 right-34 flex justify-center ${freeLeft} ${LAYER.bar}`}>
+              <div className="pointer-events-auto w-full max-w-xl">
+                <TimeBar year={filters.year} onChange={setYear} showNote={hasToday} />
+              </div>
+            </div>
+          </>
+        )}
+
+        {isDesktop === false && (
+          <>
+            <div className={`absolute inset-x-0 top-0 px-3 pt-3 ${LAYER.popover}`}>{renderChips(true)}</div>
+            <BottomSheet
+              size={sheetSize}
+              onSizeChange={setSheetSize}
+              programs={shown}
+              selectedSlug={selectedProgram?.slug ?? null}
+              query={text}
+              onQueryChange={handleQueryChange}
+              explainProvinces={explainProvinces}
+              onSelect={select}
+              onClear={clearFiltersAndSearch}
+            />
+          </>
+        )}
+
+        {isDesktop !== null && (
+          <div className={`absolute bottom-40 right-3 sm:bottom-60 lg:bottom-24 ${LAYER.panel}`}>
+            <Legend showToday={hasToday} />
+          </div>
+        )}
       </div>
 
-      {isDesktop === true && (
-        <>
-          <MapPanel
-            programs={shown}
-            selectedProgram={selectedProgram}
-            headingRef={headingRef}
-            query={text}
-            onQueryChange={handleQueryChange}
-            open={panelOpen}
-            onOpenChange={setPanelOpen}
-            explainProvinces={explainProvinces}
-            onSelect={select}
-            onBack={() => closePreview(true)}
-            onClear={clearFiltersAndSearch}
-          />
-          <div className={`absolute top-3 w-fit max-w-[calc(100%-1.5rem)] ${panelOpen ? "left-[calc(clamp(20rem,30vw,26rem)+1.5rem)]" : "left-52"} ${LAYER.popover}`}>
-            {renderChips(false)}
-          </div>
-          <div className={`pointer-events-none absolute bottom-3 right-34 flex justify-center ${freeLeft} ${LAYER.bar}`}>
-            <div className="pointer-events-auto w-full max-w-xl">
-              <TimeBar year={filters.year} onChange={setYear} showNote={hasToday} />
-            </div>
-          </div>
-        </>
-      )}
-
-      {isDesktop === false && (
-        <>
-          <div className={`absolute inset-x-0 top-0 px-3 pt-3 ${LAYER.popover}`}>{renderChips(true)}</div>
-          <BottomSheet
-            size={sheetSize}
-            onSizeChange={setSheetSize}
-            programs={shown}
-            selectedProgram={selectedProgram}
-            headingRef={headingRef}
-            query={text}
-            onQueryChange={handleQueryChange}
-            explainProvinces={explainProvinces}
-            onSelect={select}
-            onBack={() => closePreview(true)}
-            onClear={clearFiltersAndSearch}
-          />
-        </>
-      )}
-
-      {isDesktop !== null && (
-        <div className={`absolute bottom-40 right-3 sm:bottom-60 lg:bottom-24 ${LAYER.panel}`}>
-          <Legend showToday={hasToday} />
-        </div>
+      {selectedProgram && (
+        <PlaceDrawer
+          program={selectedProgram}
+          position={shown.indexOf(selectedProgram) + 1}
+          total={shown.length}
+          headingRef={headingRef}
+          onClose={() => closePreview(true)}
+          onPrev={() => stepSelected(-1)}
+          onNext={() => stepSelected(1)}
+        />
       )}
     </div>
   );

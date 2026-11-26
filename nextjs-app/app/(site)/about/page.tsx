@@ -19,6 +19,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ButtonLink } from "@/components/Button";
+import { Container } from "@/components/Container";
 import { Kicker } from "@/components/Kicker";
 import { PageRail, type NavItem } from "@/components/PageNav";
 import { Section } from "@/components/Section";
@@ -131,8 +132,8 @@ export default async function AboutPage() {
 
   return (
     // on desktop the content and the sticky rail sit side by side
-    <main id="main" className="mx-auto max-w-6xl px-4 py-8 lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-10">
-      <div className="max-w-3xl space-y-10">
+    <Container as="main" className="py-8 lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-10">
+      <div className="min-w-0 space-y-10">
         <header className="space-y-3 border-t-2 border-ink pt-4">
           <Kicker>The project</Kicker>
           <h1 className="font-serif text-[clamp(2.25rem,5vw,3.5rem)] font-bold leading-tight tracking-tight text-stone-950">
@@ -414,6 +415,6 @@ export default async function AboutPage() {
 
       {/* desktop only sticky rail */}
       <PageRail items={NAV} />
-    </main>
+    </Container>
   );
 }

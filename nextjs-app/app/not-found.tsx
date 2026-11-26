@@ -29,7 +29,7 @@ export default function NotFound() {
   return (
     <>
       <SiteHeader />
-      <Container as="main" width="prose" className="space-y-6 py-12">
+      <Container as="main" className="space-y-6 py-12">
         <div className="space-y-3 border-t-2 border-ink pt-4">
           {/* small label so the reader knows what kind of page this is */}
           <Kicker>Error 404</Kicker>

@@ -27,7 +27,7 @@ export default async function ProgramsPage() {
   const programs = (await getPrograms()).map(toExplorerProgram);
 
   return (
-    <Container as="main" width="wide" className="space-y-6 py-8">
+    <Container as="main" className="space-y-6 py-8">
       <header className="space-y-3 border-t-2 border-ink pt-4">
         <Kicker>Reading list</Kicker>
         <h1 className="font-serif text-[clamp(2.25rem,5vw,3.5rem)] font-bold leading-tight tracking-tight text-stone-950">
