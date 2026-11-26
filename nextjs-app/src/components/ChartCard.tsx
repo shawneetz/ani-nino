@@ -7,7 +7,7 @@
 // change in this version (e7): editorial figure
 //   a 2px ink rule and a "Figure n" kicker open the chart, no box around it
 //   the notes are flat with a left rule, the table uses hairlines
-import { chartParts, labelSide, percentOf } from "@/lib/chart-data";
+import { chartParts, labelFitsInside, labelSide, percentOf } from "@/lib/chart-data";
 import type { Chart, ChartPoint } from "@/lib/content-schema";
 import { Kicker } from "./Kicker";
 import { ScopeChip } from "./ScopeChip";
@@ -117,16 +117,22 @@ export function ChartCard({ chart, figure }: ChartCardProps) {
               </div>
             )}
 
-            {/* one row per bar: label and value on top, the bar on a grey track below */}
+            {/* one row per bar: value inside when it fits, otherwise in the label row */}
             <ul className="space-y-4">
-              {bars.map((point) => (
-                <li key={point.label}>
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-                    <span className="font-sans text-base font-medium text-stone-900">{point.label}</span>
-                    <span className="figures font-serif text-lg font-bold text-accent-strong">{formatValue(point)}</span>
-                  </div>
-                  <div className="relative mt-1 h-8 bg-stone-200">
-                    <div className="h-full bg-accent" style={{ width: `${percentOf(point.value, axisMax)}%` }} />
+              {bars.map((point) => {
+                const percent = percentOf(point.value, axisMax);
+                const text = formatValue(point);
+                const inside = labelFitsInside(percent, text.length);
+                return (
+                  <li key={point.label}>
+                    <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+                      <span className="font-sans text-base font-medium text-stone-900">{point.label}</span>
+                      {!inside && <span className="figures font-serif text-lg font-bold text-accent-strong">{text}</span>}
+                    </div>
+                    <div className="relative mt-1 h-10 bg-stone-200">
+                      <div className="flex h-full items-center justify-end bg-accent px-3" style={{ width: `${percent}%` }}>
+                        {inside && <span className="figures whitespace-nowrap font-serif text-lg font-bold text-white">{text}</span>}
+                      </div>
                     {/* the target lines continue through every track */}
                     {targets.map((target) => (
                       <span
@@ -135,9 +141,10 @@ export function ChartCard({ chart, figure }: ChartCardProps) {
                         style={{ left: `${percentOf(target.value, axisMax)}%` }}
                       />
                     ))}
-                  </div>
-                </li>
-              ))}
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
 
             {/* the axis runs from 0 to the biggest number */}

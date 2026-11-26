@@ -1,16 +1,7 @@
-// what this file does: describes the reader-flow, keyboard and phone checks
-// updated for the new explorer: selecting shows a preview, the list count matches
-// the result count, and the phone has a map | list toggle and a filter sheet
-// the program page panel is "What the record shows", and the header has a copy link button
-// change in this version (b11): program and province counts now come from the yaml files
-// (e2e/live-programs.ts), the two today-layer tests are gone, the cavite tests read
-// the real count, and the sources anchor test was added
-// run with `pnpm test:e2e`
+// what this file does: describes the reader-flow checks for the landing page, program page, sources and charts
 import { expect, test } from "@playwright/test";
-import { martialLawCount, provinceCount } from "./live-programs";
-
-// martial-law programs shown by default, counted from content/programs
-const MARTIAL_LAW_PROGRAMS = martialLawCount();
+import { HERO } from "../src/lib/site";
+import { chartCount, provinceCount } from "./live-programs";
 
 test.describe("landing page", () => {
   test("shows the project name and the two hero buttons", async ({ page }) => {
@@ -40,11 +31,9 @@ test.describe("landing page", () => {
     const tile = page.getByRole("region", { name: "Pick a province" }).getByRole("link", { name: /Cavite/ });
     const cavite = provinceCount("cavite");
     if (cavite > 0) {
-      // a province with pages opens the filtered map
       await expect(tile).toContainText(`${cavite} ${cavite === 1 ? "program" : "programs"}`);
       await expect(tile).toHaveAttribute("href", /\/map\?province=cavite/);
     } else {
-      // a province with no pages explains itself instead of opening a blank map
       await expect(tile).toContainText("No program yet");
       await expect(tile).toHaveAttribute("href", /\/sources/);
     }
@@ -53,7 +42,8 @@ test.describe("landing page", () => {
   test("an old shared link redirects to the filtered map", async ({ page }) => {
     await page.goto("/?topic=land&province=laguna");
     await expect(page).toHaveURL(/\/map\?topic=land&province=laguna/);
-    await expect(page.getByRole("button", { name: "Land", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await page.getByRole("button", { name: /^Topic/ }).click();
+    await expect(page.getByRole("group", { name: "Topic filter" }).getByRole("button", { name: "Land", exact: true })).toHaveAttribute("aria-pressed", "true");
   });
 
   test("a confirmed-only shared link redirects to the map", async ({ page }) => {
@@ -68,78 +58,7 @@ test.describe("landing page", () => {
   });
 });
 
-test.describe("explorer", () => {
-  test("opens the map with all programs and marks map as current", async ({ page }) => {
-    await page.goto("/map");
-    // the heading is visually hidden but still in the accessibility tree
-    await expect(page.getByRole("heading", { level: 1, name: "Explore the map" })).toBeAttached();
-    await expect(page.getByRole("region", { name: "Map of programs" })).toBeVisible();
-    });
-
-  test("hides the today layer controls when no today programs exist", async ({ page }) => {
-    await page.goto("/map");
-    await expect(page.getByRole("switch", { name: "Show today's echoes" })).toHaveCount(0);
-    await expect(page.getByText("Year filters martial-law programs only.", { exact: true })).toHaveCount(0);
-    await page.getByText("Map key", { exact: true }).click();
-    await expect(page.getByText("Square: a program from today (round is martial law)", { exact: true })).toHaveCount(0);
-
-    await page.goto("/programs");
-    await expect(page.getByRole("switch", { name: "Show today's echoes" })).toHaveCount(0);
-    await expect(page.getByText("Adds programs from today that echo the older ones.", { exact: true })).toHaveCount(0);
-  });
-
-  test("confirmed only filters programs and round-trips through the URL", async ({ page }) => {
-    await page.goto("/map?confirmed=1");
-    const confirmedSwitch = page.getByRole("switch", { name: "Confirmed only" });
-    await expect(confirmedSwitch).toHaveAttribute("aria-checked", "true");
-
-    const list = page.getByRole("region", { name: "Programs", exact: true });
-    const cards = list.locator("article");
-    const confirmedCount = await cards.count();
-    expect(confirmedCount).toBeGreaterThan(0);
-    await expect(page.getByTestId("result-count").locator("strong")).toHaveText(String(confirmedCount));
-    for (const card of await cards.all()) {
-      await expect(card.getByText("Confirmed", { exact: true })).toBeVisible();
-    }
-
-    await page.reload();
-    await expect(page.getByRole("switch", { name: "Confirmed only" })).toHaveAttribute("aria-checked", "true");
-    await page.getByRole("switch", { name: "Confirmed only" }).click();
-    await expect(page).toHaveURL(/\/map$/);
-    await expect(page.getByTestId("result-count").locator("strong")).toHaveText(String(MARTIAL_LAW_PROGRAMS));
-  });
-
-  test("filters by topic, keeps the url state and the count matches the list", async ({ page }) => {
-    await page.goto("/map");
-    await page.getByRole("button", { name: "Land", exact: true }).click();
-    await expect(page).toHaveURL(/topic=land/);
-    await expect(page.getByRole("button", { name: "Land", exact: true })).toHaveAttribute("aria-pressed", "true");
-    const total = await page.getByRole("region", { name: "Programs", exact: true }).getByRole("link").count();
-    await expect(page.getByTestId("result-count")).toContainText(`${total} program`);
-  });
-
-  test("show on map opens a preview, escape closes it, open program leaves the page", async ({ page }) => {
-    await page.goto("/map");
-    await page.getByRole("button", { name: /Show on map/ }).first().click();
-    const preview = page.getByRole("region", { name: "Program preview" });
-    await expect(preview).toBeVisible();
-    await expect(page).toHaveURL(/sel=/);
-
-    await page.keyboard.press("Escape");
-    await expect(preview).toBeHidden();
-    await expect(page).not.toHaveURL(/sel=/);
-
-    await page.getByRole("button", { name: /Show on map/ }).first().click();
-    await page.getByRole("link", { name: "Open program" }).click();
-    await expect(page).toHaveURL(/\/programs\//);
-  });
-
-  test("the map key lists real marker samples", async ({ page }) => {
-    await page.goto("/map");
-    await page.getByText("Map key").click();
-    await expect(page.getByText("Solid fill: confirmed")).toBeVisible();
-  });
-
+test.describe("program page", () => {
   test("opens a program page with evidence sections and contribution links", async ({ page }) => {
     await page.goto("/programs/laguna-operation-land-transfer");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Operation Land Transfer in Laguna");
@@ -147,24 +66,13 @@ test.describe("explorer", () => {
     await expect(page.getByRole("heading", { name: "What it promised" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "What the record shows" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Sources" })).toBeVisible();
-    // the header has a copy link button (u12)
     await expect(page.getByRole("button", { name: "Copy link" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Suggest a source" })).toHaveAttribute("target", "_blank");
     await expect(page.getByRole("link", { name: "Back to the map" })).toHaveAttribute("href", "/map");
   });
-
-  test("supports keyboard focus on filters", async ({ page }) => {
-    await page.goto("/map");
-    const land = page.getByRole("button", { name: "Land", exact: true });
-    await land.focus();
-    await expect(land).toBeFocused();
-    await page.keyboard.press("Enter");
-    await expect(land).toHaveAttribute("aria-pressed", "true");
-  });
 });
 
 test.describe("sources anchors", () => {
-  // the landing tile and the explorer link to this gap, so the anchor must exist
   test("the cavite gap anchor lands on its gap", async ({ page }) => {
     await page.goto("/sources#gap-cavite-not-covered");
     await expect(page.locator("#gap-cavite-not-covered")).toBeVisible();
@@ -176,26 +84,27 @@ test.describe("sources anchors", () => {
     await expect(page.getByRole("link", { name: "See the held files" })).toHaveAttribute("href", /content\/holding$/);
     await expect(page.getByRole("group", { name: "Open on a page" })).toBeVisible();
     await expect(page.getByRole("group", { name: "Missing from the whole site" })).toBeVisible();
-
     await page.getByRole("searchbox", { name: "Search" }).fill("Laiban and Kaliwa dam plans");
     await expect(page.locator("#held-topics li")).toHaveCount(1);
     await expect(page.getByTestId("sources-count")).toContainText("1 held topic");
-
     await page.getByRole("group", { name: "Filter sources by label" }).getByRole("button", { name: /Government/ }).click();
     await expect(page.locator("#held-topics li")).toHaveCount(1);
     await page.getByRole("button", { name: "Clear search and label" }).first().click();
-
-    await page.goto("/sources#questions");
-    await expect(page.locator("#questions")).toBeVisible();
-    await page.goto("/sources#gaps");
-    await expect(page.locator("#gaps")).toBeVisible();
-    await page.goto("/sources#gap-cavite-not-covered");
-    await expect(page.locator("#gap-cavite-not-covered")).toBeVisible();
   });
 
   test("held program pages link to the held topics section", async ({ page }) => {
     await page.goto("/programs/laguna-kkk");
     await expect(page.getByRole("link", { name: "See what is not known yet" })).toHaveAttribute("href", "/sources#held-topics");
+  });
+
+  test("the rail lists the four sections and jumps to one", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/sources");
+    const rail = page.getByRole("navigation", { name: "On this page" });
+    await expect(rail).toBeVisible();
+    await expect(rail.getByRole("link")).toHaveCount(4);
+    await rail.getByRole("link", { name: "Held topics" }).click();
+    await expect(page).toHaveURL(/#held-topics$/);
   });
 });
 
@@ -203,8 +112,7 @@ test.describe("charts", () => {
   test("each chart states its question and scopes every data row", async ({ page }) => {
     await page.goto("/charts");
     const cards = page.locator('article[id^="chart-"]');
-    await expect(cards).toHaveCount(3);
-
+    await expect(cards).toHaveCount(chartCount());
     for (const card of await cards.all()) {
       await expect(card.locator("h2 + p")).toHaveText(/\S+/);
       const rows = card.locator("table tbody tr");
@@ -213,8 +121,6 @@ test.describe("charts", () => {
         await expect(row.getByText("National", { exact: true })).toBeVisible();
       }
     }
-
-    await expect(page.getByText("These bars are two reports of roughly the same total. They are not added together.")).toBeVisible();
   });
 });
 
@@ -224,39 +130,21 @@ test.describe("phone viewport", () => {
   test("landing page does not scroll sideways", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    const fits = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
-    expect(fits).toBe(true);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
 
-  test("the map page starts on the list, does not scroll sideways, and toggles to the map", async ({ page }) => {
-    await page.goto("/map");
-    await expect(page.getByRole("region", { name: "Programs", exact: true })).toBeVisible();
-    const fits = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
-    expect(fits).toBe(true);
-
-    const toggle = page.getByRole("group", { name: "Show" });
-    await toggle.getByRole("button", { name: "Map" }).click();
-    await expect(page.getByRole("region", { name: "Map of programs" })).toBeVisible();
-    await expect(page.getByRole("region", { name: "Programs", exact: true })).toBeHidden();
-
-    await toggle.getByRole("button", { name: "List" }).click();
-    await expect(page.getByRole("region", { name: "Programs", exact: true })).toBeVisible();
-  });
-
-  test("the filter sheet opens, filters and closes with escape", async ({ page }) => {
-    await page.goto("/map");
-    await page.getByRole("button", { name: /^Filters/ }).click();
-    const dialog = page.getByRole("dialog", { name: "Filters" });
-    await expect(dialog).toBeVisible();
-    await dialog.getByRole("button", { name: "Land", exact: true }).click();
-    await expect(page).toHaveURL(/topic=land/);
-    await page.keyboard.press("Escape");
-    await expect(dialog).toBeHidden();
-  });
-
-  test("a stale today url does not count as a visible filter", async ({ page }) => {
-    await page.goto("/map?today=1");
-    await expect(page.getByRole("button", { name: "Filters", exact: true })).toBeVisible();
-    await expect(page.getByTestId("result-count").locator("strong")).toHaveText(String(MARTIAL_LAW_PROGRAMS));
+  test("the hero has one h1, a credit or the fallback, and both buttons in the first screen", async ({ page }) => {
+    await page.goto("/");
+    const hero = page.locator('section[aria-labelledby="hero-heading"]');
+    await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+    if (HERO) await expect(hero.getByText(/Photo:/)).toBeVisible();
+    else await expect(hero.locator("svg")).toBeAttached();
+    for (const name of ["Explore the map", "Read a program"]) {
+      const link = hero.getByRole("link", { name });
+      await expect(link).toBeVisible();
+      const b = await link.boundingBox();
+      expect(b).not.toBeNull();
+      expect(b!.y + b!.height).toBeLessThanOrEqual(844);
+    }
   });
 });

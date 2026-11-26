@@ -10,6 +10,7 @@ import { yearRange } from "@/lib/filter";
 import { TOPICS } from "@/lib/vocab";
 import { StatusTag } from "./StatusTag";
 import { VoiceChip } from "./VoiceChip";
+import { YearStrip } from "./YearStrip";
 
 /**
  * Props for the ProgramRow component.
@@ -76,6 +77,13 @@ export function ProgramRow({ program }: ProgramRowProps) {
             {program.title}
           </Link>
         </h3>
+        <YearStrip
+          compact
+          startYear={program.startYear}
+          endYear={program.endYear}
+          topic={program.topic}
+          className="hidden max-w-md sm:grid"
+        />
         <p className="line-clamp-2 max-w-[68ch] font-serif leading-relaxed text-stone-800">{program.summary}</p>
         <div className="flex flex-wrap items-center gap-2 pt-1">
           <StatusTag status={program.status} />

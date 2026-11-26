@@ -31,7 +31,14 @@ export function ProgramHeader({ program }: Props) {
         {program.title}
       </h1>
 
-      <Dateline status={program.status} checkedOn={program.checkedOn} placeCount={program.places.length} />
+      <Dateline
+        status={program.status}
+        checkedOn={program.checkedOn}
+        placeCount={program.places.length}
+        startYear={program.startYear}
+        endYear={program.endYear}
+        topic={program.topic}
+      />
 
       <div>
         <CopyLinkButton />

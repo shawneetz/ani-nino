@@ -15,6 +15,7 @@ import type { Source } from "@/lib/content-schema";
 import type { HeldTopic } from "@/lib/held-topics";
 import { matchesSearch } from "@/lib/source-search";
 import { GAP_KINDS, VOICES, VOICE_KEYS, type GapKind, type Voice } from "@/lib/vocab";
+import { PageRail, type NavItem } from "./PageNav";
 import { SourceList } from "./SourceList";
 
 /**
@@ -62,11 +63,11 @@ interface SourcesBrowserProps {
 }
 
 // in-page links shown in the sticky bar
-const SECTION_LINKS = [
-  { href: "#labels", label: "Labels" },
-  { href: "#not-known", label: "Not known yet" },
-  { href: "#held-topics", label: "Held topics" },
-  { href: "#all-sources", label: "All sources" },
+const SECTION_LINKS: NavItem[] = [
+  { id: "labels", label: "Labels" },
+  { id: "not-known", label: "Not known yet" },
+  { id: "held-topics", label: "Held topics" },
+  { id: "all-sources", label: "All sources" },
 ] as const;
 
 // shared looks, so every section matches
@@ -138,16 +139,17 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
   }
 
   return (
-    <div className="space-y-8">
+    <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-10">
+      <div className="min-w-0 space-y-8">
       {/* sticky bar: in-page links, search and label filter */}
       <div className="sticky top-0 z-30 -mx-4 space-y-2 border-b border-stone-400 bg-background/95 px-4 py-2 backdrop-blur">
         {/* links scroll sideways on narrow phones instead of wrapping into a tall bar */}
-        <nav aria-label="On this page" className="-mx-1 overflow-x-auto">
+        <nav aria-label="On this page" className="-mx-1 overflow-x-auto lg:hidden">
           <ul className="flex gap-1 whitespace-nowrap px-1">
             {SECTION_LINKS.map((link) => (
-              <li key={link.href}>
+              <li key={link.id}>
                 <a
-                  href={link.href}
+                  href={`#${link.id}`}
                   className="tap-target inline-flex items-center rounded-sm px-3 font-sans text-base text-stone-800 underline underline-offset-4 hover:bg-stone-100"
                 >
                   {link.label}
@@ -344,6 +346,8 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
           })
         )}
       </section>
+      </div>
+      <PageRail items={SECTION_LINKS} />
     </div>
   );
 }

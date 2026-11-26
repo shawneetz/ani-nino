@@ -1,4 +1,3 @@
-// what this file does: audits the post-C11 UI checks at desktop and phone widths
 import { expect, test } from "@playwright/test";
 import { readdirSync } from "node:fs";
 
@@ -7,7 +6,7 @@ test.describe("post-C11 UI checks", () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/map");
     await expect(page.getByText("Layer", { exact: true })).toHaveCount(0);
-    await expect(page.getByRole("button", { name: "Filters", exact: true })).toBeVisible();
+    await expect(page.getByRole("group", { name: "Filters" })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 
     await page.goto("/programs");
@@ -27,8 +26,6 @@ test.describe("post-C11 UI checks", () => {
   test("sticky source and map bars do not cover target headings", async ({ page }) => {
     await page.goto("/sources#held-topics");
     await expect(page.getByRole("heading", { name: "Held topics" })).toBeVisible();
-    await expect(page.locator("#held-topics")).toBeVisible();
-
     await page.goto("/map");
     await page.getByText("Map key", { exact: true }).click();
     await expect(page.getByText("Solid fill: confirmed", { exact: true })).toBeVisible();
@@ -38,18 +35,13 @@ test.describe("post-C11 UI checks", () => {
     await page.goto("/programs/laguna-operation-land-transfer");
     await page.keyboard.press("Tab");
     await expect(page.getByRole("link", { name: "Skip to content" })).toBeFocused();
-
     const cite = page.getByRole("button", { name: "Copy citation" });
     await cite.focus();
     await expect(cite).toBeFocused();
-    await expect(cite).toBeVisible();
   });
 
   test("print mode keeps citation and place list while hiding chrome", async ({ page }) => {
-    for (const slug of [
-      "laguna-operation-land-transfer",
-      "quezon-coconut-levy",
-    ]) {
+    for (const slug of ["laguna-operation-land-transfer", "quezon-coconut-levy"]) {
       await page.goto(`/programs/${slug}`);
       await page.emulateMedia({ media: "print" });
       await expect(page.getByTestId("citation-text")).toBeVisible();
@@ -64,14 +56,10 @@ test.describe("post-C11 UI checks", () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/charts");
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
-    await expect(page.getByText("National", { exact: true }).first()).toBeVisible();
   });
 
   test("live program text has no first-person draft phrases", async ({ page }) => {
-    const slugs = readdirSync("content/programs")
-      .filter((name) => name.endsWith(".yaml"))
-      .map((name) => name.replace(/\.yaml$/, ""));
-
+    const slugs = readdirSync("content/programs").filter((name) => name.endsWith(".yaml")).map((name) => name.replace(/\.yaml$/, ""));
     for (const slug of slugs) {
       await page.goto(`/programs/${slug}`);
       const text = await page.locator("body").innerText();

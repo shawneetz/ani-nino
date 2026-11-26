@@ -76,3 +76,12 @@ export function percentOf(value: number, axisMax: number): number {
 export function labelSide(percent: number): "left" | "right" {
     return percent > 55 ? "right" : "left";
 }
+
+const INSIDE_BASE_PERCENT = 20;
+const INSIDE_PERCENT_PER_CHAR = 1.8;
+const INSIDE_MAX_NEEDED = 70;
+
+export function labelFitsInside(percent: number, textLength: number): boolean {
+    const needed = Math.min(INSIDE_MAX_NEEDED, INSIDE_BASE_PERCENT + textLength * INSIDE_PERCENT_PER_CHAR);
+    return percent >= needed;
+}
