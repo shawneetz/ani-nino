@@ -13,8 +13,12 @@ import { FIRST_YEAR, LAST_YEAR } from "@/lib/vocab";
 import { Button } from "./Button";
 
 // labels under the slider, spaced so they never touch on a phone
-const TICKS = [1972, 1976, 1981, 1986];
+export const YEAR_TICKS = [1972, 1976, 1981, 1986];
 const SPAN = LAST_YEAR - FIRST_YEAR;
+
+export function tickPercent(tick: number): number {
+  return ((tick - FIRST_YEAR) / SPAN) * 100;
+}
 
 // the input is 44px tall so it is easy to tap, the track is a thin 6px line
 const RANGE_BASE = "h-[44px] w-full cursor-pointer appearance-none bg-transparent";
@@ -49,6 +53,8 @@ const RANGE_MOZ = [
   "[&::-moz-range-thumb]:shadow-[0_0_0_1px_#78716c]",
 ].join(" ");
 
+export const YEAR_RANGE_CLASS = `${RANGE_BASE} ${RANGE_WEBKIT} ${RANGE_MOZ}`;
+
 type Props = { year: number | null; onChange: (year: number | null) => void; showNote: boolean };
 
 export function YearSlider({ year, onChange, showNote }: Props) {
@@ -76,17 +82,17 @@ export function YearSlider({ year, onChange, showNote }: Props) {
         onPointerUp={(event) => {
           if (noYear) onChange(Number(event.currentTarget.value));
         }}
-        className={`${RANGE_BASE} ${RANGE_WEBKIT} ${RANGE_MOZ} ${noYear ? "opacity-50" : ""}`}
+        className={`${YEAR_RANGE_CLASS} ${noYear ? "opacity-50" : ""}`}
       />
 
       {/* ticks: inset by half a thumb (14px) so each label is centered under its thumb position */}
       <div aria-hidden="true" className="relative mx-[14px] h-6">
-        {TICKS.map((tick) => (
+        {YEAR_TICKS.map((tick) => (
           <span
             key={tick}
             className="absolute -translate-x-1/2 text-sm text-stone-700"
             // the position is computed from the year, so it has to stay inline
-            style={{ left: `${((tick - FIRST_YEAR) / SPAN) * 100}%` }}
+            style={{ left: `${tickPercent(tick)}%` }}
           >
             {tick}
           </span>

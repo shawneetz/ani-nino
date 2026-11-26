@@ -39,6 +39,22 @@ describe("mapPadding", () => {
     expect(mapPadding(1023).left).toBe(40);
     expect(mapPadding(1024).left).toBeGreaterThan(300);
   });
+
+  it("leaves more room at the bottom of a phone when the sheet is half open", () => {
+    const peek = mapPadding(390, true, "peek", 844);
+    const half = mapPadding(390, true, "half", 844);
+    expect(half.bottom).toBeGreaterThan(peek.bottom);
+    expect(half.top).toBe(peek.top);
+    expect(half.left).toBe(peek.left);
+  });
+
+  it("treats the full sheet like the half sheet", () => {
+    expect(mapPadding(390, true, "full", 844)).toEqual(mapPadding(390, true, "half", 844));
+  });
+
+  it("ignores the sheet size on desktop", () => {
+    expect(mapPadding(1440, true, "half", 900)).toEqual(mapPadding(1440, true, "peek", 900));
+  });
 });
 
 describe("clampPadding", () => {

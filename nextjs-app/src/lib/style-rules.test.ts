@@ -11,8 +11,6 @@ import { describe, expect, it } from "vitest";
 const SHADOW_ALLOWED = new Set([
   "SiteNav.tsx",
   "PinMap.tsx",
-  "PreviewCard.tsx",
-  "FilterSheet.tsx",
   "YearSlider.tsx",
   "MapPanel.tsx",
   "TimeBar.tsx",
@@ -20,6 +18,7 @@ const SHADOW_ALLOWED = new Set([
   "PlaceDetails.tsx",
   "ChipPopover.tsx",
   "FilterChips.tsx",
+  "Legend.tsx",
 ]);
 
 // collect tsx files below one root, in a stable order for readable failures

@@ -303,7 +303,7 @@ export default function PinMap({
         // the places list beside the map already says this, so screen readers skip the marker
         el.setAttribute("aria-hidden", "true");
       } else {
-        const label = count === 1 ? `${first.title}, ${group.name}. Show preview` : `${count} programs at ${group.name}. Choose one`;
+        const label = count === 1 ? `${first.title}, ${group.name}. Show details` : `${count} programs at ${group.name}. Choose one`;
         el.setAttribute("aria-label", label);
         el.title = label;
         el.addEventListener("click", (event) => {
@@ -367,10 +367,10 @@ export default function PinMap({
   }, [pickerKey, closePicker]);
 
   return (
-    // on the big map, the bottom-right zoom buttons are lifted above the phone toggle from 640px to 1024px
+    // on the big map, lift zoom buttons above the phone sheet peek from 640px to 1024px
     <div
       className={`absolute inset-0 ${
-        embedded ? "" : "[&_.maplibregl-ctrl-bottom-right]:mb-16 lg:[&_.maplibregl-ctrl-bottom-right]:mb-0"
+        embedded ? "" : "[&_.maplibregl-ctrl-bottom-right]:mb-36 lg:[&_.maplibregl-ctrl-bottom-right]:mb-0"
       }`}
     >
       <div
@@ -380,13 +380,13 @@ export default function PinMap({
         className="h-full w-full rounded-lg border border-stone-200 bg-stone-100"
       />
 
-      {/* picker for a spot with several programs */}
+      {/* picker for a spot with several programs, in the middle of the free map */}
       {pickerGroup && (
         <div
           ref={panel}
           role="dialog"
           aria-label={`Programs at ${pickerGroup.name}`}
-          className="absolute left-3 top-3 z-10 w-72 max-w-[calc(100%-5rem)] space-y-1 rounded-card border border-stone-300 bg-white p-2 shadow-lg"
+          className="absolute left-1/2 top-1/3 z-10 w-72 max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 space-y-1 rounded-card border border-stone-300 bg-white p-2 shadow-lg lg:left-[58%]"
         >
           <p className="px-2 py-1 text-base font-semibold">
             {pickerGroup.items.length} programs at {pickerGroup.name}

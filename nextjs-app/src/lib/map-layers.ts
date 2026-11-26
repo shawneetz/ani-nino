@@ -3,8 +3,8 @@
 // the values are full tailwind class names on purpose, tailwind only sees whole strings
 //   map     = the map itself
 //   panel   = results panel, place details and the map key
-//   bar     = filter chips, time bar and the phone toggle
-//   sheet   = the phone bottom sheet (m8)
+//   bar     = filter chips and time bar
+//   sheet   = place details, bottom sheet and map overlays
 //   popover = chip popovers and the picker for stacked pins
 // the filter sheet and the footer are not here, the sheet is fixed at z-50 and the footer is not on /map
 
