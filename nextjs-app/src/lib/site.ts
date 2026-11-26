@@ -29,6 +29,21 @@ export const SITE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
   : "http://localhost:3000";
 
+export interface HeroImage {
+  src: string;
+  width: number;
+  height: number;
+  position: string;
+  author: string;
+  source: string;
+  sourceUrl: string;
+  license: string;
+  year: number;
+  caption: string;
+}
+
+export const HERO: HeroImage | null = null;
+
 /** GitHub account that owns the repository. */
 export const REPO_OWNER = "shawneetz";
 /** Name of the GitHub repository. */

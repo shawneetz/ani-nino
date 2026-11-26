@@ -5,7 +5,7 @@ import { GROUP_LOOK, markerLook } from "@/lib/marker-style";
 import { TOPIC_KEYS, TOPICS } from "@/lib/vocab";
 
 function Sample({ style, children }: { style: CSSProperties; children?: ReactNode }) {
-  return <span aria-hidden="true" style={style} className="inline-flex h-7 w-7 shrink-0 items-center justify-center text-sm font-bold text-white">{children}</span>;
+  return <span aria-hidden="true" style={style} className="inline-flex h-8 w-8 shrink-0 items-center justify-center text-sm font-bold text-white">{children}</span>;
 }
 
 const base = { topic: "land", status: "confirmed", approximate: false } as const;

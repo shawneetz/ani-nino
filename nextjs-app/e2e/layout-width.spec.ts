@@ -23,7 +23,10 @@ test.describe("one page width", () => {
 
       const headerRow = await page.getByRole("banner").locator("> div").first().boundingBox();
       const footerRow = await page.getByRole("contentinfo").locator("> div").first().boundingBox();
-      const main = await page.locator("main#main").boundingBox();
+      const main = await (route === "/"
+        ? page.locator("main#main > div").first()
+        : page.locator("main#main")
+      ).boundingBox();
 
       expect(headerRow).not.toBeNull();
       expect(footerRow).not.toBeNull();

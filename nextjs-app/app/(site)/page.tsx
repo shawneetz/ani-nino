@@ -15,6 +15,7 @@ import { redirect } from "next/navigation";
 import { ButtonLink } from "@/components/Button";
 import { FeaturedProgramCard } from "@/components/FeaturedProgramCard";
 import { Container } from "@/components/Container";
+import { Hero } from "@/components/Hero";
 import { Kicker } from "@/components/Kicker";
 import { Section } from "@/components/Section";
 import { StatusTag } from "@/components/StatusTag";
@@ -95,28 +96,9 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   ];
 
   return (
-    <Container as="main" className="space-y-12 py-8">
-      {/* masthead: the project name is the only h1, a heavy rule closes it */}
-      <section aria-labelledby="hero-heading" className="space-y-4 border-b-2 border-ink pb-8 pt-2">
-        <Kicker>Martial-law farm programs · CALABARZON · 1972 to 1986</Kicker>
-        <h1
-          id="hero-heading"
-          className="font-serif text-[clamp(3rem,8vw,6rem)] font-bold leading-none tracking-tight text-stone-950"
-        >
-          {SITE.title}
-        </h1>
-        <p className="font-serif text-2xl text-stone-700">{SITE.tagline}</p>
-        <p className="max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800">
-          A map of farm programs from the martial-law years: what each promised, what the record shows, and who says
-          so, with a link to every source.
-        </p>
-        <div className="flex flex-wrap gap-3 pt-1">
-          <ButtonLink href="/map">Explore the map</ButtonLink>
-          <ButtonLink href="#start-here" variant="secondary">
-            Read a program
-          </ButtonLink>
-        </div>
-      </section>
+    <main id="main">
+      <Hero />
+      <Container className="space-y-12 py-8">
 
       {/* ledger strip: one row of large serif numerals split by hairlines */}
       <section aria-label="The site in numbers">
@@ -305,6 +287,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
           </ButtonLink>
         </div>
       </section>
-    </Container>
+      </Container>
+    </main>
   );
 }

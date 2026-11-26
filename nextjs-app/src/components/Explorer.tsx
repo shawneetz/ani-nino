@@ -11,6 +11,7 @@ import { visiblePrograms } from "@/lib/filter";
 import type { SheetSize } from "@/lib/fit-padding";
 import { LAYER } from "@/lib/map-layers";
 import { matchesQuery } from "@/lib/program-search";
+import { yearCounts } from "@/lib/year-counts";
 import { BottomSheet } from "./BottomSheet";
 import { FilterChips } from "./FilterChips";
 import { Legend } from "./Legend";
@@ -45,6 +46,8 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
   const shown = useMemo(() => filtered.filter((program) => matchesQuery(program, text)), [filtered, text]);
   const selectedProgram = useMemo(() => shown.find((program) => program.slug === selected) ?? null, [shown, selected]);
   const hasToday = useMemo(() => programs.some((program) => program.era === "today"), [programs]);
+  const searched = useMemo(() => programs.filter((program) => matchesQuery(program, text)), [programs, text]);
+  const counts = useMemo(() => yearCounts(searched, filters), [searched, filters]);
 
   const drawerOpen = selectedProgram !== null;
   const panelShown = panelOpen && !(drawerOpen && isWide === false);
@@ -233,8 +236,8 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
               <div className="pointer-events-auto w-fit min-w-0">{renderChips(false)}</div>
             </div>
             <div className={`pointer-events-none absolute bottom-3 right-34 flex justify-center ${freeLeft} ${LAYER.bar}`}>
-              <div className="pointer-events-auto w-full max-w-xl">
-                <TimeBar year={filters.year} onChange={setYear} showNote={hasToday} />
+              <div className="pointer-events-auto w-full max-w-4xl">
+                <TimeBar year={filters.year} onChange={setYear} showNote={hasToday} counts={counts} />
               </div>
             </div>
           </>

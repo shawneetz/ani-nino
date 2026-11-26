@@ -6,7 +6,7 @@
 import Link from "next/link";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-type Variant = "primary" | "secondary";
+type Variant = "primary" | "secondary" | "inverse";
 
 // one place for the look, so Button and ButtonLink can never drift apart
 function styles(variant: Variant, className: string): string {
@@ -15,7 +15,9 @@ function styles(variant: Variant, className: string): string {
   const look =
     variant === "primary"
       ? "border-accent bg-accent text-white hover:bg-accent-strong"
-      : "border-stone-500 bg-transparent text-stone-900 hover:border-ink";
+      : variant === "inverse"
+        ? "border-stone-100 bg-transparent text-stone-50 hover:bg-stone-50/15"
+        : "border-stone-500 bg-transparent text-stone-900 hover:border-ink";
   return `${base} ${look} ${className}`;
 }
 

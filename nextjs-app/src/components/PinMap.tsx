@@ -27,7 +27,9 @@ import { yearRange } from "@/lib/filter";
 import { clampPadding, DEFAULT_FIT_PADDING, MAX_FIT_ZOOM, type FitPadding } from "@/lib/fit-padding";
 import { groupPlaces, type PlaceGroup } from "@/lib/group-places";
 import {
+  MAP_BOUNDS,
   MAP_CENTER,
+  MAP_MIN_ZOOM,
   MAP_STYLE_URL,
   MAP_ZOOM,
   MAPLIBRE_CSS_INTEGRITY,
@@ -35,22 +37,24 @@ import {
   MAPLIBRE_JS_INTEGRITY,
   MAPLIBRE_JS_URL,
 } from "@/lib/map-config";
-import { GROUP_LOOK, markerLook } from "@/lib/marker-style";
+import { GROUP_LOOK, markerLook, SELECTED_SHADOW } from "@/lib/marker-style";
 import type { Province } from "@/lib/vocab";
 import { Button } from "./Button";
 
 type MapLibreLib = typeof MapLibre;
 type Group = PlaceGroup<ExplorerProgram>;
-type Pin = { marker: MapLibre.Marker; el: HTMLElement; dot: HTMLSpanElement; group: Group };
+type Pin = { marker: MapLibre.Marker; el: HTMLElement; dot: HTMLSpanElement; pulse: HTMLSpanElement; group: Group; base: string };
 type Point = [number, number];
 
 // marker classes, the outer element is the 44px tap area and the inner dot is the 28px marker you see
 // the cursor is added in code, because embedded markers are not clickable
 const PIN_BUTTON = "z-[1] flex h-[44px] w-[44px] items-center justify-center border-0 bg-transparent p-0";
-const PIN_DOT = "box-border flex h-[28px] w-[28px] items-center justify-center text-[14px] font-bold text-white";
-// the ring and the raised layer are toggled for the selected program
-const PIN_RING = "shadow-[0_0_0_3px_#fff,0_0_0_6px_#171717]";
+const PIN_DOT =
+  "relative box-border flex h-[32px] w-[32px] items-center justify-center text-[14px] font-bold text-white motion-safe:transition-transform group-hover:scale-110";
+const PIN_PULSE =
+  "pointer-events-none absolute hidden h-[32px] w-[32px] rounded-full bg-stone-900/40 motion-safe:animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]";
 const PIN_RAISED = "z-[2]";
+const TINT_CLASS = "pointer-events-none absolute inset-0 bg-amber-100/40 mix-blend-multiply";
 
 // zoom buttons only exist from this width, the same as tailwind's sm breakpoint
 const ZOOM_BUTTONS_QUERY = "(min-width: 640px)";
@@ -216,9 +220,16 @@ export default function PinMap({
       style: MAP_STYLE_URL,
       center: MAP_CENTER,
       zoom: MAP_ZOOM,
+      maxBounds: MAP_BOUNDS,
+      minZoom: MAP_MIN_ZOOM,
       // on a long page, ctrl-scroll or two fingers zoom the map, so the page stays scrollable
       cooperativeGestures: embedded,
     });
+
+    const tint = document.createElement("div");
+    tint.className = TINT_CLASS;
+    tint.setAttribute("aria-hidden", "true");
+    instance.getCanvasContainer().after(tint);
 
     // zoom buttons: the mini-map keeps them top-right, the big map has them bottom-right from 640px up
     // under 640px they are left out, pinch and double tap still zoom
@@ -245,6 +256,7 @@ export default function PinMap({
     setMap(instance);
     return () => {
       wide.removeEventListener("change", syncZoomControl);
+      tint.remove();
       instance.remove();
       setMap(null);
     };
@@ -286,18 +298,20 @@ export default function PinMap({
       // embedded maps use a plain div, the others use a real button
       const el = document.createElement(embedded ? "div" : "button");
       if (el instanceof HTMLButtonElement) el.type = "button";
-      el.className = `${PIN_BUTTON} ${embedded ? "cursor-default" : "cursor-pointer"}`;
+      el.className = `group ${PIN_BUTTON} ${embedded ? "cursor-default" : "cursor-pointer"}`;
 
       const dot = document.createElement("span");
       dot.className = PIN_DOT;
-      // color, fill, border and shape depend on the program, so they stay inline
-      if (count === 1) {
-        Object.assign(dot.style, markerLook({ topic: first.topic, era: first.era, status: first.status, approximate: group.approximate }));
-      } else {
-        Object.assign(dot.style, GROUP_LOOK);
-        dot.textContent = String(count); // the number means color is not the only signal
-      }
-      el.append(dot);
+      const look =
+        count === 1
+          ? markerLook({ topic: first.topic, era: first.era, status: first.status, approximate: group.approximate })
+          : GROUP_LOOK;
+      Object.assign(dot.style, look);
+      if (count > 1) dot.textContent = String(count);
+
+      const pulse = document.createElement("span");
+      pulse.className = PIN_PULSE;
+      el.append(pulse, dot);
 
       if (embedded) {
         // the places list beside the map already says this, so screen readers skip the marker
@@ -320,15 +334,16 @@ export default function PinMap({
       }
 
       const marker = new lib.Marker({ element: el }).setLngLat([group.lng, group.lat]).addTo(map);
-      return { marker, el, dot, group };
+      return { marker, el, dot, pulse, group, base: look.boxShadow };
     });
   }, [lib, map, groups, embedded]);
 
-  // step 5: ring the markers of the selected program, without rebuilding them
+  // step 5: ring and pulse the markers of the selected program, without rebuilding them
   useEffect(() => {
     pins.current.forEach((pin) => {
       const on = pin.group.items.some((item) => item.slug === selectedSlug);
-      pin.dot.classList.toggle(PIN_RING, on);
+      pin.dot.style.boxShadow = on ? SELECTED_SHADOW : pin.base;
+      pin.pulse.classList.toggle("hidden", !on);
       pin.el.classList.toggle(PIN_RAISED, on);
     });
   }, [lib, map, groups, selectedSlug]);
@@ -377,7 +392,7 @@ export default function PinMap({
         ref={box}
         role="region"
         aria-label={embedded ? "Map of this program's places" : "Map of programs"}
-        className="h-full w-full rounded-lg border border-stone-200 bg-stone-100"
+        className="isolate h-full w-full rounded-lg border border-stone-200 bg-stone-100"
       />
 
       {/* picker for a spot with several programs, in the middle of the free map */}
