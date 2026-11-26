@@ -1,13 +1,14 @@
 // what this file does: the results panel on /map, it floats over the map
 //   desktop: a rounded panel on the left, width clamp(20rem, 30vw, 26rem), 12px from the edges
-//     it holds the one live count, a collapse button, a search box, the temporary filter controls and the list
+//     it holds the one live count, a collapse button, a search box and the list
 //     collapsing turns it into a small pill with the count and a "Show list" button, the map gets all the room
-//   phone: a top strip with the filters button and the count, it grows into the list view (m8 replaces it with a sheet)
+//   phone: a top strip with the count and the filter chips, it grows into the list view (m8 replaces it with a sheet)
 // the collapse button is the same element in both states, so keyboard focus never has to move
 // the panel only draws what it is given: the parent filters and searches first, so panel, pins and count agree
 // change in this version (m4): new, replaces the inline panel in Explorer and the ProgramCard list
+// change in this version (m5): temporary filter controls and phone Filters button are gone
 import Link from "next/link";
-import { useId, type ReactNode, type RefObject } from "react";
+import { useId, type ReactNode } from "react";
 import type { ExplorerProgram } from "@/lib/explorer-types";
 import { LAYER } from "@/lib/map-layers";
 import { PROVINCE_LABELS, type Province } from "@/lib/vocab";
@@ -29,13 +30,8 @@ interface MapPanelProps {
   onOpenChange: (open: boolean) => void;
   /** Phone only: which view is showing, the list view fills the screen. */
   view: "list" | "map";
-  /** Number of active filters, shown on the phone filters button. */
-  filterCount: number;
-  /** Ref of the phone filters button, so the parent can return focus to it. */
-  filtersButtonRef: RefObject<HTMLButtonElement | null>;
-  onOpenFilters: () => void;
-  /** The filter controls shown inside the desktop panel (temporary until the chips in m5). */
-  controls: ReactNode;
+  /** The filter chip row, shown in the phone strip only. */
+  chips: ReactNode;
   /** Picked provinces that have no program at all, they get an explanation instead of an empty list. */
   explainProvinces: Province[];
   onSelect: (slug: string) => void;
@@ -58,10 +54,7 @@ export function MapPanel({
   open,
   onOpenChange,
   view,
-  filterCount,
-  filtersButtonRef,
-  onOpenFilters,
-  controls,
+  chips,
   explainProvinces,
   onSelect,
   onClear,
@@ -82,21 +75,12 @@ export function MapPanel({
     <aside
       className={`absolute inset-x-0 top-0 flex flex-col border-b border-stone-300 lg:border lg:shadow-lg ${LAYER.panel} ${phoneShell} ${desktopShell}`}
     >
-      {/* header: the filters button on phones, the one live count, and the collapse button on desktop */}
+      {/* header: the one live count, and the collapse button on desktop */}
       <div
         className={`flex items-center justify-between gap-3 px-4 py-2 ${
           open ? "lg:border-b lg:border-stone-200" : "lg:gap-4 lg:py-1 lg:pr-2"
         }`}
       >
-        <button
-          ref={filtersButtonRef}
-          type="button"
-          aria-haspopup="dialog"
-          onClick={onOpenFilters}
-          className="tap-target rounded-lg border border-stone-400 bg-white px-4 font-sans text-base font-medium lg:hidden"
-        >
-          Filters{filterCount > 0 ? ` (${filterCount})` : ""}
-        </button>
         <p role="status" data-testid="result-count" className="figures font-sans text-base text-stone-800">
           <strong>{programs.length}</strong> {countText}
         </p>
@@ -123,12 +107,15 @@ export function MapPanel({
         </button>
       </div>
 
-      {/* body: search, the temporary filter controls and the list, hidden when collapsed or in the phone map view */}
+      {/* phone only: the chip row sits under the count, in both the map and the list view */}
+      <div className="px-4 pb-2 lg:hidden">{chips}</div>
+
+      {/* body: search and the list, hidden when collapsed or in the phone map view */}
       <div
         id={bodyId}
         className={`${view === "list" ? "flex" : "hidden"} ${open ? "lg:flex" : "lg:hidden"} min-h-0 flex-1 flex-col`}
       >
-        <div className="border-b border-stone-200 px-4 py-2">
+        <div className="border-y border-stone-200 px-4 py-2 lg:border-t-0">
           <label htmlFor={searchId} className="font-sans text-base font-medium text-stone-700">
             Search
           </label>
@@ -141,9 +128,6 @@ export function MapPanel({
             className="mt-1 min-h-[44px] w-full rounded-sm border border-stone-500 bg-white px-3 font-sans text-base text-stone-900 placeholder:text-stone-700"
           />
         </div>
-
-        {/* desktop only: scrolls inside the panel when the controls get tall, m5 replaces them with chips */}
-        <div className="hidden max-h-[45%] overflow-y-auto border-b border-stone-200 px-4 py-3 lg:block">{controls}</div>
 
         <section aria-label="Programs" className="min-h-0 flex-1 overflow-y-auto">
           {programs.length > 0 ? (

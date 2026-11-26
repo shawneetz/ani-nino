@@ -6,6 +6,7 @@
 // the numbers match the layout in Explorer.tsx and MapPanel.tsx, change them together
 // pure functions, so they can be tested without a browser
 // change in this version (m4): mapPadding knows if the results panel is open or collapsed
+// change in this version (m5): the phone top strip now holds the count and the chip row, so it is taller
 
 /**
  * Pixels of the map to keep free on each side when fitting to pins.
@@ -42,10 +43,11 @@ const COLLAPSED_LEFT = 40;
 
 // height the time bar takes at the bottom on desktop, and the toggle strip on phones
 const TIME_BAR_HEIGHT = 200;
-const PHONE_BOTTOM = 96;
+const PHONE_BOTTOM = 120;
 
-// room for the header strip on phones and the chip row on desktop
+// room for the chip row on desktop
 const TOP = 72;
+const PHONE_TOP = 116;
 
 /**
  * Finds how much of each map edge the floating pieces cover at a screen width.
@@ -76,7 +78,7 @@ export function mapPadding(viewportWidth: number, panelOpen = true): FitPadding 
       left: panelOpen ? Math.round(panel + PANEL_EDGE + PANEL_GAP) : COLLAPSED_LEFT,
     };
   }
-  return { top: TOP, right: 40, bottom: PHONE_BOTTOM, left: 40 };
+  return { top: PHONE_TOP, right: 40, bottom: PHONE_BOTTOM, left: 40 };
 }
 
 /**

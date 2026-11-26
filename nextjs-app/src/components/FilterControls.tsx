@@ -2,8 +2,10 @@
 // change in this version
 //   c1: hides the today layer when there are no today programs, and keeps clear in its own row
 //   c2: adds the confirmed only switch
-//   layout "row" puts labels and chips inline for the desktop filter bar
-//   layout "stack" is the roomy version used inside the phone filter sheet
+//   layout "row" puts labels and chips inline for the programs page filter bar
+//   layout "stack" is the roomy version used in stacked layouts
+//   m5: the topic and province option lists are exported on their own (TopicOptions, ProvinceOptions)
+//   so the map chip popovers reuse the exact same chips as this component
 // every chip and switch is at least 44px tall so it is easy to tap on a phone
 "use client";
 
@@ -38,6 +40,26 @@ function Chip({ label, pressed, color = "#44403c", onClick }: { label: string; p
     >
       {label}
     </button>
+  );
+}
+
+export function TopicOptions({ topics, onToggle }: { topics: Topic[]; onToggle: (topic: Topic) => void }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {TOPIC_KEYS.map((key) => (
+        <Chip key={key} label={TOPICS[key].label} color={TOPICS[key].color} pressed={topics.includes(key)} onClick={() => onToggle(key)} />
+      ))}
+    </div>
+  );
+}
+
+export function ProvinceOptions({ provinces, onToggle }: { provinces: Province[]; onToggle: (province: Province) => void }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {PROVINCE_KEYS.map((key) => (
+        <Chip key={key} label={PROVINCE_LABELS[key]} pressed={provinces.includes(key)} onClick={() => onToggle(key)} />
+      ))}
+    </div>
   );
 }
 
@@ -89,20 +111,12 @@ export function FilterControls({ layout = "stack", ...props }: Props) {
     <div className={row ? "space-y-2" : "space-y-5"}>
       <div role="group" aria-labelledby={`${uid}-topic`} className={group}>
         <span id={`${uid}-topic`} className={label}>Topic</span>
-        <div className="flex flex-wrap gap-2">
-          {TOPIC_KEYS.map((key) => (
-            <Chip key={key} label={TOPICS[key].label} color={TOPICS[key].color} pressed={props.topics.includes(key)} onClick={() => props.onToggleTopic(key)} />
-          ))}
-        </div>
+        <TopicOptions topics={props.topics} onToggle={props.onToggleTopic} />
       </div>
 
       <div role="group" aria-labelledby={`${uid}-province`} className={group}>
         <span id={`${uid}-province`} className={label}>Province</span>
-        <div className="flex flex-wrap gap-2">
-          {PROVINCE_KEYS.map((key) => (
-            <Chip key={key} label={PROVINCE_LABELS[key]} pressed={props.provinces.includes(key)} onClick={() => props.onToggleProvince(key)} />
-          ))}
-        </div>
+        <ProvinceOptions provinces={props.provinces} onToggle={props.onToggleProvince} />
       </div>
 
       <div role="group" aria-labelledby={`${uid}-show`} className={group}>

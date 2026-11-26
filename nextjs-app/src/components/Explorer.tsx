@@ -3,13 +3,14 @@
 //   everything else is an absolute layer above it, the stacking order lives in src/lib/map-layers.ts
 //   one filter path (visiblePrograms, then the search) feeds the map, the list and the count, so they never disagree
 // pieces, all temporary until the stages named below replace them
-//   results panel (m4, done): MapPanel, the count, search, the filter controls and the list
-//   time bar (m6): the year slider, bottom-left on desktop, inside the filter sheet on phones
+//   results panel (m4, done): MapPanel, the count, search and the list
+//   filter chips (m5, done): FilterChips, floating on desktop, inside the results strip on phones
+//   time bar (m6): the year slider, bottom-left on desktop, the Year chip popover on phones
 //   map key (m9): bottom-right, above the zoom buttons
 //   place preview (m7): opens over the map, to the right of the panel on desktop
 //   phone toggle (m8): a map | list switch at the bottom, the map stays mounted so it keeps its tiles
 // pin or a result selects a program, "open program" leaves the page, selection lives in the url as ?sel=<slug>
-// accessibility (c6.2): focus moves into the preview and the sheet when they open,
+// accessibility (c6.2): focus moves into the preview when it opens,
 // escape closes them, and focus returns to the control that opened them
 // change in this version (m2): full-bleed shell
 //   the h1 is visually hidden, the main element now comes from the map layout
@@ -18,10 +19,10 @@
 //   so pins land in the part of the map the panel, time bar and toggle do not cover
 //   the map key moved up so it never sits on the zoom buttons
 // change in this version (m4): the panel is MapPanel and ProgramCard is gone
-//   the search text is local state for now, m5 moves it to the q url key
-//   search runs after the filters and feeds the map too, so pins, list and count always match
-//   a collapsed panel moves the time bar and the preview to the left and widens the map padding
-//   the interim time bar lost its shadow, shadows are only allowed in the files listed in style-rules.test.ts
+// change in this version (m5): chips and the q url key
+//   the phone filter sheet is no longer used here
+//   search text stays local and the url follows after a short wait
+//   url changes restore the search box
 "use client";
 
 import dynamic from "next/dynamic";
@@ -32,8 +33,7 @@ import type { ExplorerProgram } from "@/lib/explorer-types";
 import { visiblePrograms } from "@/lib/filter";
 import { LAYER } from "@/lib/map-layers";
 import { matchesQuery } from "@/lib/program-search";
-import { FilterControls } from "./FilterControls";
-import { FilterSheet } from "./FilterSheet";
+import { FilterChips } from "./FilterChips";
 import { Legend } from "./Legend";
 import { MapPanel } from "./MapPanel";
 import { PreviewCard } from "./PreviewCard";
@@ -47,27 +47,33 @@ const PinMap = dynamic(() => import("./PinMap"), {
 
 type View = "list" | "map";
 
+const QUERY_DELAY_MS = 250;
+
 export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
   const {
     filters,
     selected,
+    query,
     setSelected,
+    setQuery,
     setYear,
     toggleTopic,
     toggleProvince,
     toggleToday,
     toggleConfirmed,
     clearAll,
+    clearEverything,
   } = useFilterState();
 
-  const [query, setQuery] = useState("");
+  const [text, setText] = useState(query);
+  const lastWritten = useRef(query);
+  const queryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [panelOpen, setPanelOpen] = useState(true); // desktop only, a phone always shows its strip
   const [view, setView] = useState<View>("list"); // phone only, desktop shows both
-  const [sheetOpen, setSheetOpen] = useState(false);
 
   // filters first, then the search, so the map, the list and the count read the same list
   const filtered = useMemo(() => visiblePrograms(programs, filters), [programs, filters]);
-  const shown = useMemo(() => filtered.filter((program) => matchesQuery(program, query)), [filtered, query]);
+  const shown = useMemo(() => filtered.filter((program) => matchesQuery(program, text)), [filtered, text]);
   const selectedProgram = useMemo(() => shown.find((program) => program.slug === selected) ?? null, [shown, selected]);
   const hasToday = useMemo(() => programs.some((program) => program.era === "today"), [programs]);
   // how much of each map edge the floating pieces cover at this screen width
@@ -76,16 +82,14 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
   const trigger = useRef<HTMLElement | null>(null); // the control that selected, for returning focus
   const previewRef = useRef<HTMLDivElement>(null);
   const moveFocus = useRef(false);
-  const filtersButton = useRef<HTMLButtonElement>(null);
 
-  const activeCount =
-    filters.topics.length +
-    filters.provinces.length +
-    (filters.year !== null ? 1 : 0) +
-    (hasToday && filters.today ? 1 : 0) +
-    (filters.confirmed ? 1 : 0);
-  const hasFilters = activeCount > 0;
-  const searching = query.trim() !== "";
+  const hasFilters =
+    filters.topics.length > 0 ||
+    filters.provinces.length > 0 ||
+    filters.year !== null ||
+    (hasToday && filters.today) ||
+    filters.confirmed;
+  const searching = text.trim() !== "";
 
   // a province with no program at all (cavite) gets an explanation instead of a blank list
   // it only applies when nothing else could be hiding programs, so no search text and every picked province is empty
@@ -115,16 +119,31 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
     [setSelected],
   );
 
-  const closeSheet = useCallback(() => {
-    setSheetOpen(false);
-    requestAnimationFrame(() => filtersButton.current?.focus());
-  }, []);
-
-  // one button for the panel empty state, it clears the filters and the search text
-  const clearEverything = () => {
-    clearAll();
-    setQuery("");
+  const handleQueryChange = (value: string) => {
+    setText(value);
+    lastWritten.current = value;
+    if (queryTimer.current) clearTimeout(queryTimer.current);
+    queryTimer.current = setTimeout(() => setQuery(value), QUERY_DELAY_MS);
   };
+
+  const clearFiltersAndSearch = () => {
+    if (queryTimer.current) clearTimeout(queryTimer.current);
+    lastWritten.current = "";
+    setText("");
+    clearEverything();
+  };
+
+  useEffect(() => {
+    if (query === lastWritten.current) return;
+    lastWritten.current = query;
+    setText(query);
+  }, [query]);
+
+  useEffect(() => {
+    return () => {
+      if (queryTimer.current) clearTimeout(queryTimer.current);
+    };
+  }, []);
 
   // drop the selection when a filter or the search hides the selected program (or the url has a bad slug)
   useEffect(() => {
@@ -139,15 +158,15 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
     moveFocus.current = false;
   }, [selectedProgram, view]);
 
-  // escape closes the preview, the sheet and the picker handle their own escape
+  // escape closes the preview, an open chip popover stops escape first
   useEffect(() => {
-    if (!selectedProgram || sheetOpen) return;
+    if (!selectedProgram) return;
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") closePreview(true);
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [selectedProgram, sheetOpen, closePreview]);
+  }, [selectedProgram, closePreview]);
 
   // a picked pin scrolls its row into view (skipped when the list is hidden)
   useEffect(() => {
@@ -158,20 +177,21 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
     row.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
   }, [selected, view, panelOpen]);
 
-  // the same controls are used in the desktop panel and in the phone sheet
-  const controls = (showClear: boolean) => (
-    <FilterControls
-      layout="stack"
+  const renderChips = (showYear: boolean) => (
+    <FilterChips
       topics={filters.topics}
       provinces={filters.provinces}
+      year={filters.year}
       today={filters.today}
       confirmed={filters.confirmed}
       showToday={hasToday}
-      hasFilters={showClear && hasFilters}
+      showYear={showYear}
+      hasFilters={hasFilters}
       onToggleTopic={toggleTopic}
       onToggleProvince={toggleProvince}
-      onToggleToday={toggleToday}
+      onSetYear={setYear}
       onToggleConfirmed={toggleConfirmed}
+      onToggleToday={toggleToday}
       onClear={clearAll}
     />
   );
@@ -198,22 +218,28 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
       <MapPanel
         programs={shown}
         selectedSlug={selected}
-        query={query}
-        onQueryChange={setQuery}
+        query={text}
+        onQueryChange={handleQueryChange}
         open={panelOpen}
         onOpenChange={setPanelOpen}
         view={view}
-        filterCount={activeCount}
-        filtersButtonRef={filtersButton}
-        onOpenFilters={() => setSheetOpen(true)}
-        controls={controls(true)}
+        chips={renderChips(true)}
         explainProvinces={explainProvinces}
         onSelect={(slug) => select(slug, true)}
-        onClear={clearEverything}
+        onClear={clearFiltersAndSearch}
       />
 
+      {/* layer: filter chips on desktop, along the top and to the right of the panel */}
+      <div
+        className={`absolute top-3 hidden w-fit max-w-[calc(100%-1.5rem)] lg:block ${
+          panelOpen ? "lg:left-[calc(clamp(20rem,30vw,26rem)+1.5rem)]" : "lg:left-52"
+        } ${LAYER.popover}`}
+      >
+        {renderChips(false)}
+      </div>
+
       {/* layer: time bar (temporary, m6 replaces it), desktop only, it starts to the right of the panel
-          on phones the year slider lives inside the filter sheet */}
+          on phones the year slider lives in the Year chip popover */}
       <div
         className={`absolute bottom-3 ${
           panelOpen ? "left-[calc(clamp(20rem,30vw,26rem)+1.5rem)]" : "left-3"
@@ -263,10 +289,6 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
         </div>
       </div>
 
-      <FilterSheet open={sheetOpen} resultCount={shown.length} hasFilters={hasFilters} onClose={closeSheet} onClear={clearAll}>
-        {controls(false)}
-        <YearSlider year={filters.year} onChange={setYear} showNote={hasToday} />
-      </FilterSheet>
     </div>
   );
 }
