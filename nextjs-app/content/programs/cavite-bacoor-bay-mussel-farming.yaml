@@ -1,7 +1,8 @@
 # what this file does: program page for bivalve (oyster and mussel) farming in bacoor bay
 # it stays "still checking" because no 1972 to 1986 count of farming families or income was found
+# stage N5 (2026-11-27): every source was opened again, the seafdec record was read as an abstract only
 # the 1934 pilot farm date comes from the seafdec paper, the fao paper says 1935, so only the seafdec date is used
-# the fao farm count has no date in the text that was read, the question asks for it
+# the fao farm count has no date in the text, the question asks for it
 slug: cavite-bacoor-bay-mussel-farming
 title: Bacoor Bay mussel and oyster farms
 when: 1972 onward
@@ -29,14 +30,14 @@ sources:
   - title: "Country report: Philippines (Young and Serna)"
     publisher: SEAFDEC Institutional Repository
     voice: independent
-    cite: "1982. In Bivalve culture in Asia and the Pacific, workshop held in Singapore, February 16 to 19, 1982, pages 55 to 68."
+    cite: "1982. In Bivalve culture in Asia and the Pacific, workshop held in Singapore, February 16 to 19, 1982, pages 55 to 68. Abstract read in the repository record."
     url: "https://repository.seafdec.org/handle/20.500.12066/2341"
-    accessed: "2026-11-26"
+    accessed: "2026-11-27"
     backs: happened
   - title: "Bivalve farming: an alternative economic activity for small-scale coastal fishermen in the ASEAN region"
     publisher: Food and Agriculture Organization
     voice: independent
-    cite: "FAO document AG163E, chapter 2. About 134 mussel farms in Bacoor along Manila Bay."
+    cite: "FAO document AG163E (M. N. Delmendo, 1989), chapter 2. About 134 mussel farms in Bacoor along Manila Bay, no date given for the count."
     url: "https://www.fao.org/4/ag163e/AG163E02.htm"
-    accessed: "2026-11-26"
+    accessed: "2026-11-27"
     backs: happened

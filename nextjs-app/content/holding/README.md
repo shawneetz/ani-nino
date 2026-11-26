@@ -28,3 +28,15 @@ The three Cavite files were rebuilt on 2026-11-27 from sources that were opened,
 | Maragondon and Ternate tourist zone | Proclamation 1520, PD 1574 | held, see table above |
 | Puerto Azul resort, Ternate | no pre-1986 source on farmers found | wait |
 | Bacoor reclamation projects of 2020 | CoverStory 2024 | dropped as a page, it is after 1986, kept as a dated record on two pages |
+
+## Cavite confirmation pass (stage N5, 2026-11-27)
+
+Every source on the three live Cavite pages was opened on this day. The held files were not reopened, they are not published.
+
+| page | result | why |
+|---|---|---|
+| `cavite-export-processing-zone` | confirmed, `checkedOn` 2026-11-27 | all three Government sources opened, every sentence matches, the lot lists name no farmers and the page says so |
+| `cavite-bacoor-bay-mussel-farming` | stays checking | the sources cover pollution and farm counts, none counts families or income (the SEAFDEC record was read as an abstract only) |
+| `cavite-carmona-housing-conversion` | stays checking | one court decision is the only source, a later decision (G.R. No. 131481, seen in search, not opened) cites it, so it is not an independent check |
+
+Coverage after N5: 3 live Cavite pages, 1 confirmed. The goal in spec 7.1 (at least 2 confirmed) is not met, and nothing was loosened to reach it.
