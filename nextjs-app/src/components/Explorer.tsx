@@ -1,15 +1,20 @@
-// what this file does: the explorer at /map, built around one filter path (visiblePrograms)
-// so the map, the list and the count can never disagree (c3.1 to c3.12)
-//   desktop: filter bar on top, list on the left (scrolls), map fills the rest
-//   phone: sticky bar with a filters button (opens a bottom sheet), a map | list toggle
-//          at the bottom (default list), the map stays mounted so it keeps its tiles
-//   pin or "show on map" selects a program, a preview card opens, "open program" leaves the page
-//   selection lives in the url as ?sel=<slug>
+// what this file does: the shell of the /map page, a full-bleed map with floating pieces on top
+//   the map fills the whole area under the header (its parent is the relative main in app/(map)/map/layout.tsx)
+//   everything else is an absolute layer above it, the stacking order lives in src/lib/map-layers.ts
+//   one filter path (visiblePrograms) feeds the map, the list and the count, so they never disagree
+// pieces, all temporary until the stages named below replace them
+//   results panel (m4): the count, the filter controls and the list, a left panel on desktop, the top strip
+//     and the list view on phones, there is only one count in the page
+//   time bar (m6): the year slider, bottom-left on desktop, inside the filter sheet on phones
+//   map key (m9): bottom-right, above the phone toggle
+//   place preview (m7): opens over the map, to the right of the panel on desktop
+//   phone toggle (m8): a map | list switch at the bottom, the map stays mounted so it keeps its tiles
+// pin or "show on map" selects a program, "open program" leaves the page, selection lives in the url as ?sel=<slug>
 // accessibility (c6.2): focus moves into the preview and the sheet when they open,
 // escape closes them, and focus returns to the control that opened them
-// change in this version
-//   c1: hides the today layer controls when no today program exists
-//   c2: wires confirmed only into filtering and the active-filter count
+// change in this version (m2): full-bleed shell
+//   the h1 is visually hidden, the main element now comes from the map layout
+//   the old sticky filter bar, the list column and the fixed height calc are gone
 "use client";
 
 import dynamic from "next/dynamic";
@@ -18,6 +23,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFilterState } from "@/hooks/use-filter-state";
 import type { ExplorerProgram } from "@/lib/explorer-types";
 import { visiblePrograms } from "@/lib/filter";
+import { LAYER } from "@/lib/map-layers";
 import { PROVINCE_LABELS } from "@/lib/vocab";
 import { FilterControls } from "./FilterControls";
 import { FilterSheet } from "./FilterSheet";
@@ -29,7 +35,7 @@ import { YearSlider } from "./YearSlider";
 // the map is loaded in the browser only, with a placeholder while it loads
 const PinMap = dynamic(() => import("./PinMap"), {
   ssr: false,
-  loading: () => <div className="absolute inset-0 animate-pulse rounded-lg bg-stone-100" />,
+  loading: () => <div className="absolute inset-0 animate-pulse bg-stone-100" />,
 });
 
 type View = "list" | "map";
@@ -127,10 +133,10 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
     card.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
   }, [selected, view]);
 
-  // the same controls are used in the desktop bar and in the phone sheet
-  const controls = (layout: "row" | "stack", showClear: boolean) => (
+  // the same controls are used in the desktop panel and in the phone sheet
+  const controls = (showClear: boolean) => (
     <FilterControls
-      layout={layout}
+      layout="stack"
       topics={filters.topics}
       provinces={filters.provinces}
       today={filters.today}
@@ -146,34 +152,54 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
   );
 
   return (
-    <div className="flex flex-col gap-3 lg:h-[calc(100dvh-10rem)] lg:min-h-[560px]">
-      {/* sticky filter bar: full controls on desktop, a filters button on phones */}
-      <div className="sticky top-0 z-30 -mx-4 space-y-2 border-b border-stone-200 bg-background/95 px-4 py-2 backdrop-blur lg:static lg:mx-0 lg:px-0">
-        <div className="hidden gap-x-8 lg:grid lg:grid-cols-[minmax(0,1fr)_26rem]">
-          {controls("row", true)}
-          <YearSlider year={filters.year} onChange={setYear} showNote={hasToday} />
-        </div>
-        <div className="flex items-center justify-between gap-3">
+    // fills the relative main of the map layout, every child below is a layer
+    <div className="absolute inset-0">
+      {/* the page needs one h1, the map has no visible heading */}
+      <h1 className="sr-only">Explore the map</h1>
+
+      {/* layer: the map, always mounted, always the full area */}
+      <div className={`absolute inset-0 ${LAYER.map}`}>
+        <PinMap
+          programs={visible}
+          provinces={filters.provinces}
+          selectedSlug={selectedProgram?.slug ?? null}
+          onSelect={(slug) => select(slug, false)}
+          onClear={() => closePreview(false)}
+        />
+      </div>
+
+      {/* layer: results panel (temporary, m4 replaces it)
+          desktop: a floating panel on the left, phone: a top strip that grows into the list view */}
+      <aside
+        className={`absolute inset-x-0 top-0 flex flex-col border-b border-stone-300 ${LAYER.panel} ${
+          view === "list" ? "bottom-14 bg-background" : "bg-background/95 backdrop-blur"
+        } lg:inset-x-auto lg:left-3 lg:top-3 lg:bottom-3 lg:w-[clamp(20rem,30vw,26rem)] lg:rounded-xl lg:border lg:bg-white lg:shadow-lg lg:backdrop-blur-none`}
+      >
+        {/* header: the filters button on phones and the one live count */}
+        <div className="flex items-center justify-between gap-3 px-4 py-2 lg:border-b lg:border-stone-200">
           <button
             ref={filtersButton}
             type="button"
             aria-haspopup="dialog"
             onClick={() => setSheetOpen(true)}
-            className="tap-target rounded-lg border border-stone-400 bg-white px-4 text-base font-medium lg:hidden"
+            className="tap-target rounded-lg border border-stone-400 bg-white px-4 font-sans text-base font-medium lg:hidden"
           >
             Filters{activeCount > 0 ? ` (${activeCount})` : ""}
           </button>
-          <p role="status" data-testid="result-count" className="text-base text-stone-800">
+          <p role="status" data-testid="result-count" className="figures font-sans text-base text-stone-800">
             <strong>{visible.length}</strong> {countText}
           </p>
         </div>
-      </div>
 
-      <div className="flex flex-col gap-3 lg:min-h-0 lg:flex-1 lg:flex-row">
-        {/* list: left panel on desktop, its own view on phones */}
+        {/* desktop only: the filter controls, scroll inside the panel when they get tall */}
+        <div className="hidden max-h-[45%] overflow-y-auto border-b border-stone-200 px-4 py-3 lg:block">
+          {controls(true)}
+        </div>
+
+        {/* list: its own view on phones, always visible on desktop */}
         <section
           aria-label="Programs"
-          className={`${view === "list" ? "block" : "hidden"} space-y-3 lg:block lg:w-[440px] lg:shrink-0 lg:overflow-y-auto lg:pr-1`}
+          className={`${view === "list" ? "block" : "hidden"} min-h-0 flex-1 space-y-3 overflow-y-auto p-3 lg:block`}
         >
           {visible.length > 0 ? (
             visible.map((program) => (
@@ -205,27 +231,35 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
             </div>
           )}
         </section>
+      </aside>
 
-        {/* map: right side on desktop, its own view on phones */}
-        <div className={`${view === "map" ? "flex" : "hidden"} min-h-0 flex-1 flex-col gap-2 lg:flex`}>
-          <div className="relative min-h-[60dvh] flex-1 lg:min-h-0">
-            <PinMap
-              programs={visible}
-              provinces={filters.provinces}
-              selectedSlug={selectedProgram?.slug ?? null}
-              onSelect={(slug) => select(slug, false)}
-              onClear={() => closePreview(false)}
-            />
-            {selectedProgram && (
-              <PreviewCard program={selectedProgram} containerRef={previewRef} onClose={() => closePreview(true)} />
-            )}
-          </div>
-          <Legend showToday={hasToday} />
-        </div>
+      {/* layer: time bar (temporary, m6 replaces it), desktop only, it starts to the right of the panel
+          on phones the year slider lives inside the filter sheet */}
+      <div
+        className={`absolute bottom-3 left-[calc(clamp(20rem,30vw,26rem)+1.5rem)] hidden w-[22rem] rounded-xl border border-stone-300 bg-white p-3 shadow-lg lg:block ${LAYER.bar}`}
+      >
+        <YearSlider year={filters.year} onChange={setYear} showNote={hasToday} />
       </div>
 
-      {/* phone view toggle: sticky inside the explorer, so it never covers the footer */}
-      <div className="sticky bottom-0 z-30 -mx-4 border-t border-stone-200 bg-white px-4 py-2 lg:hidden">
+      {/* layer: map key (temporary, m9 replaces it), anchored by its bottom edge so it opens upward
+          on phones it sits above the toggle */}
+      <div className={`absolute bottom-16 right-3 w-72 max-w-[calc(100%-1.5rem)] lg:bottom-3 ${LAYER.panel}`}>
+        <Legend showToday={hasToday} />
+      </div>
+
+      {/* layer: preview card (temporary, m7 replaces it)
+          the wrapper ignores clicks, only the card takes them, so the map stays usable around it
+          on desktop it starts to the right of the panel and stays above the time bar */}
+      {selectedProgram && (
+        <div
+          className={`pointer-events-none absolute inset-0 bottom-14 lg:bottom-40 lg:left-[calc(clamp(20rem,30vw,26rem)+1.5rem)] [&>*]:pointer-events-auto ${LAYER.sheet}`}
+        >
+          <PreviewCard program={selectedProgram} containerRef={previewRef} onClose={() => closePreview(true)} />
+        </div>
+      )}
+
+      {/* layer: phone toggle (temporary, m8 replaces it) */}
+      <div className={`absolute inset-x-0 bottom-0 border-t border-stone-200 bg-white px-4 py-2 lg:hidden ${LAYER.bar}`}>
         <div role="group" aria-label="Show" className="mx-auto grid max-w-sm grid-cols-2 gap-2">
           {(["map", "list"] as const).map((option) => (
             <button
@@ -244,7 +278,7 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
       </div>
 
       <FilterSheet open={sheetOpen} resultCount={visible.length} hasFilters={hasFilters} onClose={closeSheet} onClear={clearAll}>
-        {controls("stack", false)}
+        {controls(false)}
         <YearSlider year={filters.year} onChange={setYear} showNote={hasToday} />
       </FilterSheet>
     </div>
