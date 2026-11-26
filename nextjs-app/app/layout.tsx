@@ -1,8 +1,9 @@
-// What this file does: sets the shared page shell, navigation, footer and metadata.
-// change in this version (c5): the site url now comes from SITE_URL in site.ts
+// what this file does: the root shell shared by every route, it holds the html, the body and the skip link only
+// the header and footer now live in the route group layouts, so a route can choose its own frame
+//   app/(site)/layout.tsx draws header + page + footer
+//   app/(map)/map/layout.tsx draws header + a full height map area, no footer
+// change in this version (m1): header and footer moved out of this file
 import type { Metadata } from "next";
-import { SiteFooter } from "@/components/SiteFooter";
-import { SiteHeader } from "@/components/SiteHeader";
 import { SITE, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -19,10 +20,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className="h-full antialiased">
       <body className="flex min-h-full flex-col">
-        <a href="#main" className="sr-only z-50 rounded bg-white p-3 text-neutral-950 focus:not-sr-only focus:fixed focus:left-4 focus:top-4">Skip to content</a>
-        <SiteHeader />
+        {/* the skip link jumps to the element with id="main", each route group provides one */}
+        <a
+          href="#main"
+          className="sr-only z-50 rounded bg-white p-3 text-neutral-950 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        >
+          Skip to content
+        </a>
         {children}
-        <SiteFooter />
       </body>
     </html>
   );
