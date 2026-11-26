@@ -1,6 +1,6 @@
 // what this file does: the /about page
 //   order: why this site exists, using this site, method, limits, where to start,
-//   ask at a relative, glossary, contribute
+//   reading notes, ask at a relative, glossary, contribute
 //   the narrative numbers come from landingStats, so they never go out of date
 //   the thin province list in "limits" is also computed from landingStats
 //   the "where to start" list reuses FEATURED from site.ts, the same picks as the landing page
@@ -9,7 +9,11 @@
 //   a sticky "on this page" rail from 1024px, the same one the program page uses
 //   new "ask at a relative" section with three plain questions, no form, nothing collected
 //   no boxed card, "where to start" is a ruled list, reading text is serif
-// section ids: story, using, method, limits, where-to-start, ask-at-a-relative, glossary, contribute
+// change in this version (e-o1): new "reading notes" section, a short labeled interpretation
+//   it only repeats facts already on the program pages and links back to each one
+//   the numbers in READING_NOTES are copied from those pages, so recheck them when a page changes
+// section ids: story, using, method, limits, where-to-start, reading-notes,
+//   ask-at-a-relative, glossary, contribute
 // contributions are github only in v1, so this page never mentions accounts on this site
 // it is a server component, only the rail runs a little code in the browser
 import type { Metadata } from "next";
@@ -31,7 +35,7 @@ import { PROVINCE_KEYS, PROVINCE_LABELS } from "@/lib/vocab";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Why this site exists, how to use and cite it, how each claim is checked, what it does not cover, where to start, questions to ask at home and how to help.",
+    "Why this site exists, how to use and cite it, how each claim is checked, what it does not cover, where to start, reading notes, questions to ask at home and how to help.",
 };
 
 // the sections of this page, in order, the rail lists exactly these
@@ -41,6 +45,7 @@ const NAV: NavItem[] = [
   { id: "method", label: "Method" },
   { id: "limits", label: "Limits" },
   { id: "where-to-start", label: "Where to start" },
+  { id: "reading-notes", label: "Reading notes" },
   { id: "ask-at-a-relative", label: "Ask at a relative" },
   { id: "glossary", label: "Glossary" },
   { id: "contribute", label: "How to contribute" },
@@ -51,6 +56,33 @@ const OTHER_STARTS = [
   { href: "/map", label: "Explore the map", hint: "Filter by topic, province and year." },
   { href: "/programs", label: "Browse every program", hint: "Search by title or place." },
   { href: "/charts", label: "See the numbers", hint: "Each figure links to its source." },
+] as const;
+
+// three notes that read across the program pages, every fact comes from a page linked under it
+// the wording is "this project reads", never a verdict, and no opinion words
+const READING_NOTES = [
+  {
+    title: "The rule decided who was covered",
+    text: "Presidential Decree (PD) 27 covered tenanted rice and corn land and left out sugar and other export crops. A certificate of land transfer was not a title, and title came only after payment and membership in a farmers' cooperative. This project reads these pages together as a question of scope: who stood inside the rule at all, and how far the paper went toward ownership.",
+    links: [
+      { href: "/programs/laguna-operation-land-transfer", label: "Operation Land Transfer in Laguna" },
+      { href: "/programs/batangas-nasugbu-sugar-estates", label: "Sugar estates in Nasugbu and PD 27" },
+      { href: "/programs/laguna-samahang-nayon", label: "Samahang Nayon farmer associations in Laguna" },
+    ],
+  },
+  {
+    title: "Credit reached fewer borrowers over time",
+    text: "Nationally, about 400,000 farmers borrowed under Masagana 99 in the first phase and 54,250 in the fourteenth. Sources disagree on how far repayment fell. This project reads the drop as a pattern to test against Laguna loan records, which have not been found.",
+    links: [{ href: "/programs/laguna-masagana-99", label: "Masagana 99 rice credit in Laguna" }],
+  },
+  {
+    title: "Space and money were gathered before any return was shown",
+    text: "Fishpen area on Laguna de Bay grew from 40 hectares in 1971 to about 30,000 hectares by 1983, and a United Nations University review says all lake revenue growth from 1968 to 1973 went to pen owners. A 1984 order told owners to turn excess pen areas over to small fishermen's associations. The coconut levy was paid by farmers when they sold copra, and the Presidential Commission on Good Government gives 9.695 billion pesos collected from 1973 to 1983. This project reads both as cases where the open question is what came back to small fishers and farmers. The Quezon page still lists that question as open.",
+    links: [
+      { href: "/programs/laguna-lake-fishpens", label: "Laguna de Bay fishpens" },
+      { href: "/programs/quezon-coconut-levy", label: "The coconut levy in Quezon" },
+    ],
+  },
 ] as const;
 
 // three plain questions for someone who farmed or fished in those years
@@ -66,6 +98,9 @@ const INLINE_LINK = "underline underline-offset-2";
 const PROSE = "max-w-[68ch] space-y-3 font-serif text-lg leading-relaxed text-stone-800";
 const LIST = "max-w-[68ch] list-disc space-y-2 pl-5 font-serif text-lg leading-relaxed text-stone-800";
 const ORDERED = "max-w-[68ch] list-decimal space-y-2 pl-5 font-serif text-lg leading-relaxed text-stone-800";
+
+// flat note with a left rule, used instead of a boxed card
+const NOTE = "max-w-[68ch] border-l-4 border-stone-500 py-1 pl-4 font-serif text-lg leading-relaxed text-stone-800";
 
 // a province with this many programs or fewer is called thin
 const THIN_MAX = 1;
@@ -241,6 +276,51 @@ export default async function AboutPage() {
               ))}
             </ul>
           </div>
+        </Section>
+
+        {/* reading notes: short interpretation, labeled as such, built only from facts on the program pages */}
+        <Section
+          id="reading-notes"
+          title="Reading notes"
+          kicker="Interpretation"
+          intro="Three patterns this project sees across the program pages."
+          className="scroll-mt-24"
+        >
+          <p className={NOTE}>
+            These notes are interpretation, not established findings. Each one rests on the pages linked under it.
+            Where a page lists a figure as missing, the note does not fill it in.
+          </p>
+          <ol className="border-t border-stone-400">
+            {READING_NOTES.map((note) => (
+              <li key={note.title} className="space-y-2 border-b border-stone-400 py-4">
+                <h3 className="font-serif text-xl font-semibold text-stone-950">{note.title}</h3>
+                <p className="max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800">{note.text}</p>
+                <ul className="font-sans text-base text-stone-800">
+                  {note.links.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="tap-target inline-flex items-center underline underline-offset-2"
+                      >
+                        Program: {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ol>
+          <p className="max-w-[68ch] font-sans text-base leading-relaxed text-stone-700">
+            See the{" "}
+            <Link href="#limits" className={INLINE_LINK}>
+              limits
+            </Link>{" "}
+            and what is{" "}
+            <Link href="/sources#not-known" className={INLINE_LINK}>
+              not known yet
+            </Link>
+            .
+          </p>
         </Section>
 
         {/* ask at a relative: plain questions, no form, nothing is collected */}
