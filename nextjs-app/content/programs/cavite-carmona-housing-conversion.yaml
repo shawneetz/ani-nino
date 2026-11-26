@@ -1,0 +1,24 @@
+# what this file does: program page for farmland in carmona that was converted to a housing project
+# it stays "still checking" because one court decision is the only source, and the farmers' tenancy was disputed
+# the decision says the land was untenanted in 1979, the farmers say they tilled it since 1961, the text keeps both
+# no 1970s tenancy record was found, the question asks for one
+slug: cavite-carmona-housing-conversion
+title: Farm tillers and a housing project in Carmona
+when: 1976 onward
+topic: displacement
+status: checking
+startYear: 1976
+endYear: null
+places:
+  - { name: Carmona, province: cavite, lat: 14.3136, lng: 121.0575, approximate: true }
+promised: "Carmona's council approved a low-cost housing project on May 30, 1976. A July 3, 1979 order of the Minister of Agrarian Reform allowed 35.8 hectares to become a residential subdivision."
+happened: "A 2004 Supreme Court decision ordered 37 farmers' association members to leave land in Carmona, Cavite, after finding they were not tenants. The owner, Credito Asiatic (earlier Lakeview Development Corporation), built a housing project there. The 1979 order found the converted 35.8 hectares untenanted and not planted to rice or corn. The members say they have farmed there since 1961. A group of farmers who sued in 1987 said they learned of the conversion only that January."
+question: "Find a 1970s Ministry of Agrarian Reform or Carmona record that shows who tilled the land, and whether anyone paid rent to the owner."
+sources:
+  - title: Pasong Bayabas Farmers Association, Inc. v. Court of Appeals, G.R. No. 142359 (2004)
+    publisher: Supreme Court E-Library
+    voice: independent
+    cite: "May 25, 2004. Describes the May 30, 1976 council resolution, the July 3, 1979 conversion order, the 1987 suit and the order to vacate."
+    url: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/1/46318"
+    accessed: "2026-11-27"
+    backs: happened

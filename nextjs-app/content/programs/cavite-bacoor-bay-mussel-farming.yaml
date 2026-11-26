@@ -1,0 +1,42 @@
+# what this file does: program page for bivalve (oyster and mussel) farming in bacoor bay
+# it stays "still checking" because no 1972 to 1986 count of farming families or income was found
+# the 1934 pilot farm date comes from the seafdec paper, the fao paper says 1935, so only the seafdec date is used
+# the fao farm count has no date in the text that was read, the question asks for it
+slug: cavite-bacoor-bay-mussel-farming
+title: Bacoor Bay mussel and oyster farms
+when: 1972 onward
+topic: support
+status: checking
+startYear: 1972
+endYear: null
+places:
+  - { name: Bacoor Bay, province: cavite, lat: 14.4624, lng: 120.9645, approximate: true }
+  - { name: Binakayan, province: cavite, lat: 14.4439, lng: 120.9094, approximate: true }
+promised: "The Bureau of Fisheries and Aquatic Resources set up a pilot oyster farm in Binakayan, Cavite, in May 1934. It later started mussel farms after mussels threatened the oyster farms in the late 1950s."
+happened: "A 1982 country report says Bacoor Bay became increasingly polluted in the early 1970s and the windowpane oyster stocks could not survive. It also says about 200 hectares of private farms existed in Bacoor Bay by 1950. A Food and Agriculture Organization paper lists about 134 mussel farms in Bacoor and presents bivalve farming as an alternative livelihood for small-scale coastal fishermen. How many families farmed shellfish from 1972 to 1986, and what the pollution did to their income, has not been found."
+question: "Find a Bureau of Fisheries and Aquatic Resources record or study from 1972 to 1986 that counts Bacoor families farming shellfish and shows how pollution changed their income."
+since:
+  - year: 2024
+    text: "A report says Bacoor's two reclamation projects will turn about 420 hectares of water into land, and a mussel farmer says nearby mussel farms were demolished."
+    source:
+      title: Bacoor rezones waters for reclamation, reducing fishing grounds
+      publisher: CoverStory
+      voice: independent
+      cite: "By Guinevere Latoza, November 19, 2024."
+      url: "https://coverstory.ph/2024/11/19/bacoor-rezones-waters-for-reclamation-reducing-fishing-grounds/"
+      accessed: "2026-11-27"
+sources:
+  - title: "Country report: Philippines (Young and Serna)"
+    publisher: SEAFDEC Institutional Repository
+    voice: independent
+    cite: "1982. In Bivalve culture in Asia and the Pacific, workshop held in Singapore, February 16 to 19, 1982, pages 55 to 68."
+    url: "https://repository.seafdec.org/handle/20.500.12066/2341"
+    accessed: "2026-11-26"
+    backs: happened
+  - title: "Bivalve farming: an alternative economic activity for small-scale coastal fishermen in the ASEAN region"
+    publisher: Food and Agriculture Organization
+    voice: independent
+    cite: "FAO document AG163E, chapter 2. About 134 mussel farms in Bacoor along Manila Bay."
+    url: "https://www.fao.org/4/ag163e/AG163E02.htm"
+    accessed: "2026-11-26"
+    backs: happened

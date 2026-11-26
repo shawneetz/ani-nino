@@ -1,0 +1,50 @@
+# what this file does: program page for the cavite export processing zone in rosario and general trias
+# status is confirmed: all three sources are government texts, opened and checked on 2026-11-26
+# the lot lists in proclamations 1980 and 2017 name no farmers, so the page says so
+# the proclamation 1980 text prints its area as 2,208,898 hectares, which looks like a typo, so no area is quoted for it
+# how many farmers were displaced, and when, is not found yet, the happened text says so
+slug: cavite-export-processing-zone
+title: Cavite Export Processing Zone in Rosario
+when: 1980 onward
+topic: displacement
+status: confirmed
+startYear: 1980
+endYear: null
+places:
+  - { name: Rosario, province: cavite, lat: 14.4167, lng: 120.8567, approximate: true }
+  - { name: General Trias, province: cavite, lat: 14.3869, lng: 120.8814, approximate: true }
+promised: "Proclamation 1980 (May 30, 1980) set aside private land in Rosario and General Trias for the Export Processing Zone Authority, subject to private rights. Proclamation 2017 (September 19, 1980) added 55 hectares in Rosario."
+happened: "A 2005 proclamation says farmers were displaced by the proclamation and development of the Cavite zone. Proclamation 1980 reserved lots of the San Francisco de Malabon Estate in Rosario and General Trias, and Proclamation 2017 added 55 hectares in Rosario. The lot lists name no farmers. The number of farmers displaced, and when they left, has not been found."
+checkedOn: "2026-11-26"
+since:
+  - year: 2005
+    text: "Proclamation 817 excluded 9,116 square meters in Barangay Tejero from the Cavite Economic Zone as a relocation site for displaced farmers."
+    source:
+      title: Proclamation No. 817
+      publisher: Official Gazette (text on Lawphil)
+      voice: official
+      cite: "March 22, 2005."
+      url: "https://lawphil.net/executive/proc/proc2005/proc_817_2005.html"
+      accessed: "2026-11-26"
+sources:
+  - title: Proclamation No. 1980
+    publisher: Official Gazette (text on Lawphil)
+    voice: official
+    cite: "May 30, 1980. Reserves lots in Rosario and General Trias for the Export Processing Zone Authority."
+    url: "https://lawphil.net/executive/proc/proc1980/proc_1980_1980.html"
+    accessed: "2026-11-26"
+    backs: promise
+  - title: Proclamation No. 2017
+    publisher: Official Gazette (text on Lawphil)
+    voice: official
+    cite: "September 19, 1980. Adds 550,000 square meters (55 hectares) in Rosario."
+    url: "https://lawphil.net/executive/proc/proc1980/proc_2017_1980.html"
+    accessed: "2026-11-26"
+    backs: promise
+  - title: Proclamation No. 817
+    publisher: Official Gazette (text on Lawphil)
+    voice: official
+    cite: "March 22, 2005. Calls the relocation site a permanent site for farmers displaced by the proclamation and development of the zone."
+    url: "https://lawphil.net/executive/proc/proc2005/proc_817_2005.html"
+    accessed: "2026-11-26"
+    backs: happened

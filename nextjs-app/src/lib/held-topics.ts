@@ -35,17 +35,17 @@ export const HELD_TOPICS: readonly HeldTopic[] = [
   {
     slug: "cavite-mataas-na-gulod-national-park",
     title: "Mataas na Gulod National Park in Cavite",
-    reason: "No link to farmers was found. The full proclamation text and any account of people living in the area would bring it back.",
+    reason: "The 1976 proclamation was read and names no farmers or occupants. An account of people living or farming in the park area before 1986 would bring it back.",
   },
   {
     slug: "cavite-coastal-road-reclamation",
     title: "Manila-Cavite coastal road and reclamation",
-    reason: "The decree was found, but no 1970s source on its effect. A count of affected fisherfolk or farm families in Bacoor and Kawit would bring it back.",
+    reason: "The 1977 decree was read and names no fisherfolk or farm families. A 1970s count of people affected in Bacoor and Kawit would bring it back.",
   },
   {
     slug: "cavite-maragondon-ternate-tourist-zone",
     title: "Maragondon and Ternate tourist zone",
-    reason: "No source says what the zone did to farmers in the two towns. A record of tenants or farmers there before 1986 would bring it back.",
+    reason: "The 1975 proclamation and the 1978 decree were read and name no farmers or tenants. A record of tenants or farmers there before 1986 would bring it back.",
   },
   {
     slug: "rizal-kaliwa-laiban-dam",

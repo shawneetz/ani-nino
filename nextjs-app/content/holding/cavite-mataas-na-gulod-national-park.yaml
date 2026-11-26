@@ -1,0 +1,24 @@
+# what this file does: held topic for the mataas na gulod national park in ternate and maragondon
+# held files are not validated and do not appear on the site
+# it stays held because the proclamation text names no farmers or occupants
+slug: cavite-mataas-na-gulod-national-park
+title: Mataas na Gulod National Park in Cavite
+when: 1976 onward
+topic: displacement
+status: checking
+startYear: 1976
+endYear: null
+places:
+  - { name: Ternate, province: cavite, lat: 14.2897, lng: 120.7186, approximate: true }
+  - { name: Maragondon, province: cavite, lat: 14.2733, lng: 120.7339, approximate: true }
+promised: "Proclamation 1594 (October 26, 1976) withdrew Mts. Palaypalay and Mataas na Gulod and vicinities from settlement, entry, sale, lease and exploitation, subject to private rights, as a national park, game refuge and bird sanctuary of about 4,000 hectares."
+happened: "The text names Ternate and Maragondon in Cavite and Nasugbu in Batangas, and puts the park under the Bureau of Forest Development. It bans hunting and the destruction of vegetation. It names no occupants, farmers or tenants. What it meant for people farming or living there before 1986 has not been found."
+question: "Find an account of people living or farming in the park area before 1986, from a forestry record, a court decision or a study."
+sources:
+  - title: Proclamation No. 1594
+    publisher: Official Gazette (text on Lawphil)
+    voice: official
+    cite: "October 26, 1976."
+    url: "https://lawphil.net/executive/proc/proc1976/proc_1594_1976.html"
+    accessed: "2026-11-26"
+    backs: promise

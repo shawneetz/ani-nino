@@ -1,0 +1,41 @@
+# what this file does: held topic for the manila-cavite coastal road and reclamation project in bacoor and cavite city
+# held files are not validated and do not appear on the site
+# it stays held because no 1970s source says what happened to fisherfolk or farm families
+slug: cavite-coastal-road-reclamation
+title: Manila-Cavite coastal road and reclamation
+when: 1973 onward
+topic: displacement
+status: checking
+startYear: 1973
+endYear: null
+places:
+  - { name: Bacoor, province: cavite, lat: 14.4624, lng: 120.9645, approximate: true }
+  - { name: Cavite City, province: cavite, lat: 14.4791, lng: 120.8970, approximate: true }
+promised: "The national government was reclaiming foreshore and offshore areas of Manila Bay from the Cultural Center through Parañaque, Las Piñas and Bacoor up to Cavite City. PD 1085 (February 4, 1977) said it was in the public interest to turn the land into a modern city."
+happened: "PD 1085 gave the reclaimed land to the Public Estates Authority and kept the rights of the Construction and Development Corporation of the Philippines under a November 20, 1973 contract. The decree names no fishermen, fish farms or families. A 2024 report says reclamation at Island Cove in Kawit began as early as the 1970s and has drawn controversy over fishers' livelihood."
+question: "Find a 1970s count of fisherfolk or farm families affected in Bacoor and Kawit, from a government record or a study."
+since:
+  - year: 2024
+    text: "A report says Bacoor's reclamation projects will turn about 420 hectares of water into land, and a mussel farmer says nearby mussel farms were demolished."
+    source:
+      title: Bacoor rezones waters for reclamation, reducing fishing grounds
+      publisher: CoverStory
+      voice: independent
+      cite: "By Guinevere Latoza, November 19, 2024."
+      url: "https://coverstory.ph/2024/11/19/bacoor-rezones-waters-for-reclamation-reducing-fishing-grounds/"
+      accessed: "2026-11-27"
+sources:
+  - title: Presidential Decree No. 1085
+    publisher: Official Gazette (text on Lawphil)
+    voice: official
+    cite: "February 4, 1977."
+    url: "https://lawphil.net/statutes/presdecs/pd1977/pd_1085_1977.html"
+    accessed: "2026-11-27"
+    backs: promise
+  - title: Bacoor rezones waters for reclamation, reducing fishing grounds
+    publisher: CoverStory
+    voice: independent
+    cite: "November 19, 2024. Says Island Cove reclamation began as early as the 1970s."
+    url: "https://coverstory.ph/2024/11/19/bacoor-rezones-waters-for-reclamation-reducing-fishing-grounds/"
+    accessed: "2026-11-27"
+    backs: context

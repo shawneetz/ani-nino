@@ -1,0 +1,32 @@
+# what this file does: held topic for the maragondon-ternate-nasugbu tourist zone, cavite side
+# held files are not validated and do not appear on the site
+# it stays held because neither text names farmers, tenants or occupants
+# proclamation 1520 is also cited on the nasugbu page, start there for court records on the batangas side
+slug: cavite-maragondon-ternate-tourist-zone
+title: Maragondon and Ternate tourist zone
+when: 1975 onward
+topic: displacement
+status: checking
+startYear: 1975
+endYear: null
+places:
+  - { name: Ternate, province: cavite, lat: 14.2897, lng: 120.7186, approximate: true }
+  - { name: Maragondon, province: cavite, lat: 14.2733, lng: 120.7339, approximate: true }
+promised: "Proclamation 1520 (November 28, 1975) declared Maragondon and Ternate in Cavite and Nasugbu in Batangas a tourist zone under the Philippine Tourism Authority, to be developed into resort complexes for foreign and domestic visitors."
+happened: "The proclamation told the Philippine Tourism Authority to identify areas with tourism value inside the zone and left military reservations out. PD 1574 (June 11, 1978) gave 125 hectares of public land in Ternate to the authority for tourism development. Neither text names farmers, tenants or occupants."
+question: "Find a record of tenants or farmers in Maragondon and Ternate before 1986, such as a court decision, a survey or a study."
+sources:
+  - title: Proclamation No. 1520
+    publisher: Official Gazette (text on Lawphil)
+    voice: official
+    cite: "November 28, 1975."
+    url: "https://lawphil.net/executive/proc/proc1975/proc_1520_1975.html"
+    accessed: "2026-11-27"
+    backs: promise
+  - title: Presidential Decree No. 1574
+    publisher: Official Gazette (text on Lawphil)
+    voice: official
+    cite: "June 11, 1978. Transfers 125 hectares in Ternate to the Philippine Tourism Authority."
+    url: "https://lawphil.net/statutes/presdecs/pd1978/pd_1574_1978.html"
+    accessed: "2026-11-27"
+    backs: happened
