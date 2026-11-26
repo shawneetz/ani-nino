@@ -6,6 +6,8 @@
 // change in this version (e8): added since years and two helpers
 //   fromThenToNowCount = how many entries the landing block should show
 //   chartCount = how many charts have data and so render on /charts
+// change in this version (fix): content paths come from this file's own location
+//   the old process.cwd() broke when playwright ran from the workspace root instead of nextjs-app
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { parse } from "yaml";
@@ -18,9 +20,11 @@ type LiveProgram = {
   sinceYears: number[];
 };
 
-// playwright runs from the project root, so content/ is found from the working directory
-const PROGRAMS_DIR = path.join(process.cwd(), "content", "programs");
-const CHARTS_DIR = path.join(process.cwd(), "content", "charts");
+// this file lives in nextjs-app/e2e, so the project root is one level up
+// __dirname does not depend on where the test runner was started
+const PROJECT_ROOT = path.resolve(__dirname, "..");
+const PROGRAMS_DIR = path.join(PROJECT_ROOT, "content", "programs");
+const CHARTS_DIR = path.join(PROJECT_ROOT, "content", "charts");
 
 // same limits as src/lib/latest-since.ts
 const LATEST_FROM_YEAR = 2000;

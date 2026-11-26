@@ -3,8 +3,8 @@
 // this layout owns <main id="main">, so the skip link still lands and the page must not render another main
 // the main area does not scroll, the map and its floating pieces scroll on their own
 // the route group name "(map)" is not part of the url, /map stays /map
-// change in this version (m2): the main area no longer scrolls, the map fills it
 // it is a server component and ships no client code
+// note: this file must be .tsx, a .ts file cannot contain jsx
 import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 

@@ -3,6 +3,7 @@
 // each page renders its own <main id="main"> through Container, so the skip link still lands
 // the route group name "(site)" is not part of the url, so no address changes
 // it is a server component and ships no client code
+// note: this file must be .tsx, a .ts file cannot contain jsx
 import type { ReactNode } from "react";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
