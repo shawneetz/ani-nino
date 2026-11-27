@@ -4,7 +4,7 @@ import type { RefObject } from "react";
 import type { ExplorerProgram } from "@/lib/explorer-types";
 import { LAYER } from "@/lib/map-layers";
 import type { Province } from "@/lib/vocab";
-import { MapSearch, ResultsBody } from "./ResultsBody";
+import { MapSearch, ResultsBody, type SpotBanner } from "./ResultsBody";
 
 interface MapPanelProps {
   programs: ExplorerProgram[];
@@ -14,11 +14,12 @@ interface MapPanelProps {
   onQueryChange: (query: string) => void;
   onCollapse: () => void;
   explainProvinces: Province[];
+  spot?: SpotBanner | null;
   onSelect: (slug: string) => void;
   onClear: () => void;
 }
 
-export function MapPanel({ programs, selectedSlug, panelRef, query, onQueryChange, onCollapse, explainProvinces, onSelect, onClear }: MapPanelProps) {
+export function MapPanel({ programs, selectedSlug, panelRef, query, onQueryChange, onCollapse, explainProvinces, spot = null, onSelect, onClear }: MapPanelProps) {
   const countText = programs.length === 1 ? "program" : "programs";
 
   return (
@@ -42,7 +43,7 @@ export function MapPanel({ programs, selectedSlug, panelRef, query, onQueryChang
       </div>
       <div className="border-b border-stone-200 px-4 py-2"><MapSearch query={query} onQueryChange={onQueryChange} /></div>
       <div className="min-h-0 flex-1 overflow-y-auto">
-        <ResultsBody programs={programs} selectedSlug={selectedSlug} explainProvinces={explainProvinces} onSelect={onSelect} onClear={onClear} />
+        <ResultsBody programs={programs} selectedSlug={selectedSlug} explainProvinces={explainProvinces} spot={spot} onSelect={onSelect} onClear={onClear} />
       </div>
     </aside>
   );

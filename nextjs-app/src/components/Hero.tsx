@@ -3,20 +3,20 @@ import { HERO, SITE } from "@/lib/site";
 import { ButtonLink } from "./Button";
 import { Container } from "./Container";
 
-const LINE_COUNT = 9;
-const ACCENT_LINE = 3;
+const LINE_COUNT = 12;
+const ACCENT_LINE = 4;
 
 function ContourLines() {
   return (
     <svg aria-hidden="true" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
       {Array.from({ length: LINE_COUNT }, (_, index) => {
-        const y = 50 + index * 62;
-        const lift = 40 + (index % 3) * 22;
+        const y = 40 + index * 46;
+        const lift = 30 + (index % 4) * 18;
         const accent = index === ACCENT_LINE;
         return (
           <path
             key={index}
-            d={`M0 ${y} C 220 ${y - lift} 420 ${y + lift} 640 ${y} S 980 ${y - lift} 1200 ${y + 14}`}
+            d={`M-20 ${y} C 240 ${y - lift} 460 ${y + lift} 700 ${y} S 1000 ${y - lift} 1220 ${y + 10}`}
             fill="none"
             strokeLinecap="round"
             strokeWidth={accent ? 4 : 2.5}
@@ -30,7 +30,7 @@ function ContourLines() {
 
 export function Hero() {
   return (
-    <section aria-labelledby="hero-heading" className="relative isolate flex min-h-[28rem] items-end overflow-hidden bg-stone-950 sm:min-h-[36rem] print:min-h-0 print:bg-white">
+    <section aria-labelledby="hero-heading"     className="relative isolate flex min-h-[30rem] items-end overflow-hidden bg-stone-950 sm:min-h-[40rem] print:min-h-0 print:bg-white">
       <div aria-hidden="true" className="absolute inset-0 -z-10 print:hidden">
         {HERO ? (
           <>
@@ -40,17 +40,17 @@ export function Hero() {
         ) : (
           <>
             <ContourLines />
-            <div className="absolute inset-0 bg-linear-to-t from-stone-950/90 via-stone-950/30 to-transparent" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_75%_25%,rgba(217,119,6,0.28),transparent_55%)]" />
+            <div className="absolute inset-0 bg-linear-to-t from-stone-950/90 via-stone-950/35 to-stone-950/10" />
           </>
         )}
       </div>
-      <Container className="space-y-4 pb-10 pt-24 print:pt-0">
+      <Container className="space-y-4 pb-12 pt-28 print:pt-0">
         <p className="font-sans text-sm font-semibold uppercase tracking-kicker text-amber-300 print:text-stone-700">Martial-law farm programs · CALABARZON · 1972 to 1986</p>
         <h1 id="hero-heading" className="font-serif text-[clamp(3rem,8vw,6rem)] font-bold leading-none tracking-tight text-stone-50 print:text-stone-950">{SITE.title}</h1>
         <p className="font-serif text-2xl text-stone-100 print:text-stone-700">{SITE.tagline}</p>
         <p className="max-w-[68ch] font-serif text-lg leading-relaxed text-stone-100 print:text-stone-800">
-          A map of farm programs from the martial-law years: what each promised, what the record shows, and who says
-          so, with a link to every source.
+          What each program promised, what the record shows, and who says so.
         </p>
         <div className="flex flex-wrap gap-3 pt-1 print:hidden">
           <ButtonLink href="/map">Explore the map</ButtonLink>

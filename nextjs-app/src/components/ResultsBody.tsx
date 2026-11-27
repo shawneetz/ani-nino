@@ -24,17 +24,29 @@ export function MapSearch({ query, onQueryChange, hideLabel = false }: { query: 
   );
 }
 
+export interface SpotBanner {
+  name: string;
+  onClear: () => void;
+}
+
 interface ResultsBodyProps {
   programs: ExplorerProgram[];
   selectedSlug: string | null;
   explainProvinces: Province[];
+  spot?: SpotBanner | null;
   onSelect: (slug: string) => void;
   onClear: () => void;
 }
 
-export function ResultsBody({ programs, selectedSlug, explainProvinces, onSelect, onClear }: ResultsBodyProps) {
+export function ResultsBody({ programs, selectedSlug, explainProvinces, spot = null, onSelect, onClear }: ResultsBodyProps) {
   return (
     <section aria-label="Programs">
+      {spot && (
+        <div className="flex items-center justify-between gap-3 border-b border-stone-300 bg-amber-50 px-4 py-1 font-sans text-base text-stone-900">
+          <p>At <strong>{spot.name}</strong></p>
+          <button type="button" onClick={spot.onClear} className={EMPTY_ACTION}>Show all</button>
+        </div>
+      )}
       {programs.length > 0 ? (
         <ul className="divide-y divide-stone-300">
           {programs.map((program) => (

@@ -7,6 +7,7 @@ import { LAYER } from "@/lib/map-layers";
 import { PROVINCE_LABELS, TOPICS } from "@/lib/vocab";
 import { Button, ButtonLink } from "./Button";
 import { Kicker } from "./Kicker";
+import { ProgramImage } from "./ProgramImage";
 import { StatusTag } from "./StatusTag";
 import { VoiceChip } from "./VoiceChip";
 
@@ -56,6 +57,7 @@ export function PlaceDrawer({ program, position, total, headingRef, onClose, onP
         </div>
 
         <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-3">
+          <ProgramImage slug={program.slug} topic={program.topic} size="drawer" className="-mx-4" />
           <h2 ref={headingRef} id={HEADING_ID} tabIndex={-1} className="font-serif text-2xl font-semibold leading-snug text-stone-950">
             {program.title}
           </h2>

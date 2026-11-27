@@ -5,7 +5,7 @@ import type { ExplorerProgram } from "@/lib/explorer-types";
 import type { SheetSize } from "@/lib/fit-padding";
 import { LAYER } from "@/lib/map-layers";
 import type { Province } from "@/lib/vocab";
-import { MapSearch, ResultsBody } from "./ResultsBody";
+import { MapSearch, ResultsBody, type SpotBanner } from "./ResultsBody";
 
 interface BottomSheetProps {
   size: SheetSize;
@@ -15,6 +15,7 @@ interface BottomSheetProps {
   query: string;
   onQueryChange: (query: string) => void;
   explainProvinces: Province[];
+  spot?: SpotBanner | null;
   onSelect: (slug: string) => void;
   onClear: () => void;
 }
@@ -33,7 +34,7 @@ function step(size: SheetSize, direction: 1 | -1): SheetSize {
   return ORDER[Math.min(ORDER.length - 1, Math.max(0, next))];
 }
 
-export function BottomSheet({ size, onSizeChange, programs, selectedSlug, query, onQueryChange, explainProvinces, onSelect, onClear }: BottomSheetProps) {
+export function BottomSheet({ size, onSizeChange, programs, selectedSlug, query, onQueryChange, explainProvinces, spot = null, onSelect, onClear }: BottomSheetProps) {
   const bodyId = useId();
   const startY = useRef<number | null>(null);
   const dragged = useRef(false);
@@ -76,7 +77,7 @@ export function BottomSheet({ size, onSizeChange, programs, selectedSlug, query,
       <p role="status" data-testid="result-count" className="figures px-4 pb-1 font-sans text-base text-stone-800"><strong>{programs.length}</strong> {countText}</p>
       <div className="px-4 pb-2"><MapSearch query={query} onQueryChange={onQueryChange} hideLabel /></div>
       <div id={bodyId} className={`${open ? "block" : "hidden"} min-h-0 flex-1 overflow-y-auto border-t border-stone-200`}>
-        <ResultsBody programs={programs} selectedSlug={selectedSlug} explainProvinces={explainProvinces} onSelect={onSelect} onClear={onClear} />
+        <ResultsBody programs={programs} selectedSlug={selectedSlug} explainProvinces={explainProvinces} spot={spot} onSelect={onSelect} onClear={onClear} />
       </div>
     </aside>
   );

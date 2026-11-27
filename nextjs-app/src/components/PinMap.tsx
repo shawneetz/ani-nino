@@ -23,7 +23,6 @@
 import type * as MapLibre from "maplibre-gl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ExplorerProgram } from "@/lib/explorer-types";
-import { yearRange } from "@/lib/filter";
 import { clampPadding, DEFAULT_FIT_PADDING, MAX_FIT_ZOOM, type FitPadding } from "@/lib/fit-padding";
 import { groupPlaces, type PlaceGroup } from "@/lib/group-places";
 import {
@@ -39,13 +38,18 @@ import {
 } from "@/lib/map-config";
 import { GROUP_LOOK, markerLook, SELECTED_SHADOW } from "@/lib/marker-style";
 import type { Province } from "@/lib/vocab";
-import { Button } from "./Button";
-import { EMPTY_BODY, EmptyState, ROW_HOVER } from "./States";
+import { EMPTY_BODY, EmptyState } from "./States";
 
 type MapLibreLib = typeof MapLibre;
 type Group = PlaceGroup<ExplorerProgram>;
 type Pin = { marker: MapLibre.Marker; el: HTMLElement; dot: HTMLSpanElement; pulse: HTMLSpanElement; group: Group; base: string };
 type Point = [number, number];
+
+export interface SpotPick {
+  key: string;
+  name: string;
+  slugs: string[];
+}
 
 // marker classes, the outer element is the 44px tap area and the inner dot is the 28px marker you see
 // the cursor is added in code, because embedded markers are not clickable
@@ -131,7 +135,9 @@ type Props = {
   programs: ExplorerProgram[];
   provinces?: Province[];
   selectedSlug?: string | null;
+  activeSpotKey?: string | null;
   onSelect?: (slug: string) => void;
+  onSelectGroup?: (spot: SpotPick) => void;
   onClear?: () => void;
   // true for the small map on a program page: no clicks on markers, gentler gestures
   embedded?: boolean;
@@ -143,30 +149,28 @@ export default function PinMap({
   programs,
   provinces = NO_PROVINCES,
   selectedSlug = null,
+  activeSpotKey = null,
   onSelect,
+  onSelectGroup,
   onClear,
   embedded = false,
   fitPadding = DEFAULT_FIT_PADDING,
 }: Props) {
   const box = useRef<HTMLDivElement>(null);
-  const panel = useRef<HTMLDivElement>(null);
   const pins = useRef<Pin[]>([]);
   const groupsRef = useRef<Group[]>([]);
   const pending = useRef<{ points: Point[] } | null>(null); // a fit that waited for the map to become visible
   const firstFit = useRef(true);
-  const pickerTrigger = useRef<HTMLElement | null>(null);
   // latest callbacks, so markers never need to be rebuilt when the parent re-renders
-  const handlers = useRef({ onSelect, onClear });
+  const handlers = useRef({ onSelect, onSelectGroup, onClear });
   // latest padding, read when a fit runs, so a resize never causes a refit by itself
   const paddingRef = useRef(fitPadding);
 
   const [lib, setLib] = useState<MapLibreLib | null>(null);
   const [map, setMap] = useState<MapLibre.Map | null>(null);
   const [failed, setFailed] = useState(false);
-  const [pickerKey, setPickerKey] = useState<string | null>(null);
-
   useEffect(() => {
-    handlers.current = { onSelect, onClear };
+    handlers.current = { onSelect, onSelectGroup, onClear };
   });
 
   useEffect(() => {
@@ -178,7 +182,6 @@ export default function PinMap({
   const pointsKey = useMemo(() => groups.map((group) => group.key).join("|"), [groups]);
   // a plain string, so the resize effect below only runs when a side really changes
   const paddingKey = `${fitPadding.top},${fitPadding.right},${fitPadding.bottom},${fitPadding.left}`;
-  const pickerGroup = groups.find((group) => group.key === pickerKey) ?? null;
 
   useEffect(() => {
     groupsRef.current = groups;
@@ -249,10 +252,9 @@ export default function PinMap({
     syncZoomControl();
     wide.addEventListener("change", syncZoomControl);
 
-    // tapping empty map closes the preview and the picker
+    // tapping empty map closes the preview and the spot list
     instance.on("click", () => {
       handlers.current.onClear?.();
-      setPickerKey(null);
     });
     setMap(instance);
     return () => {
@@ -325,11 +327,13 @@ export default function PinMap({
           // stop the click so it does not also count as a tap on the empty map
           event.stopPropagation();
           if (count === 1) {
-            setPickerKey(null);
             handlers.current.onSelect?.(first.slug);
           } else {
-            pickerTrigger.current = el;
-            setPickerKey(group.key);
+            handlers.current.onSelectGroup?.({
+              key: group.key,
+              name: group.name,
+              slugs: group.items.map((item) => item.slug),
+            });
           }
         });
       }
@@ -342,12 +346,12 @@ export default function PinMap({
   // step 5: ring and pulse the markers of the selected program, without rebuilding them
   useEffect(() => {
     pins.current.forEach((pin) => {
-      const on = pin.group.items.some((item) => item.slug === selectedSlug);
+      const on = pin.group.items.some((item) => item.slug === selectedSlug) || pin.group.key === activeSpotKey;
       pin.dot.style.boxShadow = on ? SELECTED_SHADOW : pin.base;
       pin.pulse.classList.toggle("hidden", !on);
       pin.el.classList.toggle(PIN_RAISED, on);
     });
-  }, [lib, map, groups, selectedSlug]);
+  }, [lib, map, groups, selectedSlug, activeSpotKey]);
 
   // step 6: fit to the visible pins (first fit has no animation)
   useEffect(() => {
@@ -366,22 +370,6 @@ export default function PinMap({
     fit(points, true);
   }, [lib, map, selectedSlug, fit]);
 
-  // picker: escape closes it, focus moves in on open and goes back to the marker on close
-  const closePicker = useCallback((restoreFocus: boolean) => {
-    setPickerKey(null);
-    if (restoreFocus && pickerTrigger.current?.isConnected) pickerTrigger.current.focus();
-  }, []);
-
-  useEffect(() => {
-    if (!pickerKey) return;
-    panel.current?.querySelector("button")?.focus();
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closePicker(true);
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [pickerKey, closePicker]);
-
   return (
     // on the big map, lift zoom buttons above the phone sheet peek from 640px to 1024px
     <div
@@ -397,38 +385,6 @@ export default function PinMap({
           embedded ? "border-stone-400" : "rounded-lg border-stone-200"
         }`}
       />
-
-      {/* picker for a spot with several programs, in the middle of the free map */}
-      {pickerGroup && (
-        <div
-          ref={panel}
-          role="dialog"
-          aria-label={`Programs at ${pickerGroup.name}`}
-          className="absolute left-1/2 top-1/3 z-10 w-72 max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 space-y-1 rounded-card border border-stone-300 bg-white p-2 shadow-lg lg:left-[58%]"
-        >
-          <p className="px-2 py-1 text-base font-semibold">
-            {pickerGroup.items.length} programs at {pickerGroup.name}
-          </p>
-          <ul>
-            {pickerGroup.items.map((item) => (
-              <li key={item.slug}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setPickerKey(null);
-                    handlers.current.onSelect?.(item.slug);
-                  }}
-                  className={`tap-target w-full rounded-lg px-2 py-1 text-left text-base ${ROW_HOVER}`}
-                >
-                  {item.title}
-                  <span className="block text-sm text-stone-700">{yearRange(item)}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-          <Button variant="secondary" className="w-full" onClick={() => closePicker(true)}>Close</Button>
-        </div>
-      )}
 
       {/* shown only if the cdn is blocked or offline, the program list still works */}
       {failed && (

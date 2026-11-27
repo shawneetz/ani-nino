@@ -14,7 +14,7 @@ const MARKER_ROWS: { look: CSSProperties; text: string; label?: string; todayOnl
   { look: markerLook({ ...base, status: "checking" }), text: "Hollow: still checking" },
   { look: markerLook({ ...base, approximate: true }), text: "Dashed border: approximate place" },
   { look: markerLook({ ...base, era: "today" }), text: "Square: a program from today (round is martial law)", todayOnly: true },
-  { look: GROUP_LOOK, text: "Number: several programs at one place, tap to choose", label: "3" },
+  { look: GROUP_LOOK, text: "Number: several programs at one place, tap to list them on the left", label: "3" },
 ];
 
 export function Legend({ showToday }: { showToday: boolean }) {

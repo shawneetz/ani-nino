@@ -16,21 +16,19 @@ import { ButtonLink } from "@/components/Button";
 import { FeaturedProgramCard } from "@/components/FeaturedProgramCard";
 import { Container, HEADING, PAGE_STACK } from "@/components/Container";
 import { Hero } from "@/components/Hero";
-import { Kicker } from "@/components/Kicker";
 import { Section } from "@/components/Section";
 import { StatusTag } from "@/components/StatusTag";
 import { TimelineStrip } from "@/components/TimelineStrip";
 import { VoiceChip } from "@/components/VoiceChip";
-import type { Gap, Program } from "@/lib/content-schema";
-import { getGaps, getPrograms, getSources } from "@/lib/content";
+import type { Program } from "@/lib/content-schema";
+import { getPrograms, getSources } from "@/lib/content";
 import { EMPTY_FILTERS, visiblePrograms } from "@/lib/filter";
 import { HELD_TOPICS } from "@/lib/held-topics";
 import { landingStats, provinceTileText } from "@/lib/landing-stats";
 import { latestSince } from "@/lib/latest-since";
 import { legacyRedirect, type RawParams } from "@/lib/legacy-redirect";
-import { CONTENT_URL, FEATURED, FEATURED_GAPS, ISSUES_URL, SITE } from "@/lib/site";
+import { CONTENT_URL, FEATURED, ISSUES_URL, SITE } from "@/lib/site";
 import {
-  GAP_KINDS,
   PROGRAM_STATUS_BLURBS,
   PROGRAM_STATUS_KEYS,
   PROVINCE_KEYS,
@@ -73,7 +71,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   if (target) redirect(target);
 
   // step 2: load everything once, on the server
-  const [allPrograms, sources, gaps] = await Promise.all([getPrograms(), getSources(), getGaps()]);
+  const [allPrograms, sources] = await Promise.all([getPrograms(), getSources()]);
   const stats = landingStats(allPrograms, sources.length);
   const martialLaw = visiblePrograms(allPrograms, EMPTY_FILTERS); // no filters = martial-law layer only
   const thenToNow = latestSince(allPrograms); // dated records from 2000 onward, newest first
@@ -82,10 +80,6 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   const featured = FEATURED.map((slug) => allPrograms.find((program) => program.slug === slug)).filter(
     (program): program is Program => program !== undefined,
   );
-  const featuredGaps = FEATURED_GAPS.map((id) => gaps.find((gap) => gap.id === id)).filter(
-    (gap): gap is Gap => gap !== undefined,
-  );
-  const titleBySlug = new Map(allPrograms.map((program) => [program.slug, program.title]));
 
   // every number is computed from the content, none is typed by hand
   const numbers = [
@@ -111,6 +105,17 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
           ))}
         </dl>
       </section>
+
+      {/* start here: three featured programs as short articles, picks live in src/lib/site.ts */}
+      {featured.length > 0 && (
+        <Section id="start-here" title="Start here" intro="Three programs that show how the pages work.">
+          <div className="grid gap-x-8 gap-y-10 md:grid-cols-3">
+            {featured.map((program) => (
+              <FeaturedProgramCard key={program.slug} program={program} />
+            ))}
+          </div>
+        </Section>
+      )}
 
       {/* how to read: explains labels before the reader meets them */}
       <Section
@@ -157,17 +162,6 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
           </div>
         </div>
       </Section>
-
-      {/* start here: three featured programs as short articles, picks live in src/lib/site.ts */}
-      {featured.length > 0 && (
-        <Section id="start-here" title="Start here" intro="Three programs that show how the pages work.">
-          <div className="grid gap-x-8 gap-y-6 md:grid-cols-3">
-            {featured.map((program) => (
-              <FeaturedProgramCard key={program.slug} program={program} />
-            ))}
-          </div>
-        </Section>
-      )}
 
       {/* provinces: five ruled rows, each opens the map with that province filtered */}
       <Section id="provinces" title="Pick a province" intro="Programs are counted by the provinces they touch.">
@@ -235,33 +229,6 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
       <Section id="timeline" title="1972 to 1986" intro="When each program ran. Tap a row to open it.">
         <TimelineStrip programs={martialLaw} />
       </Section>
-
-      {/* unknowns: honest gaps as flat columns, the full list is on /sources */}
-      {featuredGaps.length > 0 && (
-        <Section
-          id="unknowns"
-          title="What we do not know yet"
-          intro="Some questions are still open. We list them instead of guessing."
-        >
-          <div className="grid gap-x-8 gap-y-6 md:grid-cols-3">
-            {featuredGaps.map((gap) => (
-              <article key={gap.id} className="space-y-2 border-t border-stone-400 pt-3">
-                <Kicker>{GAP_KINDS[gap.kind]}</Kicker>
-                <h3 className="font-serif text-lg font-semibold leading-snug text-stone-950">{gap.title}</h3>
-                <p className="font-serif leading-relaxed text-stone-800">{gap.description}</p>
-                {gap.program && titleBySlug.has(gap.program) && (
-                  <Link href={`/programs/${gap.program}`} className={`${TEXT_LINK} text-base`}>
-                    Related program: {titleBySlug.get(gap.program)}
-                  </Link>
-                )}
-              </article>
-            ))}
-          </div>
-          <Link href="/sources" className={`${TEXT_LINK} text-base`}>
-            See all gaps and open questions
-          </Link>
-        </Section>
-      )}
 
       {/* held topics note: one line, only when some topics are held back */}
       {HELD_TOPICS.length > 0 && (

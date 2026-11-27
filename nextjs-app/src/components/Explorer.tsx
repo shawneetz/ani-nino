@@ -17,6 +17,7 @@ import { FilterChips } from "./FilterChips";
 import { Legend } from "./Legend";
 import { ListPill } from "./ListPill";
 import { MapPanel } from "./MapPanel";
+import type { SpotPick } from "./PinMap";
 import { PlaceDrawer } from "./PlaceDrawer";
 import { TimeBar } from "./TimeBar";
 
@@ -41,6 +42,7 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
   const queryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [panelOpen, setPanelOpen] = useState(true);
   const [sheetSize, setSheetSize] = useState<SheetSize>("peek");
+  const [spot, setSpot] = useState<SpotPick | null>(null);
 
   const filtered = useMemo(() => visiblePrograms(programs, filters), [programs, filters]);
   const shown = useMemo(() => filtered.filter((program) => matchesQuery(program, text)), [filtered, text]);
@@ -48,6 +50,16 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
   const hasToday = useMemo(() => programs.some((program) => program.era === "today"), [programs]);
   const searched = useMemo(() => programs.filter((program) => matchesQuery(program, text)), [programs, text]);
   const counts = useMemo(() => yearCounts(searched, filters), [searched, filters]);
+
+  const activeSpot = useMemo(
+    () => (spot && shown.some((program) => spot.slugs.includes(program.slug)) ? spot : null),
+    [spot, shown],
+  );
+  const listed = useMemo(
+    () => (activeSpot ? shown.filter((program) => activeSpot.slugs.includes(program.slug)) : shown),
+    [shown, activeSpot],
+  );
+  const pool = selectedProgram && listed.includes(selectedProgram) ? listed : shown;
 
   const drawerOpen = selectedProgram !== null;
   const panelShown = panelOpen && !(drawerOpen && isWide === false);
@@ -86,6 +98,20 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
     [setSelected],
   );
 
+  const selectFromPin = useCallback(
+    (slug: string) => {
+      setSpot(null);
+      select(slug);
+    },
+    [select],
+  );
+
+  const pickSpot = useCallback((next: SpotPick) => {
+    setSpot(next);
+    setPanelOpen(true);
+    setSheetSize((size) => (size === "peek" ? "half" : size));
+  }, []);
+
   const closePreview = useCallback(
     (restoreFocus: boolean) => {
       moveFocus.current = false;
@@ -97,12 +123,12 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
 
   const stepSelected = useCallback(
     (direction: 1 | -1) => {
-      if (!selectedProgram || shown.length === 0) return;
-      const index = shown.indexOf(selectedProgram);
-      const next = shown[(index + direction + shown.length) % shown.length];
+      if (!selectedProgram || pool.length === 0) return;
+      const index = pool.indexOf(selectedProgram);
+      const next = pool[(index + direction + pool.length) % pool.length];
       setSelected(next.slug);
     },
-    [shown, selectedProgram, setSelected],
+    [pool, selectedProgram, setSelected],
   );
 
   const changePanel = (open: boolean) => {
@@ -121,6 +147,7 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
     if (queryTimer.current) clearTimeout(queryTimer.current);
     lastWritten.current = "";
     setText("");
+    setSpot(null);
     clearEverything();
   };
 
@@ -193,7 +220,10 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
       onSetYear={setYear}
       onToggleConfirmed={toggleConfirmed}
       onToggleToday={toggleToday}
-      onClear={clearAll}
+      onClear={() => {
+        setSpot(null);
+        clearAll();
+      }}
     />
   );
 
@@ -208,8 +238,13 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
             programs={shown}
             provinces={filters.provinces}
             selectedSlug={selectedProgram?.slug ?? null}
-            onSelect={select}
-            onClear={() => closePreview(false)}
+            activeSpotKey={activeSpot?.key ?? null}
+            onSelect={selectFromPin}
+            onSelectGroup={pickSpot}
+            onClear={() => {
+              setSpot(null);
+              closePreview(false);
+            }}
             fitPadding={fitPadding}
           />
         </div>
@@ -218,13 +253,14 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
           <>
             {panelShown && (
               <MapPanel
-                programs={shown}
+                programs={listed}
                 selectedSlug={selectedProgram?.slug ?? null}
                 panelRef={panelRef}
                 query={text}
                 onQueryChange={handleQueryChange}
                 onCollapse={() => changePanel(false)}
                 explainProvinces={explainProvinces}
+                spot={activeSpot ? { name: activeSpot.name, onClear: () => setSpot(null) } : null}
                 onSelect={select}
                 onClear={clearFiltersAndSearch}
               />
@@ -232,7 +268,7 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
             <div
               className={`pointer-events-none absolute right-3 top-3 flex items-center gap-2 ${panelShown ? AFTER_PANEL : "left-3"} ${LAYER.popover}`}
             >
-              {!panelShown && <ListPill count={shown.length} buttonRef={pillRef} onOpen={() => changePanel(true)} />}
+              {!panelShown && <ListPill count={listed.length} buttonRef={pillRef} onOpen={() => changePanel(true)} />}
               <div className="pointer-events-auto w-fit min-w-0">{renderChips(false)}</div>
             </div>
             <div className={`pointer-events-none absolute bottom-3 right-34 flex justify-center ${freeLeft} ${LAYER.bar}`}>
@@ -249,11 +285,12 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
             <BottomSheet
               size={sheetSize}
               onSizeChange={setSheetSize}
-              programs={shown}
+              programs={listed}
               selectedSlug={selectedProgram?.slug ?? null}
               query={text}
               onQueryChange={handleQueryChange}
               explainProvinces={explainProvinces}
+              spot={activeSpot ? { name: activeSpot.name, onClear: () => setSpot(null) } : null}
               onSelect={select}
               onClear={clearFiltersAndSearch}
             />
@@ -271,8 +308,8 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
       {selectedProgram && (
         <PlaceDrawer
           program={selectedProgram}
-          position={shown.indexOf(selectedProgram) + 1}
-          total={shown.length}
+          position={pool.indexOf(selectedProgram) + 1}
+          total={pool.length}
           headingRef={headingRef}
           onClose={() => closePreview(true)}
           onPrev={() => stepSelected(-1)}
