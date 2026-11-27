@@ -52,12 +52,6 @@ test.describe("post-C11 UI checks", () => {
     }
   });
 
-  test("charts remain contained at 390px", async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto("/charts");
-    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
-  });
-
   test("live program text has no first-person draft phrases", async ({ page }) => {
     const slugs = readdirSync("content/programs").filter((name) => name.endsWith(".yaml")).map((name) => name.replace(/\.yaml$/, ""));
     for (const slug of slugs) {

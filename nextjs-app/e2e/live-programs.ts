@@ -5,7 +5,6 @@
 // a program without an era counts as martial law, same default as the schema
 // change in this version (e8): added since years and two helpers
 //   fromThenToNowCount = how many entries the landing block should show
-//   chartCount = how many charts have data and so render on /charts
 // change in this version (fix): content paths come from this file's own location
 //   the old process.cwd() broke when playwright ran from the workspace root instead of nextjs-app
 // change in this version (n7): added status and four helpers for the cavite gate
@@ -28,7 +27,6 @@ type LiveProgram = {
 // __dirname does not depend on where the test runner was started
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const PROGRAMS_DIR = path.join(PROJECT_ROOT, "content", "programs");
-const CHARTS_DIR = path.join(PROJECT_ROOT, "content", "charts");
 const CONTENT_DIR = path.join(PROJECT_ROOT, "content");
 
 // same limits as src/lib/latest-since.ts
@@ -142,21 +140,4 @@ export async function sourceCount(): Promise<number> {
 export function fromThenToNowCount(): number {
   const dated = PROGRAMS.flatMap((program) => program.sinceYears).filter((year) => year >= LATEST_FROM_YEAR);
   return Math.min(dated.length, LATEST_LIMIT);
-}
-
-/**
- * Counts the charts that render on /charts.
- *
- * @remarks
- * A chart file with no points is a valid placeholder, but the page does not render it.
- *
- * @returns The number of chart files that have at least one point.
- */
-export function chartCount(): number {
-  return readdirSync(CHARTS_DIR)
-    .filter((name) => name.endsWith(".yaml"))
-    .filter((name) => {
-      const data = parse(readFileSync(path.join(CHARTS_DIR, name), "utf8")) as { points?: unknown[] };
-      return (data.points ?? []).length > 0;
-    }).length;
 }

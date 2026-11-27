@@ -9,7 +9,6 @@ const ROUTES = [
   { name: "home", url: "/" },
   { name: "programs", url: "/programs" },
   { name: "program", url: "/programs/laguna-operation-land-transfer" },
-  { name: "charts", url: "/charts" },
 ];
 
 for (const width of WIDTHS) {

@@ -1,6 +1,5 @@
 // what this file does: end-to-end checks for u19, u17 and u23
 //   programs index: list, count, search, empty state, filter chips and the map link
-//   related programs: a few links, never the page itself
 //   not found: 404 status, message, both buttons and the shared header and footer
 // nothing here hardcodes how many programs exist, counts are compared to what is on screen
 // so adding a program in content/ never breaks these tests
@@ -81,28 +80,6 @@ test.describe("programs index", () => {
         await expect(page.getByRole("link", { name: "See on the map" })).toHaveAttribute("href", "/map?confirmed=1");
     });
 
-});
-
-test.describe("related programs", () => {
-    test("shows up to 3 links and never the page itself", async ({ page }) => {
-        await page.goto("/programs/laguna-operation-land-transfer");
-        const links = page.locator("#related a");
-        const count = await links.count();
-        expect(count).toBeGreaterThan(0);
-        expect(count).toBeLessThanOrEqual(3);
-        for (const href of await links.evaluateAll((nodes) => nodes.map((node) => node.getAttribute("href")))) {
-            expect(href).not.toBe("/programs/laguna-operation-land-transfer");
-        }
-    });
-
-    test("a related link opens that program", async ({ page }) => {
-        await page.goto("/programs/laguna-operation-land-transfer");
-        const first = page.locator("#related a").first();
-        const href = await first.getAttribute("href");
-        await first.click();
-        await expect(page).toHaveURL(new RegExp(`${href}$`));
-        await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    });
 });
 
 test.describe("not found page", () => {

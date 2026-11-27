@@ -42,7 +42,18 @@ export interface HeroImage {
   caption: string;
 }
 
-export const HERO: HeroImage | null = null;
+export const HERO: HeroImage | null = {
+  src: "/hero/landing-page.png",
+  width: 1200,
+  height: 630,
+  position: "center",
+  author: "Anino ng Ani project",
+  source: "Project-provided image",
+  sourceUrl: "https://github.com/shawneetz/ani-nino/blob/main/nextjs-app/public/hero/landing-page.png",
+  license: "Rights not stated",
+  year: 2026,
+  caption: "A collage of Masagana 99-era farming and civic imagery.",
+};
 
 /** GitHub account that owns the repository. */
 export const REPO_OWNER = "shawneetz";
@@ -78,7 +89,6 @@ const PROBLEM_TEMPLATE = "report-problem.yml";
 export const NAV_LINKS = [
   { href: "/map", label: "Map" },
   { href: "/programs", label: "Programs" },
-  { href: "/charts", label: "Charts" },
   { href: "/sources", label: "Sources" },
   { href: "/about", label: "About" },
 ] as const;

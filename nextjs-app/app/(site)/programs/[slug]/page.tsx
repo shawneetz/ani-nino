@@ -3,12 +3,11 @@
 // changes in this version
 //   u15: "where" is now a lazy-loaded mini-map with the places listed beside it
 //   u16: a sticky jump select for phones (the desktop rail was already in place)
-//   u17: related programs use the RelatedPrograms component
 //   u18: the contribute panel owns its own anchor
 //   c5: new "cite this page" section after sources, and a canonical url in the metadata
 //   c8: the two echo blocks no longer use first person, they say "This project reads ..."
-//   c10: print styles, in print the back link, jump bar, video, related programs and
-//        contribute panel are hidden, and the page is one column so a long page prints in about 3 pages
+//   c10: print styles, in print the back link, jump bar, video and contribute panel are hidden,
+//        and the page is one column so a long page prints in about 3 pages
 //   e5: editorial layout
 //       section headings are serif with a 2px ink top rule (no numbering)
 //       the header has a kicker and a dateline, the record has a large lead sentence
@@ -38,7 +37,6 @@ import { JumpSelect, PageRail, type NavItem } from "@/components/PageNav";
 import { ProgramHeader } from "@/components/ProgramHeader";
 import { ProgramMiniMap } from "@/components/ProgramMiniMap";
 import { CheckingBox, RecordPanels } from "@/components/RecordPanels";
-import { RelatedPrograms } from "@/components/RelatedPrograms";
 import { SinceTimeline } from "@/components/SinceTimeline";
 import { SourceList } from "@/components/SourceList";
 import { VideoEmbed } from "@/components/VideoEmbed";
@@ -47,7 +45,6 @@ import { getProgram, getPrograms } from "@/lib/content";
 import { toExplorerProgram } from "@/lib/explorer-types";
 import { heldTopic, type HeldTopic } from "@/lib/held-topics";
 import { programDescription } from "@/lib/program-description";
-import { relatedPrograms } from "@/lib/related";
 import { SITE_URL } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -135,8 +132,6 @@ export default async function ProgramPage({ params }: Props) {
   // past/present links: the older program this one echoes, and today's echoes of this one
   const origin = program.echoOf ? all.find((item) => item.slug === program.echoOf) : null;
   const echoes = all.filter((item) => item.echoOf === program.slug);
-  // up to 3 related programs, echo links are left out so nothing repeats
-  const related = relatedPrograms(program, all);
   // the open question only shows while the program is still being checked
   const question = program.status === "checking" ? program.question : undefined;
   const citation = citationText(program, SITE_URL);
@@ -151,7 +146,6 @@ export default async function ProgramPage({ params }: Props) {
   if (program.sources.length > 0) nav.push({ id: "sources", label: "Sources" });
   nav.push({ id: "cite", label: "Cite this page" });
   nav.push({ id: "contribute", label: "Help improve this page" });
-  if (related.length > 0) nav.push({ id: "related", label: "Related programs" });
 
   return (
     // on desktop the content and the sticky rail sit side by side
@@ -246,12 +240,6 @@ export default async function ProgramPage({ params }: Props) {
         {/* github only panel, it carries its own anchor */}
         <ContributeLinks slug={program.slug} />
 
-        {/* related programs replace the old previous and next links */}
-        {related.length > 0 && (
-          <Block id="related" title="Related programs" className="print:hidden">
-            <RelatedPrograms items={related} />
-          </Block>
-        )}
       </div>
 
       {/* desktop only sticky rail */}

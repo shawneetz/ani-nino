@@ -19,7 +19,7 @@ function jumpTo(id: string) {
 
 export function PageRail({ items }: { items: NavItem[] }) {
   return (
-    <nav aria-label="On this page" className="sticky top-6 hidden self-start lg:block print:hidden!">
+    <nav aria-label="On this page" className="sticky top-6 hidden self-start lg:block lg:pl-8 print:hidden!">
       <p className="mb-2 font-sans text-sm font-semibold uppercase tracking-kicker text-stone-700">On this page</p>
       <ul className="border-l border-stone-400">
         {items.map((item) => (

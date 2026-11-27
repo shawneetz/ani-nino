@@ -3,12 +3,11 @@
 //   program page: the lead sentence shows once, the dateline matches the status
 //   programs: ruled rows, oldest first by default, title sort
 //   about: the "ask at a relative" section, the "reading notes" section, the sticky rail
-//   charts: figure numbers in order
 //   404: the kicker and the two buttons
 // nothing here hardcodes how many programs, charts or dated records exist,
 // counts come from the yaml files (e2e/live-programs.ts)
 import { expect, test } from "@playwright/test";
-import { chartCount, fromThenToNowCount, martialLawCount } from "./live-programs";
+import { fromThenToNowCount, martialLawCount } from "./live-programs";
 
 // one confirmed and one checking page, both live in the current content
 const CONFIRMED_SLUG = "laguna-operation-land-transfer";
@@ -195,19 +194,6 @@ test.describe("about page", () => {
       const fits = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
       expect(fits).toBe(true);
     });
-  });
-});
-
-test.describe("charts as figures", () => {
-  test("figures are numbered in page order", async ({ page }) => {
-    await page.goto("/charts");
-    const cards = page.locator('article[id^="chart-"]');
-    const total = chartCount();
-    await expect(cards).toHaveCount(total);
-
-    for (let index = 0; index < total; index += 1) {
-      await expect(cards.nth(index).getByText(`Figure ${index + 1}`, { exact: true })).toBeVisible();
-    }
   });
 });
 

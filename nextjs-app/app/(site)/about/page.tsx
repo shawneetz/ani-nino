@@ -56,7 +56,6 @@ const NAV: NavItem[] = [
 const OTHER_STARTS = [
   { href: "/map", label: "Explore the map", hint: "Filter by topic, province and year." },
   { href: "/programs", label: "Browse every program", hint: "Search by title or place." },
-  { href: "/charts", label: "See the numbers", hint: "Each figure links to its source." },
 ] as const;
 
 // three notes that read across the program pages, every fact comes from a page linked under it

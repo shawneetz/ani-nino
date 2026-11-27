@@ -6,9 +6,7 @@
 import { expect, test } from "@playwright/test";
 import { HERO } from "../src/lib/site";
 import { provinceTileText } from "../src/lib/landing-stats";
-import { SCOPES } from "../src/lib/vocab";
 import {
-  chartCount,
   checkingCount,
   confirmedProvinceCount,
   martialLawCount,
@@ -16,8 +14,6 @@ import {
   provincesCoveredCount,
   sourceCount,
 } from "./live-programs";
-
-const SCOPE_LABEL = new RegExp(`^(${Object.values(SCOPES).map((scope) => scope.label).join("|")})$`);
 
 test.describe("landing page", () => {
   test("shows the project name and the two hero buttons", async ({ page }) => {
@@ -153,33 +149,6 @@ test.describe("sources anchors", () => {
     await expect(rail.getByRole("link")).toHaveCount(4);
     await rail.getByRole("link", { name: "Held topics" }).click();
     await expect(page).toHaveURL(/#held-topics$/);
-  });
-});
-
-test.describe("charts", () => {
-  test("each chart states its question and scopes every data row", async ({ page }) => {
-    await page.goto("/charts");
-    const cards = page.locator('article[id^="chart-"]');
-    await expect(cards).toHaveCount(chartCount());
-    for (const card of await cards.all()) {
-      await expect(card.locator("h2 + p")).toHaveText(/\S+/);
-      const rows = card.locator("table tbody tr");
-      expect(await rows.count()).toBeGreaterThan(0);
-      for (const row of await rows.all()) {
-        await expect(row.getByText(SCOPE_LABEL)).toHaveCount(1);
-      }
-    }
-  });
-
-  test("the fishpen area chart has three rows with the Place scope", async ({ page }) => {
-    await page.goto("/charts");
-    const card = page.locator("#chart-laguna-lake-fishpen-area");
-    await expect(card.getByRole("heading", { name: "Fishpen area on Laguna de Bay" })).toBeVisible();
-    const rows = card.locator("table tbody tr");
-    await expect(rows).toHaveCount(3);
-    for (const row of await rows.all()) {
-      await expect(row.getByText("Place", { exact: true })).toBeVisible();
-    }
   });
 });
 

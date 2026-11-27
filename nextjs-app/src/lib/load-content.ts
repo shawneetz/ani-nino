@@ -51,7 +51,7 @@ async function yamlFiles(dir: string): Promise<string[]> {
     .map((name) => path.join(dir, name));
 }
 
-function collectSources(programs: Program[], charts: Chart[]): SourceEntry[] {
+function collectSources(programs: Program[]): SourceEntry[] {
   const byKey = new Map<string, SourceEntry>();
   const add = (source: Source, label: string) => {
     const key = `${source.title}|${source.publisher}|${source.url ?? ""}`;
@@ -63,9 +63,6 @@ function collectSources(programs: Program[], charts: Chart[]): SourceEntry[] {
   for (const program of programs) {
     program.sources.forEach((source) => add(source, program.title));
     program.since.forEach((item) => add(item.source, program.title));
-  }
-  for (const chart of charts) {
-    chart.points.forEach((point) => add(point.source, `Chart: ${chart.title}`));
   }
   return [...byKey.values()].sort((a, b) => a.title.localeCompare(b.title));
 }
@@ -118,5 +115,5 @@ export async function loadContent(directory: string): Promise<Content> {
 
   if (issues.length > 0) throw new ContentError(issues);
   programs.sort((a, b) => a.startYear - b.startYear || a.title.localeCompare(b.title));
-  return { programs, charts, gaps, sources: collectSources(programs, charts) };
+  return { programs, charts, gaps, sources: collectSources(programs) };
 }

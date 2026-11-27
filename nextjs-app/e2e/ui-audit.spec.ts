@@ -18,7 +18,6 @@ const ROUTES = [
   { name: "programs", url: "/programs" },
   { name: "program-confirmed", url: "/programs/laguna-operation-land-transfer" },
   { name: "program-checking", url: "/programs/quezon-coconut-levy" },
-  { name: "charts", url: "/charts" },
   { name: "sources", url: "/sources" },
   { name: "about", url: "/about" },
   { name: "not-found", url: "/nope" },

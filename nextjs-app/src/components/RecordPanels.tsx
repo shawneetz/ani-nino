@@ -1,6 +1,5 @@
 // what this file does: the evidence block of a program page
-//   RecordPanels = "what it promised" and "what the record shows" side by side from 768px
-//   (stacked on phones, split by a vertical hairline), then a "who says so" byline
+//   RecordPanels = "what it promised", then "what the record shows", then "who says so"
 //   CheckingBox = the flat "still checking" note that comes right after the record
 // change in this version (e5): editorial layout, no boxes
 //   the first sentence of the record is a large serif lead, the rest is normal text
@@ -16,6 +15,7 @@ import { VoiceChip } from "./VoiceChip";
 // shared looks, so both panels always match
 const HEADING = "font-serif text-xl font-semibold text-stone-950";
 const LEAD = "max-w-[68ch] font-serif text-2xl leading-snug text-stone-950";
+const BLOCK = `${INNER_GAP} border-t border-stone-400 pt-4`;
 
 type RecordProps = {
   promised?: string;
@@ -31,24 +31,21 @@ export function RecordPanels({ promised, happened, sources }: RecordProps) {
 
   return (
     <section id="record" aria-label="Promise and record" className={`scroll-mt-24 ${BLOCK_GAP}`}>
-      {/* two columns only when there is a promise to show */}
-      <div className={`grid gap-6 ${promised ? "md:grid-cols-2 md:gap-0" : ""}`}>
-        {promised && (
-          // a top hairline on phones, a vertical hairline between the columns from 768px
-          <div className={`${INNER_GAP} border-t border-stone-400 pt-4 md:border-r md:border-t-0 md:pr-8 md:pt-0`}>
-            <h2 className={HEADING}>What it promised</h2>
-            <p className={BODY}>{promised}</p>
-          </div>
-        )}
-        <div className={`${INNER_GAP} border-t border-stone-400 pt-4 md:border-t-0 md:pt-0 ${promised ? "md:pl-8" : ""}`}>
-          <h2 className={HEADING}>What the record shows</h2>
-          <p className={LEAD}>{first}</p>
-          {rest && <p className={BODY}>{rest}</p>}
+      {promised && (
+        <div className={BLOCK}>
+          <h2 className={HEADING}>What it promised</h2>
+          <p className={BODY}>{promised}</p>
         </div>
+      )}
+
+      <div className={BLOCK}>
+        <h2 className={HEADING}>What the record shows</h2>
+        <p className={LEAD}>{first}</p>
+        {rest && <p className={BODY}>{rest}</p>}
       </div>
 
       {/* who says so, set like a byline, with the balance note when sources lean one way */}
-      <div className={`${INNER_GAP} border-t border-stone-400 pt-3`}>
+      <div className={BLOCK}>
         <h2 className="font-sans text-sm font-semibold uppercase tracking-kicker text-stone-700">Who says so</h2>
         {voices.length > 0 ? (
           <div className="flex flex-wrap gap-2">

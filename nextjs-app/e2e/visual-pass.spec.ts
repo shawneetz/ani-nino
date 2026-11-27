@@ -6,7 +6,6 @@ const ROUTES = [
   "/",
   "/map",
   "/programs",
-  "/charts",
   "/sources",
   "/about",
   "/programs/laguna-operation-land-transfer",
