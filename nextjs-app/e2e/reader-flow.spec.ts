@@ -1,8 +1,21 @@
 // what this file does: describes the reader-flow checks for the landing page, program page, sources and charts
+// change in this version (n7): cavite gate checks
+//   the cavite tile text now comes from provinceTileText with the confirmed count
+//   the landing numbers are compared with the yaml
+//   landing, about and sources never say cavite has no or one program when it has more
 import { expect, test } from "@playwright/test";
 import { HERO } from "../src/lib/site";
+import { provinceTileText } from "../src/lib/landing-stats";
 import { SCOPES } from "../src/lib/vocab";
-import { chartCount, provinceCount } from "./live-programs";
+import {
+  chartCount,
+  checkingCount,
+  confirmedProvinceCount,
+  martialLawCount,
+  provinceCount,
+  provincesCoveredCount,
+  sourceCount,
+} from "./live-programs";
 
 const SCOPE_LABEL = new RegExp(`^(${Object.values(SCOPES).map((scope) => scope.label).join("|")})$`);
 
@@ -29,15 +42,25 @@ test.describe("landing page", () => {
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   });
 
-  test("the cavite tile matches how many cavite programs exist", async ({ page }) => {
+  test("the ledger numbers are computed from the content", async ({ page }) => {
+    await page.goto("/");
+    const values = page.getByRole("region", { name: "The site in numbers" }).locator("dd");
+    await expect(values).toHaveText([
+      String(martialLawCount()),
+      `${provincesCoveredCount()} of 5`,
+      String(await sourceCount()),
+      String(checkingCount()),
+    ]);
+  });
+
+  test("the cavite tile matches the cavite programs in the content", async ({ page }) => {
     await page.goto("/");
     const tile = page.getByRole("region", { name: "Pick a province" }).getByRole("link", { name: /Cavite/ });
     const cavite = provinceCount("cavite");
+    await expect(tile).toContainText(provinceTileText(cavite, confirmedProvinceCount("cavite")));
     if (cavite > 0) {
-      await expect(tile).toContainText(`${cavite} ${cavite === 1 ? "program" : "programs"}`);
       await expect(tile).toHaveAttribute("href", /\/map\?province=cavite/);
     } else {
-      await expect(tile).toContainText("No program yet");
       await expect(tile).toHaveAttribute("href", /\/sources/);
     }
   });
@@ -47,6 +70,28 @@ test.describe("landing page", () => {
     await expect(page).toHaveURL(/\/map\?topic=land&province=laguna/);
     await page.getByRole("button", { name: /^Topic/ }).click();
     await expect(page.getByRole("group", { name: "Topic filter" }).getByRole("button", { name: "Land", exact: true })).toHaveAttribute("aria-pressed", "true");
+  });
+
+  // no text on the site may say cavite has no or one program once it has more
+  test.describe("cavite coverage text", () => {
+    test.skip(provinceCount("cavite") < 2, "only checked once cavite has more than one program");
+
+    for (const route of ["/", "/about", "/sources"]) {
+      test(`${route} never says cavite has no or one program`, async ({ page }) => {
+        await page.goto(route);
+        const text = await page.locator("body").innerText();
+        expect(text).not.toMatch(/Cavite has (?:no|one) program/i);
+        expect(text).not.toMatch(/No Cavite program/i);
+      });
+    }
+
+    test("the cavite gap does not call the province thin or give a count", async ({ page }) => {
+      await page.goto("/sources#gap-cavite-not-covered");
+      const gap = page.locator("#gap-cavite-not-covered");
+      await expect(gap).toBeVisible();
+      await expect(gap).not.toContainText(/\bthin(?:ly)?\b/i);
+      await expect(gap).not.toContainText(/\b(?:\d+|one|two|three|four|five)\s+(?:programs?|pages?)\b/i);
+    });
   });
 
   test("a confirmed-only shared link redirects to the map", async ({ page }) => {

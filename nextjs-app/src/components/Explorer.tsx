@@ -261,7 +261,7 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
         )}
 
         {isDesktop !== null && (
-          <div className={`absolute bottom-40 right-3 sm:bottom-60 lg:bottom-24 ${LAYER.panel}`}>
+          <div className={`absolute bottom-52 right-3 sm:bottom-60 lg:bottom-52 ${LAYER.panel}`}>
             <Legend showToday={hasToday} />
           </div>
         )}

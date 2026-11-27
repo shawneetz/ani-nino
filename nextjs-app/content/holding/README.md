@@ -29,6 +29,20 @@ The three Cavite files were rebuilt on 2026-11-27 from sources that were opened,
 | Puerto Azul resort, Ternate | no pre-1986 source on farmers found | wait |
 | Bacoor reclamation projects of 2020 | CoverStory 2024 | dropped as a page, it is after 1986, kept as a dated record on two pages |
 
+## Cavite coverage text (stage N6, 2026-11-27)
+
+Text that depends on how many Cavite pages are live was checked against the content. Nothing is typed by hand, so no count appears in any of it.
+
+| place | result |
+|---|---|
+| `content/gaps.yaml`, gap `cavite-not-covered` | rewritten to say Cavite coverage is partial, no count, id kept so `/sources#gap-cavite-not-covered` still works |
+| landing province tile | computed from the content, checked, no edit |
+| About "limits" list | computed from the content (a province with one program or fewer is listed), checked, no edit |
+| `/map?province=cavite` empty state | shows only when a province has no live page, checked, no edit |
+| `src/lib/held-topics.ts` | the six held topics still match the table above, no edit |
+
+`src/lib/cavite-coverage.test.ts` keeps this honest: the gap text may not claim a count, and each live Cavite page needs a named place, a sourced effect and a standalone first sentence.
+
 ## Cavite confirmation pass (stage N5, 2026-11-27)
 
 Every source on the three live Cavite pages was opened on this day. The held files were not reopened, they are not published.

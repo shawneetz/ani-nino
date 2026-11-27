@@ -8,14 +8,18 @@
 //   chartCount = how many charts have data and so render on /charts
 // change in this version (fix): content paths come from this file's own location
 //   the old process.cwd() broke when playwright ran from the workspace root instead of nextjs-app
+// change in this version (n7): added status and four helpers for the cavite gate
+//   confirmedProvinceCount, checkingCount, provincesCoveredCount and sourceCount
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { parse } from "yaml";
+import { loadContent } from "../src/lib/load-content";
 
 // only the fields the tests need
 type LiveProgram = {
   slug: string;
   era: "martial_law" | "today";
+  status: "confirmed" | "checking";
   provinces: string[];
   sinceYears: number[];
 };
@@ -25,6 +29,7 @@ type LiveProgram = {
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const PROGRAMS_DIR = path.join(PROJECT_ROOT, "content", "programs");
 const CHARTS_DIR = path.join(PROJECT_ROOT, "content", "charts");
+const CONTENT_DIR = path.join(PROJECT_ROOT, "content");
 
 // same limits as src/lib/latest-since.ts
 const LATEST_FROM_YEAR = 2000;
@@ -37,12 +42,14 @@ const PROGRAMS: LiveProgram[] = readdirSync(PROGRAMS_DIR)
     const data = parse(readFileSync(path.join(PROGRAMS_DIR, name), "utf8")) as {
       slug: string;
       era?: "martial_law" | "today";
+      status: "confirmed" | "checking";
       places?: { province: string }[];
       since?: { year: number }[];
     };
     return {
       slug: data.slug,
       era: data.era ?? "martial_law",
+      status: data.status,
       provinces: (data.places ?? []).map((place) => place.province),
       sinceYears: (data.since ?? []).map((entry) => entry.year),
     };
@@ -70,6 +77,57 @@ export function provinceCount(province: string): number {
   return PROGRAMS.filter(
     (program) => program.era === "martial_law" && program.provinces.includes(province),
   ).length;
+}
+
+/**
+ * Counts the confirmed martial-law programs that have a place in one province.
+ *
+ * @param province - A province key such as `"cavite"`.
+ * @returns The number of confirmed programs with a place there.
+ */
+export function confirmedProvinceCount(province: string): number {
+  return PROGRAMS.filter(
+    (program) => program.era === "martial_law"
+      && program.status === "confirmed"
+      && program.provinces.includes(province),
+  ).length;
+}
+
+/**
+ * Counts the martial-law programs that are still being checked.
+ *
+ * @returns The number shown as "Still being checked" on the landing page.
+ */
+export function checkingCount(): number {
+  return PROGRAMS.filter(
+    (program) => program.era === "martial_law" && program.status === "checking",
+  ).length;
+}
+
+/**
+ * Counts the provinces that have at least one martial-law program.
+ *
+ * @returns The first number of "n of 5" on the landing page.
+ */
+export function provincesCoveredCount(): number {
+  return new Set(
+    PROGRAMS
+      .filter((program) => program.era === "martial_law")
+      .flatMap((program) => program.provinces),
+  ).size;
+}
+
+/**
+ * Counts the sources the sources page lists.
+ *
+ * @remarks
+ * Duplicates are merged by the content loader, so this reuses it instead of
+ * repeating the merge rule here.
+ *
+ * @returns The number shown as "Sources" on the landing page.
+ */
+export async function sourceCount(): Promise<number> {
+  return (await loadContent(CONTENT_DIR)).sources.length;
 }
 
 /**

@@ -1,6 +1,7 @@
 // what this file does: checks that every page main lines up with the header and footer rows
 // at 1440px the page width token is active, so left edge and width must match on every route
 // /map is left out on purpose, it is full bleed
+// change in this version (n7): added a live cavite page route
 import { expect, test } from "@playwright/test";
 
 const ROUTES = [
@@ -10,6 +11,8 @@ const ROUTES = [
   "/sources",
   "/about",
   "/programs/laguna-operation-land-transfer",
+  // a live cavite page, confirmed
+  "/programs/cavite-export-processing-zone",
   "/programs/laguna-kkk",
   "/nope",
 ];

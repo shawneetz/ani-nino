@@ -1,8 +1,12 @@
 // what this file does: end-to-end checks for /map after the drawer redesign
+// change in this version (n7): new block for /map?province=cavite
+//   the count and list match the content, no empty state shows,
+//   every result and every pin opens the drawer
 import { expect, test, type Locator, type Page } from "@playwright/test";
-import { martialLawCount } from "./live-programs";
+import { martialLawCount, provinceCount } from "./live-programs";
 
 const TOTAL = martialLawCount();
+const CAVITE = provinceCount("cavite");
 type Box = { x: number; y: number; width: number; height: number };
 const panel = (page: Page) => page.locator('aside[aria-label="Results"]');
 const list = (page: Page) => page.locator('section[aria-label="Programs"]');
@@ -119,6 +123,50 @@ test.describe("map on desktop", () => {
     await chip.focus();
     await page.keyboard.press("Enter");
     await expect(page.getByRole("group", { name: "Topic filter" })).toBeVisible();
+  });
+});
+
+// cavite is the thinnest province, so its map view gets its own checks
+test.describe("map filtered to cavite", () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+  test.skip(CAVITE === 0, "no live cavite program");
+  test.beforeEach(async ({ page }) => { await page.goto("/map?province=cavite"); });
+
+  test("the count and list match the cavite programs and no empty state shows", async ({ page }) => {
+    await expect(countOf(page)).toHaveText(String(CAVITE));
+    await expect(list(page).locator("li")).toHaveCount(CAVITE);
+    await expect(page.getByText(/No Cavite program yet/)).toHaveCount(0);
+  });
+
+  test("every cavite result opens the drawer with its own title", async ({ page }) => {
+    const rows = list(page).locator("li button");
+    const total = await rows.count();
+    expect(total).toBe(CAVITE);
+
+    for (let index = 0; index < total; index += 1) {
+      const row = rows.nth(index);
+      const title = (await row.innerText()).trim();
+      await row.click();
+      const dialog = page.getByRole("dialog");
+      await expect(dialog.getByRole("heading", { level: 2 })).toHaveText(title);
+      await page.keyboard.press("Escape");
+      await expect(dialog).toBeHidden();
+    }
+  });
+
+  test("the pins show and each one opens the drawer", async ({ page }) => {
+    const pins = page.locator('button[aria-label$="Show details"]');
+    await expect(pins.first()).toBeVisible({ timeout: 20_000 });
+    const total = await pins.count();
+    expect(total).toBeGreaterThan(0);
+
+    for (let index = 0; index < total; index += 1) {
+      await pins.nth(index).evaluate((element) => (element as HTMLButtonElement).click());
+      const dialog = page.getByRole("dialog");
+      await expect(dialog).toBeVisible();
+      await page.keyboard.press("Escape");
+      await expect(dialog).toBeHidden();
+    }
   });
 });
 

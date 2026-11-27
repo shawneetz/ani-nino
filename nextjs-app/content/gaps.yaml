@@ -6,6 +6,8 @@
 # removed because they repeat a program question: fishpen permits, laguna coalition lead (now in the coconut levy question),
 # uplb displacement numbers, makiling resettlement outcomes
 # change in this version (p3): the laguna land transfer gap names the 1987 calamba thesis as a second unread lead
+# change in this version (n6): cavite-not-covered now matches the real coverage, still no count in the text
+#   the id stays the same because /sources#gap-cavite-not-covered is linked from other pages
 - id: no-farmer-interviews
   kind: method
   title: No interviews with farmers from the martial-law era
@@ -16,8 +18,8 @@
   description: Links between a martial-law program and later events are the author's reading, not established findings.
 - id: cavite-not-covered
   kind: scope
-  title: Cavite is thinly covered
-  description: Cavite is one of the five provinces on the map, but few of its programs have a source that says what happened to farmers or fisherfolk there. Topics without such a source are held back.
+  title: Cavite coverage is partial
+  description: Cavite pages exist, but not every one is confirmed. Some are still being checked because no source counts the families affected or their income. Other Cavite topics are held back because their texts name no farmers or fisherfolk.
 - id: region-scope
   kind: scope
   title: Region IV was wider than CALABARZON
