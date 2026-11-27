@@ -3,6 +3,7 @@
 //   rule 2 (e3): shadow classes are allowed only in map overlay files and the nav dropdown
 //   rule 3 (u1): page files in app/ use the shared spacing steps
 //   rule 4 (u2): no boxed card on a reading page, Card is gone and rounded-card is for map overlays only
+//   rule 5 (u5): page and component files use the shared spacing steps
 // reads app/ and src/components/ so a future light color, tiny text or stray shadow does not return
 import { readdirSync, readFileSync } from "node:fs";
 import { basename, join, relative } from "node:path";
@@ -25,6 +26,8 @@ const SHADOW_ALLOWED = new Set([
 ]);
 
 const CARD_ALLOWED = new Set(["PinMap.tsx", "ResultsBody.tsx"]);
+
+const SPACING_ALLOWED = new Set(["Hero.tsx", "Legend.tsx", "FilterControls.tsx"]);
 
 // collect tsx files below one root, in a stable order for readable failures
 function tsxFiles(root: string): string[] {
@@ -77,6 +80,20 @@ describe("style rules", () => {
     const oldGaps = /\bspace-y-(?:4|5|8|10)\b/;
 
     for (const file of tsxFiles(join(process.cwd(), "app"))) {
+      if (oldGaps.test(readFileSync(file, "utf8"))) {
+        violations.push(`${relative(process.cwd(), file)}: uses a one-off space-y gap, use the shared classes`);
+      }
+    }
+
+    expect(violations).toEqual([]);
+  });
+
+  it("keeps pages and components on the shared spacing steps", () => {
+    const violations: string[] = [];
+    const oldGaps = /\bspace-y-(?:4|5|8|10)\b/;
+
+    for (const file of allFiles()) {
+      if (SPACING_ALLOWED.has(basename(file))) continue;
       if (oldGaps.test(readFileSync(file, "utf8"))) {
         violations.push(`${relative(process.cwd(), file)}: uses a one-off space-y gap, use the shared classes`);
       }

@@ -7,8 +7,12 @@
 // change in this version (e7): editorial figure
 //   a 2px ink rule and a "Figure n" kicker open the chart, no box around it
 //   the notes are flat with a left rule, the table uses hairlines
+// change in this version (u5): shared rhythm
+//   the header (kicker, title, question, description) is one block 3 apart
+//   the header, the bars, the table and the notes are 6 apart
 import { chartParts, labelFitsInside, labelSide, percentOf } from "@/lib/chart-data";
 import type { Chart, ChartPoint } from "@/lib/content-schema";
+import { BLOCK_GAP, HEADING, INNER_GAP } from "./Container";
 import { Kicker } from "./Kicker";
 import { ScopeChip } from "./ScopeChip";
 import { VoiceChip } from "./VoiceChip";
@@ -40,7 +44,7 @@ const QUALIFIER_PREFIX: Record<ChartPoint["qualifier"], string> = {
 const LABEL_ROW_REM = 3.5;
 
 // shared look for the flat notes, a left rule instead of a box
-const NOTE = "mt-4 max-w-[68ch] border-l-4 border-stone-500 py-1 pl-4 font-serif text-base leading-relaxed text-stone-800";
+const NOTE = "max-w-[68ch] border-l-4 border-stone-500 py-1 pl-4 font-serif text-base leading-relaxed text-stone-800";
 
 /**
  * Renders one figure: bars on a shared axis, target lines, a sourced data table and a note.
@@ -69,16 +73,16 @@ export function ChartCard({ chart, figure }: ChartCardProps) {
     <article
       id={`chart-${chart.id}`}
       aria-labelledby={`chart-${chart.id}-heading`}
-      className="scroll-mt-4 space-y-3 border-t-2 border-ink pt-4"
+      className={`scroll-mt-4 ${BLOCK_GAP} border-t-2 border-ink pt-4`}
     >
-      <Kicker>Figure {figure}</Kicker>
-      <h2 id={`chart-${chart.id}-heading`} className="font-serif text-2xl font-semibold tracking-tight text-stone-950">
-        {chart.title}
-      </h2>
-      <p className="max-w-[68ch] font-serif text-lg font-medium leading-relaxed text-stone-900">{chart.question}</p>
-      {chart.description && (
-        <p className="max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800">{chart.description}</p>
-      )}
+      <div className={INNER_GAP}>
+        <Kicker>Figure {figure}</Kicker>
+        <h2 id={`chart-${chart.id}-heading`} className={HEADING}>{chart.title}</h2>
+        <p className="max-w-[68ch] font-serif text-lg font-medium leading-relaxed text-stone-900">{chart.question}</p>
+        {chart.description && (
+          <p className="max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800">{chart.description}</p>
+        )}
+      </div>
 
       {chart.points.length === 0 ? (
         <p className="font-sans text-base text-stone-700">Data not added yet. Every number needs a source link first.</p>
@@ -118,7 +122,7 @@ export function ChartCard({ chart, figure }: ChartCardProps) {
             )}
 
             {/* one row per bar: value inside when it fits, otherwise in the label row */}
-            <ul className="space-y-4">
+            <ul className={BLOCK_GAP}>
               {bars.map((point) => {
                 const percent = percentOf(point.value, axisMax);
                 const text = formatValue(point);

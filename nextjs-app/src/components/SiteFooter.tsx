@@ -3,6 +3,7 @@
 // change in this version (e2): editorial colophon, sits on paper with a hairline top rule
 // light text uses stone-700 or darker
 // hidden in print, and not rendered on /map once the route groups land (stage m1)
+// change in this version (u7): the top rule matches the masthead, link groups align with the colophon
 import Link from "next/link";
 import { PAGE_WIDTH } from "@/components/Container";
 import { REPO_URL, SITE } from "@/lib/site";
@@ -43,13 +44,13 @@ const LINK = "tap-target inline-flex items-center font-sans underline underline-
  */
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-stone-400 bg-paper print:hidden">
-      <div className={`mx-auto grid ${PAGE_WIDTH} gap-6 px-4 py-6 text-base text-stone-700 sm:grid-cols-[1fr_auto]`}>
+    <footer className="mt-auto border-t-2 border-ink bg-paper print:hidden">
+      <div className={`mx-auto grid ${PAGE_WIDTH} gap-6 px-4 py-6 text-base text-stone-700 sm:grid-cols-[1fr_auto] sm:items-start`}>
         {/* the colophon line, set in serif like the end matter of a book */}
         <p className="max-w-[48ch] font-serif leading-relaxed">
           {SITE.title}: an educational project. Sources are labeled; open questions are shown.
         </p>
-        <nav aria-label="Footer" className="grid grid-cols-2 gap-x-10 gap-y-4 sm:grid-cols-3">
+        <nav aria-label="Footer" className="grid grid-cols-2 gap-x-10 gap-y-6 sm:grid-cols-3">
           {GROUPS.map((group) => (
             <div key={group.title}>
               <h2 className="font-sans text-sm font-semibold uppercase tracking-kicker text-stone-700">{group.title}</h2>

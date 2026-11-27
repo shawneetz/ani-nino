@@ -4,10 +4,14 @@
 // no box and no image, rows are split by hairlines (the list draws them)
 // the title is the only link, and the row is an article so tests and screen readers see one unit
 // it is a server-safe component, it has no hooks and no client code
+// change in this version (u5): row rhythm
+//   rows are a little taller (py-6), the text column uses the shared 3-step gap
+//   the year strip lines up with the title column and stops at the same width as the text
 import Link from "next/link";
 import type { ExplorerProgram } from "@/lib/explorer-types";
 import { yearRange } from "@/lib/filter";
 import { TOPICS } from "@/lib/vocab";
+import { INNER_GAP } from "./Container";
 import { StatusTag } from "./StatusTag";
 import { VoiceChip } from "./VoiceChip";
 import { YearStrip } from "./YearStrip";
@@ -50,7 +54,7 @@ export function ProgramRow({ program }: ProgramRowProps) {
   return (
     <article
       id={`program-${program.slug}`}
-      className="grid scroll-mt-4 gap-x-6 gap-y-2 py-5 sm:grid-cols-[7rem_minmax(0,1fr)]"
+      className="grid scroll-mt-4 gap-x-6 gap-y-3 py-6 sm:grid-cols-[7rem_minmax(0,1fr)]"
     >
       {/* the full range is read once by screen readers, the split years below are only for the eye */}
       <p className="figures sm:text-right">
@@ -65,7 +69,7 @@ export function ProgramRow({ program }: ProgramRowProps) {
         )}
       </p>
 
-      <div className="space-y-2">
+      <div className={INNER_GAP}>
         {/* the topic color depends on the data, so it stays inline */}
         <p className="font-sans text-sm font-semibold uppercase tracking-kicker" style={{ color: topic.color }}>
           {topic.label}
@@ -82,10 +86,10 @@ export function ProgramRow({ program }: ProgramRowProps) {
           startYear={program.startYear}
           endYear={program.endYear}
           topic={program.topic}
-          className="hidden max-w-md sm:grid"
+          className="hidden max-w-[68ch] sm:grid"
         />
         <p className="line-clamp-2 max-w-[68ch] font-serif leading-relaxed text-stone-800">{program.summary}</p>
-        <div className="flex flex-wrap items-center gap-2 pt-1">
+        <div className="flex flex-wrap items-center gap-2">
           <StatusTag status={program.status} />
           {program.voices.map((voice) => (
             <VoiceChip key={voice} voice={voice} />

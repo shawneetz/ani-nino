@@ -7,6 +7,8 @@
 // change in this version (e6): ruled rows instead of the card grid
 //   the filter box is flat (inputs stay white), the "see on the map" link also carries the search text as q
 //   the old note "the map does not use the search box" is gone, the map reads q from stage m5
+// change in this version (u5): shared rhythm and a tighter filter bar
+//   blocks are 6 apart, the filter bar content is 3 apart and its padding is smaller
 "use client";
 
 import { useId, useMemo, useState } from "react";
@@ -15,6 +17,7 @@ import { EMPTY_FILTERS, toQueryString, visiblePrograms, type Filters } from "@/l
 import { matchesQuery, sortPrograms, type SortKey } from "@/lib/program-search";
 import type { Province, Topic } from "@/lib/vocab";
 import { Button, ButtonLink } from "./Button";
+import { BLOCK_GAP, INNER_GAP } from "./Container";
 import { FilterControls } from "./FilterControls";
 import { ProgramRow } from "./ProgramRow";
 
@@ -93,9 +96,9 @@ export function ProgramsIndex({ programs }: ProgramsIndexProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className={BLOCK_GAP}>
       {/* search, sort and chips on the page, no box, only the inputs are white */}
-      <div className="space-y-4 border-y border-stone-400 py-4">
+      <div className={`${INNER_GAP} border-y border-stone-400 py-3`}>
         <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
           <div className="min-w-[16rem] flex-1">
             <label htmlFor={searchId} className="font-sans text-base font-medium text-stone-700">
@@ -174,7 +177,7 @@ export function ProgramsIndex({ programs }: ProgramsIndexProps) {
             ))}
           </ul>
         ) : (
-          <div className="space-y-2 border border-dashed border-stone-500 p-4">
+          <div className={`${INNER_GAP} border border-dashed border-stone-500 p-4`}>
             <p className="font-serif text-lg font-semibold text-stone-950">No programs match</p>
             <Button variant="secondary" onClick={clearAll}>
               Clear search and filters

@@ -261,7 +261,8 @@ export function Explorer({ programs }: { programs: ExplorerProgram[] }) {
         )}
 
         {isDesktop !== null && (
-          <div className={`absolute bottom-52 right-3 sm:bottom-60 lg:bottom-52 ${LAYER.panel}`}>
+          // the key sits above the zoom buttons and the attribution
+          <div className={`absolute bottom-40 right-3 sm:bottom-64 lg:bottom-32 ${LAYER.panel}`}>
             <Legend showToday={hasToday} />
           </div>
         )}

@@ -7,6 +7,8 @@
 // change in this version (e7): editorial look, same behavior and anchors
 //   each section opens with a 2px ink rule, headings and reading text are serif,
 //   lists are ruled rows, the label filter and search keep their control look
+// change in this version (u5): shared rhythm
+//   sections are 12 apart, blocks inside a section 6 apart, a heading and its intro 3 apart
 "use client";
 
 import Link from "next/link";
@@ -15,6 +17,7 @@ import type { Source } from "@/lib/content-schema";
 import type { HeldTopic } from "@/lib/held-topics";
 import { matchesSearch } from "@/lib/source-search";
 import { GAP_KINDS, VOICES, VOICE_KEYS, type GapKind, type Voice } from "@/lib/vocab";
+import { BLOCK_GAP, BODY, HEADING, INNER_GAP, SECTION_GAP } from "./Container";
 import { PageRail, type NavItem } from "./PageNav";
 import { SourceList } from "./SourceList";
 
@@ -71,10 +74,8 @@ const SECTION_LINKS: NavItem[] = [
 ] as const;
 
 // shared looks, so every section matches
-const SECTION = "scroll-mt-48 space-y-3 border-t-2 border-ink pt-4";
-const H2 = "font-serif text-2xl font-semibold tracking-tight text-stone-950";
+const SECTION = `scroll-mt-48 ${BLOCK_GAP} border-t-2 border-ink pt-4`;
 const H3 = "font-serif text-xl font-semibold text-stone-950";
-const BODY = "max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800";
 const EMPTY = "font-sans text-base text-stone-700";
 const ROW_LINK = "font-serif text-lg font-semibold underline underline-offset-2";
 const PILL_ON = "border-stone-900 bg-stone-900 text-white";
@@ -140,7 +141,7 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
 
   return (
     <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-10">
-      <div className="min-w-0 space-y-8">
+      <div className="min-w-0">
       {/* sticky bar: in-page links, search and label filter */}
       <div className="sticky top-0 z-30 -mx-4 space-y-2 border-b border-stone-400 bg-background/95 px-4 py-2 backdrop-blur">
         {/* links scroll sideways on narrow phones instead of wrapping into a tall bar */}
@@ -219,12 +220,14 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
         </p>
       </div>
 
+        {/* the sections, 12 apart, with 24px of room under the sticky bar */}
+        <div className={`${SECTION_GAP} pt-6`}>
       {/* labels: always shown, they explain the chips above */}
       <section id="labels" aria-labelledby="labels-heading" className={SECTION}>
-        <h2 id="labels-heading" className={H2}>Source labels</h2>
-        <p className={BODY}>
-          A label describes who is speaking; it is not a verdict about whether the source is right or wrong.
-        </p>
+        <div className={INNER_GAP}>
+          <h2 id="labels-heading" className={HEADING}>Source labels</h2>
+          <p className={BODY}>A label describes who is speaking; it is not a verdict about whether the source is right or wrong.</p>
+        </div>
         <dl className="border-t border-stone-400">
           {VOICE_KEYS.map((key) => (
             <div key={key} className="border-b border-stone-400 py-3">
@@ -236,9 +239,9 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
       </section>
 
       {/* questions and gaps remain separately anchored, but share one section */}
-      <section id="not-known" aria-labelledby="not-known-heading" className={`${SECTION} space-y-5`}>
-        <h2 id="not-known-heading" className={H2}>What is not known yet</h2>
-        <div id="questions" role="group" aria-labelledby="questions-heading" className="scroll-mt-48 space-y-3">
+      <section id="not-known" aria-labelledby="not-known-heading" className={SECTION}>
+        <h2 id="not-known-heading" className={HEADING}>What is not known yet</h2>
+        <div id="questions" role="group" aria-labelledby="questions-heading" className={`scroll-mt-48 ${INNER_GAP}`}>
           <h3 id="questions-heading" className={H3}>Open on a page</h3>
           {shownQuestions.length === 0 ? (
             <p className={EMPTY}>{searching ? "No open questions match your search." : "No open questions."}</p>
@@ -256,7 +259,7 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
           )}
         </div>
 
-        <div id="gaps" role="group" aria-labelledby="gaps-heading" className="scroll-mt-48 space-y-3">
+        <div id="gaps" role="group" aria-labelledby="gaps-heading" className={`scroll-mt-48 ${INNER_GAP}`}>
           <h3 id="gaps-heading" className={H3}>Missing from the whole site</h3>
           {shownGaps.length === 0 ? (
             <p className={EMPTY}>{searching ? "No gaps match your search." : "No gaps have been added."}</p>
@@ -284,10 +287,10 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
       </section>
 
       <section id="held-topics" aria-labelledby="held-topics-heading" className={SECTION}>
-        <h2 id="held-topics-heading" className={H2}>Held topics</h2>
-        <p className={BODY}>
-          These topics are researched but not published; each one names what evidence is missing.
-        </p>
+        <div className={INNER_GAP}>
+          <h2 id="held-topics-heading" className={HEADING}>Held topics</h2>
+          <p className={BODY}>These topics are researched but not published; each one names what evidence is missing.</p>
+        </div>
         {shownHeldTopics.length === 0 ? (
           <p className={EMPTY}>{searching ? "No held topics match your search." : "No topics are held."}</p>
         ) : (
@@ -315,9 +318,9 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
 
       {/* all sources: grouped by label, filtered by the chips and the search box */}
       <section id="all-sources" aria-labelledby="all-sources-heading" className={SECTION}>
-        <h2 id="all-sources-heading" className={H2}>All sources</h2>
+        <h2 id="all-sources-heading" className={HEADING}>All sources</h2>
         {shownSources.length === 0 ? (
-          <div className="space-y-2">
+          <div className={INNER_GAP}>
             <p className={EMPTY}>
               {sources.length === 0 ? "No sources have been added yet." : "No sources match your search and label."}
             </p>
@@ -336,7 +339,7 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
             const group = shownSources.filter((source) => source.voice === key);
             if (group.length === 0) return null;
             return (
-              <div key={key} className="mt-4 space-y-2">
+              <div key={key} className={INNER_GAP}>
                 <h3 className={H3}>
                   {VOICES[key].label} ({group.length})
                 </h3>
@@ -346,6 +349,7 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
           })
         )}
       </section>
+      </div>
       </div>
       <PageRail items={SECTION_LINKS} />
     </div>

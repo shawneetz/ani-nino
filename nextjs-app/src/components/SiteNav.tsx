@@ -6,12 +6,18 @@
 // change in this version (e2): editorial look, same behavior
 //   square corners (4px), ink border on the dropdown, the current page is a thick underline
 //   the dropdown keeps its shadow, it is an overlay (shadow allow list in style-rules.test.ts)
+// change in this version (u7): clearer link states
+//   the current page has a thick amber underline, other links get a grey underline on hover
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { NAV_LINKS } from "@/lib/site";
+
+const LINK_BASE = "tap-target flex items-center rounded-sm px-3 font-sans text-base underline-offset-8";
+const LINK_CURRENT = "font-semibold text-ink underline decoration-2 decoration-accent";
+const LINK_OTHER = "text-stone-700 hover:text-ink hover:underline hover:decoration-stone-500";
 
 export function SiteNav() {
   const pathname = usePathname();
@@ -70,9 +76,7 @@ export function SiteNav() {
                 href={href}
                 aria-current={current ? "page" : undefined}
                 onClick={() => setOpen(false)}
-                className={`tap-target flex items-center rounded-sm px-3 font-sans text-base underline-offset-8 hover:text-ink hover:underline ${
-                  current ? "font-semibold text-ink underline decoration-2" : "text-stone-700"
-                }`}
+                className={`${LINK_BASE} ${current ? LINK_CURRENT : LINK_OTHER}`}
               >
                 {label}
               </Link>
