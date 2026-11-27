@@ -77,7 +77,6 @@ const SECTION_LINKS: NavItem[] = [
 // shared looks, so every section matches
 const SECTION = `scroll-mt-48 ${BLOCK_GAP} border-t-2 border-ink pt-4`;
 const H3 = "font-serif text-xl font-semibold text-stone-950";
-const EMPTY = "font-sans text-base text-stone-700";
 const ROW_LINK = `font-serif text-lg font-semibold underline underline-offset-2 hover:decoration-2 ${MOTION}`;
 const PILL_ON = `border-stone-900 bg-stone-900 text-white hover:bg-stone-700 ${MOTION}`;
 const PILL_OFF = `border-stone-500 bg-transparent text-stone-900 hover:border-ink active:bg-stone-200 ${MOTION}`;

@@ -2,12 +2,22 @@
 // The schema only checks that fields exist. This audit checks the honesty rules:
 //   problems = must fix before the program can stay "confirmed"
 //   warnings = worth fixing, but not blocking
-import type { Program } from "./content-schema";
+import type { Program, Source } from "./content-schema";
 
 export type AuditResult = { problems: string[]; warnings: string[] };
 
 // Leftover notes that mean "I have not opened this source yet".
 const PLACEHOLDER = /check before publishing|not captured|not verified|unverified/i;
+
+function allSources(program: Program): { label: string; source: Source }[] {
+  return [
+    ...program.sources.map((source) => ({ label: `source "${source.title}"`, source })),
+    ...program.since.map((item) => ({
+      label: `since ${item.year} source "${item.source.title}"`,
+      source: item.source,
+    })),
+  ];
+}
 
 export function auditConfirmed(programs: Program[]): AuditResult {
   const problems: string[] = [];
@@ -36,6 +46,17 @@ export function auditConfirmed(programs: Program[]): AuditResult {
     );
     if (!hasStrongVoice) {
       problems.push(`${where}: confirmed, but only advocacy or supporter sources`);
+    }
+
+    const checkedOn = program.checkedOn;
+    if (checkedOn) {
+      for (const { label, source } of allSources(program)) {
+        if (source.accessed && source.accessed > checkedOn) {
+          problems.push(
+            `${where}: ${label} was accessed on ${source.accessed}, after checkedOn ${checkedOn}`,
+          );
+        }
+      }
     }
   }
 

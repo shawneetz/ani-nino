@@ -1,5 +1,7 @@
 # what this file does: runs content checks, lint, typecheck, unit tests and a build on every push and pull request
+# on a push to main it then deploys to vercel production, only if every check passed
 # all app commands run inside nextjs-app because package.json lives there, not at the repo root
+# change in this version: new deploy job, and the concurrency rule no longer cancels a running main deploy
 name: ci
 
 on:
@@ -8,11 +10,12 @@ on:
   pull_request:
 
 # cancel older runs of the same branch so only the newest one finishes
+# main is never cancelled, so a deploy can't be stopped halfway by the next push
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
-# read-only token is enough for checks
+# read-only token is enough for checks and for the deploy
 permissions:
   contents: read
 
@@ -62,3 +65,46 @@ jobs:
       # build runs content:check first, then next build
       - name: build
         run: pnpm build
+
+  deploy:
+    # only a push to main deploys, pull requests stop after the checks
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: check
+    runs-on: ubuntu-latest
+
+    # shows up as a "production" deployment on the github repo page
+    environment: production
+
+    # these three come from repo secrets, see the setup notes
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+    # no working-directory here on purpose
+    # the vercel project root directory is nextjs-app, so the cli must start at the repo root
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v5
+        with:
+          package_json_file: nextjs-app/package.json
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: install vercel cli
+        run: npm install --global vercel@latest
+
+      # pulls the project settings and production env vars into .vercel/
+      - name: pull vercel settings
+        run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+
+      # builds the same way vercel would, using the pulled settings
+      - name: build
+        run: vercel build --prod --token="$VERCEL_TOKEN"
+
+      # uploads the prebuilt output, so vercel does not build a second time
+      - name: deploy
+        run: vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"

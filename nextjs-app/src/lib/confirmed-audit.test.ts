@@ -84,3 +84,70 @@ describe("auditConfirmed", () => {
     expect(auditConfirmed([program])).toEqual({ problems: [], warnings: [] });
   });
 });
+
+const sourceOn = (accessed: string) => ({
+  title: "A decree",
+  publisher: "Official Gazette",
+  voice: "official" as const,
+  url: "https://example.com/decree",
+  accessed,
+});
+
+describe("auditConfirmed stale confirmations", () => {
+  it("fails when a source was accessed after checkedOn", () => {
+    const program = makeProgram({ sources: [sourceOn("2026-11-16")] });
+    const result = auditConfirmed([program]);
+    expect(result.problems).toHaveLength(1);
+    expect(result.problems[0]).toContain("2026-11-16");
+    expect(result.problems[0]).toContain("after checkedOn 2026-11-15");
+  });
+
+  it("passes when the access date equals checkedOn", () => {
+    const program = makeProgram({ sources: [sourceOn("2026-11-15")] });
+    expect(auditConfirmed([program]).problems).toEqual([]);
+  });
+
+  it("passes when the access date is before checkedOn", () => {
+    const program = makeProgram({ sources: [sourceOn("2026-11-05")] });
+    expect(auditConfirmed([program]).problems).toEqual([]);
+  });
+
+  it("checks since sources too", () => {
+    const program = makeProgram({
+      since: [{ year: 2020, text: "Later.", source: sourceOn("2026-11-20") }],
+    });
+    const result = auditConfirmed([program]);
+    expect(result.problems).toHaveLength(1);
+    expect(result.problems[0]).toContain("since 2020");
+  });
+
+  it("reports each late source on its own line", () => {
+    const program = makeProgram({
+      sources: [sourceOn("2026-11-16"), sourceOn("2026-11-17")],
+      since: [{ year: 2020, text: "Later.", source: sourceOn("2026-11-18") }],
+    });
+    expect(auditConfirmed([program]).problems).toHaveLength(3);
+  });
+
+  it("skips a source with no accessed date", () => {
+    const program = makeProgram({
+      sources: [
+        sourceOn("2026-11-15"),
+        { title: "No date", publisher: "Gazette", voice: "official", url: "https://example.com/n" },
+      ],
+    });
+    const result = auditConfirmed([program]);
+    expect(result.problems).toEqual([]);
+    expect(result.warnings.join(" ")).toContain("no accessed date");
+  });
+
+  it("does not check a program that is still being checked", () => {
+    const program = makeProgram({
+      status: "checking",
+      question: "What happened?",
+      checkedOn: undefined,
+      sources: [sourceOn("2026-12-01")],
+    });
+    expect(auditConfirmed([program])).toEqual({ problems: [], warnings: [] });
+  });
+});
