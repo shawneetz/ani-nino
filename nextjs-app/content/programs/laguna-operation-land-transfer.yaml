@@ -17,6 +17,11 @@ places:
 promised: "Presidential Decree 27 declared tenant-farmers of private rice and corn lands the owners of the land they till as of October 21, 1972. The land was to be paid for over 15 years at 6 percent a year, and title would come only after payment and membership in a farmers' cooperative."
 happened: "Operation Land Transfer started in November 1972. Calamba and Biñan in Laguna were among nine pilot towns. A government magazine reported 210,054 tenants nationwide held certificates of land transfer by January 31, 1976. Its 53 percent figure matches a revised target of 393,778 tenants, down from the original 914,914. Presidential Decree 315 (October 22, 1973) made financing institutions accept a registered certificate as loan collateral. A certificate was not a title; an Emancipation Patent came after payment and other requirements. A Martial Law Museum article says the decree reached less than 14 percent of all cultivated land, because it left out sugar, coconut and other export crops. Laguna-only counts of tenants, certificates and titles have not been found."
 checkedOn: "2026-11-25"
+plain:
+  promised: "make tenant-farmers of private rice and corn land the owners of the land they worked, paying over 15 years at 6 percent a year, with a title only after full payment and joining a farmers' cooperative"
+  according: "a 1976 government magazine and the Martial Law Museum"
+  happened: "that 210,054 tenants nationwide held certificates of land transfer by January 1976. The magazine calls this 53 percent of a lowered target of 393,778 tenants, down from 914,914. A certificate was not a title. The Martial Law Museum says the decree reached less than 14 percent of all farmland, because it left out sugar, coconut and other export crops"
+  missing: "how many tenants in Laguna received certificates or titles"
 sources:
   - title: Presidential Decree No. 27
     publisher: Official Gazette (text on Lawphil)

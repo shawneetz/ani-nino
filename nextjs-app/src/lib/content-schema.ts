@@ -64,6 +64,14 @@ const videoSchema = z.strictObject({
   channel: text,
 });
 
+const plainSchema = z.strictObject({
+  promised: text,
+  according: text,
+  happened: text,
+  missing: text.optional(),
+});
+export type Plain = z.infer<typeof plainSchema>;
+
 /**
  * Validates one program file in `content/programs/`.
  *
@@ -89,6 +97,7 @@ export const programSchema = z
     promised: text.optional(),
     happened: text,
     question: text.optional(),
+    plain: plainSchema.optional(),
     since: z.array(sinceSchema).default([]),
     sources: z.array(sourceSchema).default([]),
     checkedOn: isoDate.optional(),

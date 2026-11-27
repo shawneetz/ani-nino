@@ -18,6 +18,11 @@ places:
 promised: "Each barrio would form a Samahang Nayon, an association of small farmers meant to pool savings, credit and marketing. Letter of Implementation 23 (July 9, 1973) set the rules, implementing Presidential Decree (PD) 175 (April 14, 1973)."
 happened: "Members of a Samahang Nayon farmers' association had to finish pre-membership training, pledge improved farming and savings, and pay fees. A Barrio Guarantee Fund guaranteed the land payments of members under PD 27. PD 27's text says no title is issued until the tenant is a full member of a recognized cooperative. The Martial Law Museum article goes further and says membership came before even the certificate. It also says some farmers avoided joining because of the money obligations. The article counts associations by region number only, and no Laguna figure has been found."
 checkedOn: "2026-11-25"
+plain:
+  promised: "have every barrio form a Samahang Nayon, an association of small farmers meant to pool savings, credit and marketing"
+  according: "the 1972 decree, the 1973 rules and the Martial Law Museum"
+  happened: "that members had to finish training, pledge better farming and savings, and pay fees. The decree says no land title is issued until the tenant is a full member of a recognized cooperative. The Martial Law Museum says some farmers avoided joining because of the money they had to pay"
+  missing: "how many Laguna farmers joined"
 sources:
   - title: Presidential Decree No. 27
     publisher: Official Gazette (text on Lawphil)

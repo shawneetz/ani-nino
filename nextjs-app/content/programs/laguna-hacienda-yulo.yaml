@@ -15,6 +15,11 @@ places:
 promised: "Presidential Decree (PD) 27 was meant to transfer tenanted rice and corn land to the tenants who tilled it."
 happened: "Presidential Decree 27 covered only tenanted rice and corn land and left out sugar and other export crops. Advocacy reports say the Canlubang Sugar Estate, the Yulo hacienda in Calamba, was exempt because of the Yulo family's closeness to the government. The farmers' group KASAMA-TK says the hacienda was never covered by PD 27 or the later Comprehensive Agrarian Reform Program (CARP). In the 1980s farmers began organizing to ask for the land. In 1991 the government denied a petition to include the hacienda in CARP, after the Department of Agrarian Reform (DAR) had found the land highly suitable for agriculture. No DAR or court record from 1972 to 1986 has been found yet."
 question: "Find a DAR, court or independent record on whether the Canlubang estate was ever covered by Operation Land Transfer, and what happened to its tenants before 1986."
+plain:
+  promised: "give tenants of private rice and corn land the right to own the land they worked, under Presidential Decree 27"
+  according: "advocacy groups and news reports"
+  happened: "that the decree left out sugar land, and the groups say the Canlubang estate, known as Hacienda Yulo, was never covered because of the Yulo family's closeness to the government. In 1991 the government denied a petition to include the estate in the later land reform program"
+  missing: "whether any government or court record shows the estate was ever covered, since none from 1972 to 1986 has been found"
 since:
   - year: 2010
     text: "Advocacy groups reported a clash between farmers and police over disputed land at Sitio Buntog, Barangay Canlubang."

@@ -18,6 +18,11 @@ places:
 promised: "The Laguna Lake Development Authority (LLDA) was given wider powers over the lake so it could be developed for fish, water and other uses. In 1984 the government said its policy was to democratize the lake's benefits by giving marginal users a chance to own, manage and run fishpens."
 happened: "Fishpen area on Laguna de Bay grew from 40 hectares in 1971 to about 30,000 hectares by 1983, according to the Food and Agriculture Organization. LLDA set up its first pilot fishpen at Looc, Cardona, Rizal, around 1970 to 1971. A United Nations University review says early, uncontrolled pens clashed with small fishermen. It adds that all of the lake's revenue growth from 1968 to 1973 went to pen owners. A presidential directive of October 9, 1978 ordered unpermitted fishpens destroyed and new permits suspended. Letter of Instructions 1399 (April 11, 1984) ordered excess pen areas turned over to small fishermen's cooperatives, up to 30 hectares each. Who held the 1970s permits is not yet known."
 checkedOn: "2026-11-25"
+plain:
+  promised: "develop Laguna de Bay for fish and water use, and in 1984 said it would share the lake's benefits by letting small fishermen own and run fishpens"
+  according: "the Food and Agriculture Organization, a United Nations University review and government orders"
+  happened: "that pen area grew from 40 hectares in 1971 to about 30,000 hectares by 1983. The review says early pens clashed with small fishermen, and that all of the lake's revenue growth from 1968 to 1973 went to pen owners. A 1984 order told owners to hand excess pen areas to small fishermen's groups"
+  missing: "who held the pen permits in the 1970s"
 since:
   - year: 2017
     text: "The government began dismantling big fish pens and cages, starting with a 100-hectare pen off Cardona, Rizal, after a presidential order to open fishing grounds to small fishermen."

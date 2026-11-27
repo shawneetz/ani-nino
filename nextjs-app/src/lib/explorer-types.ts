@@ -20,6 +20,7 @@ export type ExplorerProgram = {
   places: ExplorerPlace[];
   summary: string; // first sentence of "happened"
   voices: Voice[]; // who says so, in a fixed order
+  plain?: Program["plain"];
 };
 
 export function toExplorerProgram(p: Program): ExplorerProgram {
@@ -35,5 +36,6 @@ export function toExplorerProgram(p: Program): ExplorerProgram {
     places: p.places,
     summary: firstSentence(p.happened, 220),
     voices: uniqueVoices(p.sources),
+    plain: p.plain,
   };
 }

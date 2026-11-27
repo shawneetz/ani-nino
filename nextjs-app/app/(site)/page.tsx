@@ -1,7 +1,7 @@
 // what this file does: the landing page at "/", it explains the site in about 10 seconds
 // and sends a first-time reader to a program in two taps
 // blocks (spec 5.1): masthead, ledger strip, how to read, start here, by province,
-//   from then to now, timeline, what we do not know, held topics note, call to action
+//   from then to now, timeline, held topics note, call to action
 // it is a server component and loads no maplibre code (the map lives at /map)
 // old shared links such as "/?topic=land" are redirected to "/map?topic=land"
 // note: reading searchparams makes this page render on request instead of at build time

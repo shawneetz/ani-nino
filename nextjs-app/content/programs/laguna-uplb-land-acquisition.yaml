@@ -14,6 +14,11 @@ places:
 promised: "Presidential Decree (PD) 457 (May 15, 1974) let the University of the Philippines Los Baños (UPLB) buy or expropriate private farms to expand research for UPLB and the International Rice Research Institute, with funds and resettlement for tenant-tillers and landless occupants who chose homelots."
 happened: "Presidential Decree 729 (June 5, 1975) created the Institute of Plant Breeding at UPLB. Letter of Instructions 905 (March 28, 1979) allowed more acquisitions by sale or expropriation. It also funded resettlement sites in Bay and Los Baños for dispossessed tenant-tillers and landless workers, to be built as Bagong Lipunan Sites and Services projects with homelot titles. PD 457's schedule of owners includes Luis A. Yulo; it is not known whether those parcels were in Laguna. How many families were displaced, and what they received, is not yet known."
 question: "Find the number of families displaced, the resettlement sites actually built, and any UPLB or tenant account."
+plain:
+  promised: "buy or take private farms near the Los Baños research center to expand rice research, paying tenant-tillers 12,500 pesos per hectare and giving each a free 500-square-meter homelot"
+  according: "the 1974 and 1976 decrees and a 1979 Letter of Instructions"
+  happened: "that the 1979 letter says most of the tenant-tillers and landowners affected had not been properly compensated and relocated. It released 2,841,000 pesos for resettlement sites in Bay and Los Baños. In 1976 a second decree raised the land for the plant breeding institute from 150 to 219 hectares"
+  missing: "how many families were displaced, and what they finally received"
 sources:
   - title: Presidential Decree No. 457
     publisher: Official Gazette (text on Lawphil)

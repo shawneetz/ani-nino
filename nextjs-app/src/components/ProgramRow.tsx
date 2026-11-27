@@ -24,6 +24,8 @@ interface ProgramRowProps {
   program: ExplorerProgram;
 }
 
+const PLAIN_BOX = `${INNER_GAP} max-w-[68ch] border-l-4 border-stone-500 py-1 pl-4 font-serif text-lg leading-relaxed text-stone-800`;
+
 /**
  * Builds the small line under the large start year.
  *
@@ -50,6 +52,7 @@ function yearNote(program: Pick<ExplorerProgram, "startYear" | "endYear">): stri
 export function ProgramRow({ program }: ProgramRowProps) {
   const topic = TOPICS[program.topic];
   const note = yearNote(program);
+  const plain = program.plain;
 
   return (
     <article
@@ -88,7 +91,24 @@ export function ProgramRow({ program }: ProgramRowProps) {
           topic={program.topic}
           className="hidden max-w-[68ch] sm:grid"
         />
-        <p className="line-clamp-2 max-w-[68ch] font-serif leading-relaxed text-stone-800">{program.summary}</p>
+        {plain ? (
+          <div className={PLAIN_BOX}>
+            <p>
+              <strong>They promised to</strong> {plain.promised}.
+            </p>
+            <p>
+              <strong>But in the end, according to</strong> {plain.according},{" "}
+              <strong>what actually happened was</strong> {plain.happened}.
+            </p>
+            {plain.missing && (
+              <p className="font-sans text-base text-stone-700">
+                <strong>Still not known:</strong> {plain.missing}.
+              </p>
+            )}
+          </div>
+        ) : (
+          <p className="line-clamp-2 max-w-[68ch] font-serif leading-relaxed text-stone-800">{program.summary}</p>
+        )}
         <div className="flex flex-wrap items-center gap-2">
           <StatusTag status={program.status} />
           {program.voices.map((voice) => (

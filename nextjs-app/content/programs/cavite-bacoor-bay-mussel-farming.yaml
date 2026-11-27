@@ -16,6 +16,11 @@ places:
 promised: "The Bureau of Fisheries and Aquatic Resources set up a pilot oyster farm in Binakayan, Cavite, in May 1934. It later started mussel farms after mussels threatened the oyster farms in the late 1950s."
 happened: "A 1982 country report says Bacoor Bay became increasingly polluted in the early 1970s and the windowpane oyster stocks could not survive. It also says about 200 hectares of private farms existed in Bacoor Bay by 1950. A Food and Agriculture Organization paper lists about 134 mussel farms in Bacoor and presents bivalve farming as an alternative livelihood for small-scale coastal fishermen. How many families farmed shellfish from 1972 to 1986, and what the pollution did to their income, has not been found."
 question: "Find a Bureau of Fisheries and Aquatic Resources record or study from 1972 to 1986 that counts Bacoor families farming shellfish and shows how pollution changed their income."
+plain:
+  promised: "grow oysters, and later mussels, in Bacoor Bay, starting with a pilot oyster farm at Binakayan in 1934"
+  according: "a 1982 country report and a Food and Agriculture Organization paper"
+  happened: "that the bay became more polluted in the early 1970s and the oyster stocks could not survive. The paper lists about 134 mussel farms in Bacoor and describes shellfish farming as another way for small coastal fishermen to earn a living"
+  missing: "how many families farmed shellfish from 1972 to 1986, and how the pollution changed their income"
 since:
   - year: 2024
     text: "A report says Bacoor's two reclamation projects will turn about 420 hectares of water into land, and a mussel farmer says nearby mussel farms were demolished."

@@ -16,6 +16,11 @@ places:
 promised: "Carmona's council approved a low-cost housing project on May 30, 1976. A July 3, 1979 order of the Minister of Agrarian Reform allowed 35.8 hectares to become a residential subdivision."
 happened: "A 2004 Supreme Court decision ordered 37 farmers' association members to leave land in Carmona, Cavite, after finding they were not tenants. The owner, Credito Asiatic (earlier Lakeview Development Corporation), built a housing project there. The 1979 order found the converted 35.8 hectares untenanted and not planted to rice or corn. The members say they have farmed there since 1961. A group of farmers who sued in 1987 said they learned of the conversion only that January. The decision's notes say the barrio is now part of General Mariano Alvarez."
 question: "Find a 1970s Ministry of Agrarian Reform or Carmona record that shows who tilled the land, and whether anyone paid rent to the owner."
+plain:
+  promised: "turn farmland in Carmona into a low-cost housing project, which the town council approved in 1976 and a 1979 order of the Minister of Agrarian Reform allowed"
+  according: "a 2004 Supreme Court decision"
+  happened: "that the court ordered 37 members of a farmers' association to leave the land, after finding they were not tenants. The 1979 order found the land had no tenants, but the members say they have farmed it since 1961"
+  missing: "who really farmed the land in the 1970s, and whether anyone paid rent to the owner"
 sources:
   - title: Pasong Bayabas Farmers Association, Inc. v. Court of Appeals, G.R. No. 142359 (2004)
     publisher: Supreme Court E-Library

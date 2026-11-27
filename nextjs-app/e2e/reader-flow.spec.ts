@@ -1,4 +1,4 @@
-// what this file does: describes the reader-flow checks for the landing page, program page, sources and charts
+// what this file does: describes the reader-flow checks for the landing page, program page and sources
 // change in this version (n7): cavite gate checks
 //   the cavite tile text now comes from provinceTileText with the confirmed count
 //   the landing numbers are compared with the yaml

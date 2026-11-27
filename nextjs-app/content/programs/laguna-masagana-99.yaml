@@ -17,6 +17,11 @@ places:
 promised: "Loans, seed, fertilizer and chemicals for farmers who adopted high-yielding rice, aiming at 99 cavans of palay per hectare, up from about 40."
 happened: "Masagana 99 began on May 21, 1973. The government tapped academics and scientists, many from the University of the Philippines Los Baños, to design and run it. Nationally, about 400,000 farmers borrowed in the first phase (May to October 1973) and about 530,000 in the third (May to October 1974). By the 14th phase (November 1979 to April 1980) only 54,250 borrowed. Repayment fell as well, and sources disagree on exact rates. Rappler reports that by 1980 only 3.7 percent of small rice farmers were taking out loans. The program stopped in 1984. Laguna-only loan and repayment figures have not been found."
 question: "Find Laguna loan and repayment figures from rural banks, the Philippine National Bank or the Agricultural Credit Administration, and a study of how Laguna farmers experienced the program."
+plain:
+  promised: "give farmers loans, seed, fertilizer and chemicals so they could grow 99 cavans of rice per hectare, up from about 40"
+  according: "the Martial Law Museum, UP researchers, UPLB and Rappler"
+  happened: "that about 400,000 farmers borrowed nationwide in the first phase in 1973, but only 54,250 borrowed in the 14th phase. Fewer farmers paid back their loans too, and the sources give different rates. The program stopped in 1984"
+  missing: "how many Laguna farmers borrowed, and how many paid back"
 since:
   - year: 2022
     text: "In July 2022 the Department of Agriculture recommended Masagana 150, a new rice program aiming for 150 cavans per hectare. Rappler reported it was not yet approved."

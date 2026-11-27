@@ -17,6 +17,11 @@ places:
 promised: "Presidential Decree (PD) 276 (August 20, 1973) set a levy of 15 pesos per 100 kilos of copra on every first sale. It fed a Coconut Consumers Stabilization Fund to subsidize coconut-based consumer goods. Later decrees (PD 961 and PD 1468) said the funds were owned by coconut farmers."
 happened: "Farmers paid the coconut levy when they sold copra, from 1973 to 1982, and at one point it reached 100 pesos per 100 kilos. Inquirer reports say Quezon farmers were believed to be the biggest contributors. The Presidential Commission on Good Government said 9.695 billion pesos was collected from 1973 to 1983. Where the money went, and what Quezon farmers got back, is still being checked."
 question: "Find how much was collected in Quezon alone, from Philippine Coconut Authority or Commission on Audit records. A second lead: what the \"Laguna Coalition\" named in the 2012 coco levy case represented."
+plain:
+  promised: "collect a levy of 15 pesos per 100 kilos of copra to pay for cheaper coconut-based goods, and later decrees said the money belonged to coconut farmers"
+  according: "the Presidential Commission on Good Government, Inquirer reports and Supreme Court decisions"
+  happened: "that farmers paid the levy every time they sold copra, from 1973 to 1982, and at one point it reached 100 pesos per 100 kilos. The commission says 9.695 billion pesos was collected nationwide from 1973 to 1983. Quezon farmers were believed to be the biggest contributors"
+  missing: "how much came from Quezon alone, where the money went, and what Quezon farmers got back"
 since:
   - year: 2001
     text: "The Supreme Court, voting 10 to 5, declared the coconut levy funds public and owned by the government."

@@ -16,6 +16,11 @@ places:
 promised: "Proclamation 1980 (May 30, 1980) set aside private land in Rosario and General Trias for the Export Processing Zone Authority, subject to private rights. Proclamation 2017 (September 19, 1980) added 55 hectares in Rosario."
 happened: "A 2005 proclamation says farmers were displaced by the proclamation and development of the Cavite zone. Proclamation 1980 reserved lots, most of them in the San Francisco de Malabon Estate, in Rosario and General Trias, and Proclamation 2017 added 55 hectares in Rosario. The lot lists name no farmers. The number of farmers displaced, and when they left, has not been found."
 checkedOn: "2026-11-27"
+plain:
+  promised: "set aside private land in Rosario and General Trias for an export zone in 1980, and added 55 more hectares in Rosario later that year"
+  according: "government proclamations from 1980 and 2005"
+  happened: "that a 2005 proclamation says farmers were displaced by the zone, and it set aside a small relocation site for them in Barangay Tejero. The 1980 lot lists name no farmers"
+  missing: "how many farmers were displaced, and when they left"
 since:
   - year: 2005
     text: "Proclamation 817 excluded 9,116 square meters in Barangay Tejero from the Cavite Economic Zone as a relocation site for displaced farmers."

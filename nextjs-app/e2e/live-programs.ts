@@ -1,5 +1,5 @@
 // what this file does: counts live content straight from content/*.yaml
-// so e2e tests never hardcode how many programs, charts or dated records exist,
+// so e2e tests never hardcode how many programs or dated records exist,
 // adding or cutting a page in content/ then needs no test edit
 // it runs in node (playwright), never in the browser
 // a program without an era counts as martial law, same default as the schema

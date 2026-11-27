@@ -13,7 +13,7 @@ import { toExplorerProgram } from "@/lib/explorer-types";
 export const metadata: Metadata = {
   title: "Programs",
   description:
-    "Every martial-law farm program in CALABARZON, 1972 to 1986. Search, filter by topic or province, and compare what each promised with what the record shows.",
+    "Every martial-law farm program in CALABARZON, 1972 to 1986. Each one says in plain words what it promised and what the record shows. Search, filter by topic or province, and compare.",
 };
 
 /**
@@ -32,8 +32,9 @@ export default async function ProgramsPage() {
         <Kicker>Reading list</Kicker>
         <h1 className={PAGE_TITLE}>Programs</h1>
         <p className={BODY}>
-          Every martial-law farm program tracked on this site. Search by title or place, filter by topic or province,
-          or show only the programs checked against their sources.
+          Every martial-law farm program tracked on this site. Each row says in plain words what the program promised,
+          what the record shows and what is still not known. Search by title or place, filter by topic or province, or
+          show only the programs checked against their sources.
         </p>
       </header>
 

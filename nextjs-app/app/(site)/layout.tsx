@@ -1,4 +1,4 @@
-// what this file does: the frame for every normal page (landing, programs, charts, sources, about)
+// what this file does: the frame for every normal page (landing, programs, sources, about)
 // header on top, the page in the middle, footer at the bottom
 // each page renders its own <main id="main"> through Container, so the skip link still lands
 // the route group name "(site)" is not part of the url, so no address changes

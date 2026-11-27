@@ -14,6 +14,11 @@ places:
 promised: "Proclamation 1540 (April 12, 1976) reserved 760 hectares of public land in Sampaloc, Quezon for resettlement. Executive Order 494 (January 6, 1978) created a Makiling Kainginero Resettlement Committee chaired by the University of the Philippines Los Baños (UPLB) to plan and run it."
 happened: "Executive Order 494 told the Makiling resettlement committee to clear the area of trees, except those needed for riverbank protection. Money from the harvested timber went to the area's development, with UPLB as trustee. The area was cut out of the timber concession of the International Hardwood and Veneer Company of the Philippines. How many families were moved, and what became of them, has not been found."
 question: "Find the number of kainginero families resettled, and any account from the settlers or UPLB."
+plain:
+  promised: "move kaingineros, farmers who clear forest land for planting, from Mt. Makiling to 760 hectares of public land in Sampaloc, Quezon"
+  according: "Executive Order 494 and a United Nations University table"
+  happened: "that a committee led by the University of the Philippines Los Baños was told to clear the land of most trees and choose who would be resettled. A 1978 table lists a Sampaloc project of the same size and year with 96 settler families, but it does not name Makiling"
+  missing: "how many Makiling families were really resettled, and what became of them"
 sources:
   - title: Proclamation No. 1540
     publisher: Official Gazette (text on Batas Natin)
