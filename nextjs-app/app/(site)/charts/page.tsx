@@ -4,7 +4,7 @@
 //   each chart gets its figure number from its order on the page
 import type { Metadata } from "next";
 import { ChartCard } from "@/components/ChartCard";
-import { Container } from "@/components/Container";
+import { BODY, Container, PAGE_HEADER, PAGE_STACK, PAGE_TITLE } from "@/components/Container";
 import { Kicker } from "@/components/Kicker";
 import { getCharts } from "@/lib/content";
 
@@ -29,14 +29,12 @@ export default async function ChartsPage() {
   const visibleCharts = charts.filter((chart) => chart.points.length > 0);
 
   return (
-    <Container as="main" className="space-y-8 py-8">
+    <Container as="main" className={PAGE_STACK}>
       {/* header: a heavy rule opens the page like a printed article */}
-      <header className="space-y-3 border-t-2 border-ink pt-4">
+      <header className={PAGE_HEADER}>
         <Kicker>Evidence</Kicker>
-        <h1 className="font-serif text-[clamp(2.25rem,5vw,3.5rem)] font-bold leading-tight tracking-tight text-stone-950">
-          Charts
-        </h1>
-        <p className="max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800">
+        <h1 className={PAGE_TITLE}>Charts</h1>
+        <p className={BODY}>
           Every number carries a label and a link to where it comes from. Numbers reported by the
           government are labeled Government; they show what was counted, not who was left out.
         </p>

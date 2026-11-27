@@ -97,7 +97,9 @@ test.describe("map on desktop", () => {
   test("previous and next page through results and escape returns focus", async ({ page }) => {
     await list(page).locator("li button").first().click();
     const dialog = page.getByRole("dialog");
+    await expect(page).toHaveURL(/sel=/);
     const first = new URL(page.url()).searchParams.get("sel");
+    expect(first).not.toBeNull();
     await dialog.getByRole("button", { name: "Next", exact: true }).click();
     await expect(dialog.getByRole("status")).toContainText(/^2 of \d+/);
     await dialog.getByRole("button", { name: "Previous", exact: true }).click();

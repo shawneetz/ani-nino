@@ -10,7 +10,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ButtonLink } from "@/components/Button";
-import { Container } from "@/components/Container";
+import { BODY, Container, PAGE_HEADER, PAGE_STACK, PAGE_TITLE } from "@/components/Container";
 import { Kicker } from "@/components/Kicker";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -29,14 +29,12 @@ export default function NotFound() {
   return (
     <>
       <SiteHeader />
-      <Container as="main" className="space-y-6 py-12">
-        <div className="space-y-3 border-t-2 border-ink pt-4">
+      <Container as="main" className={PAGE_STACK}>
+        <div className={PAGE_HEADER}>
           {/* small label so the reader knows what kind of page this is */}
           <Kicker>Error 404</Kicker>
-          <h1 className="font-serif text-[clamp(2.25rem,5vw,3.5rem)] font-bold leading-tight tracking-tight text-stone-950">
-            We could not find that page
-          </h1>
-          <p className="max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800">
+          <h1 className={PAGE_TITLE}>We could not find that page</h1>
+          <p className={BODY}>
             The link may be old or mistyped, or the program may have been renamed. Try the map or the full
             list of programs instead.
           </p>

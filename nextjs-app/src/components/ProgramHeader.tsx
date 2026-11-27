@@ -6,6 +6,7 @@
 import type { Program } from "@/lib/content-schema";
 import { yearRange } from "@/lib/filter";
 import { TOPICS } from "@/lib/vocab";
+import { PAGE_HEADER, PAGE_TITLE } from "./Container";
 import { CopyLinkButton } from "./CopyLinkButton";
 import { Dateline } from "./Dateline";
 import { Kicker } from "./Kicker";
@@ -19,7 +20,7 @@ export function ProgramHeader({ program }: Props) {
   const topic = TOPICS[program.topic];
 
   return (
-    <header className="space-y-4 border-t-2 border-ink pt-4">
+    <header className={PAGE_HEADER}>
       <Kicker>
         {/* the topic color depends on the data, so it stays inline */}
         <span style={{ color: topic.color }}>{topic.label}</span> · {yearRange(program)}
@@ -27,9 +28,7 @@ export function ProgramHeader({ program }: Props) {
         {program.era === "today" && " · Today"}
       </Kicker>
 
-      <h1 className="font-serif text-[clamp(2.25rem,5vw,3.5rem)] font-bold leading-tight tracking-tight text-stone-950">
-        {program.title}
-      </h1>
+      <h1 className={PAGE_TITLE}>{program.title}</h1>
 
       <Dateline
         status={program.status}

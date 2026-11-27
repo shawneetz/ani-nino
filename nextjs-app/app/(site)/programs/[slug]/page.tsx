@@ -21,7 +21,17 @@ import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { ButtonLink } from "@/components/Button";
 import { CiteBlock } from "@/components/CiteBlock";
-import { Container } from "@/components/Container";
+import {
+  BLOCK_GAP,
+  BODY,
+  Container,
+  HEADING,
+  INNER_GAP,
+  PAGE_HEADER,
+  PAGE_STACK,
+  PAGE_TITLE,
+  SECTION_GAP,
+} from "@/components/Container";
 import { ContributeLinks } from "@/components/ContributeLinks";
 import { Kicker } from "@/components/Kicker";
 import { JumpSelect, PageRail, type NavItem } from "@/components/PageNav";
@@ -80,9 +90,9 @@ function Block({
     <section
       id={id}
       aria-labelledby={`${id}-heading`}
-      className={`scroll-mt-24 space-y-3 border-t-2 border-ink pt-4 ${className}`}
+      className={`scroll-mt-24 ${INNER_GAP} border-t-2 border-ink pt-4 ${className}`}
     >
-      <h2 id={`${id}-heading`} className="font-serif text-2xl font-semibold text-stone-950">
+      <h2 id={`${id}-heading`} className={HEADING}>
         {title}
       </h2>
       {children}
@@ -94,14 +104,12 @@ function Block({
 // the sources link goes to the held topics section
 function HeldTopicPage({ topic }: { topic: HeldTopic }) {
   return (
-    <Container as="main" className="space-y-6 py-12">
-      <div className="space-y-3 border-t-2 border-ink pt-4">
+    <Container as="main" className={PAGE_STACK}>
+      <div className={PAGE_HEADER}>
         <Kicker>Held topic</Kicker>
-        <h1 className="font-serif text-3xl font-bold tracking-tight text-stone-950">{topic.title}</h1>
-        <p className="max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800">
-          This topic is researched but not published yet.
-        </p>
-        <p className="max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800">{topic.reason}</p>
+        <h1 className={PAGE_TITLE}>{topic.title}</h1>
+        <p className={BODY}>This topic is researched but not published yet.</p>
+        <p className={BODY}>{topic.reason}</p>
       </div>
       <div className="flex flex-wrap gap-3">
         <ButtonLink href="/sources#held-topics">See what is not known yet</ButtonLink>
@@ -148,7 +156,7 @@ export default async function ProgramPage({ params }: Props) {
   return (
     // on desktop the content and the sticky rail sit side by side
     <Container as="main" className="py-6 lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-10 print:block!">
-      <div className="min-w-0 space-y-8">
+      <div className={`min-w-0 ${SECTION_GAP}`}>
         <Link
           href="/map"
           className="tap-target inline-flex items-center font-sans text-base underline underline-offset-2 print:hidden"
@@ -178,7 +186,7 @@ export default async function ProgramPage({ params }: Props) {
 
         {/* the past/present links share one anchor so the nav can jump to them */}
         {(origin || echoes.length > 0) && (
-          <div id="echoes" className="scroll-mt-24 space-y-8 border-t-2 border-ink pt-4">
+          <div id="echoes" className={`scroll-mt-24 ${BLOCK_GAP} border-t-2 border-ink pt-4`}>
             {/* today program -> the martial-law program it echoes */}
             {origin && (
               <section className="space-y-2">

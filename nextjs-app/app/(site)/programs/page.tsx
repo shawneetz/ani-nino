@@ -4,7 +4,7 @@
 // change in this version (e6): editorial intro with a kicker, a serif title and a 2px ink rule
 //   the intro mentions search, filters and the confirmed only switch
 import type { Metadata } from "next";
-import { Container } from "@/components/Container";
+import { BODY, Container, PAGE_HEADER, PAGE_STACK, PAGE_TITLE } from "@/components/Container";
 import { Kicker } from "@/components/Kicker";
 import { ProgramsIndex } from "@/components/ProgramsIndex";
 import { getPrograms } from "@/lib/content";
@@ -27,13 +27,11 @@ export default async function ProgramsPage() {
   const programs = (await getPrograms()).map(toExplorerProgram);
 
   return (
-    <Container as="main" className="space-y-6 py-8">
-      <header className="space-y-3 border-t-2 border-ink pt-4">
+    <Container as="main" className={PAGE_STACK}>
+      <header className={PAGE_HEADER}>
         <Kicker>Reading list</Kicker>
-        <h1 className="font-serif text-[clamp(2.25rem,5vw,3.5rem)] font-bold leading-tight tracking-tight text-stone-950">
-          Programs
-        </h1>
-        <p className="max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800">
+        <h1 className={PAGE_TITLE}>Programs</h1>
+        <p className={BODY}>
           Every martial-law farm program tracked on this site. Search by title or place, filter by topic or province,
           or show only the programs checked against their sources.
         </p>

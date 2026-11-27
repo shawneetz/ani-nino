@@ -8,7 +8,7 @@
 // change in this version (e7): editorial header with a kicker, a serif title and a 2px ink rule
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Container } from "@/components/Container";
+import { BODY, Container, PAGE_HEADER, PAGE_STACK, PAGE_TITLE } from "@/components/Container";
 import { Kicker } from "@/components/Kicker";
 import { SourcesBrowser, type GapItem, type OpenQuestionItem } from "@/components/SourcesBrowser";
 import { getGaps, getPrograms, getSources } from "@/lib/content";
@@ -49,13 +49,11 @@ export default async function SourcesPage() {
   }));
 
   return (
-    <Container as="main" className="space-y-6 py-8">
-      <header className="space-y-3 border-t-2 border-ink pt-4">
+    <Container as="main" className={PAGE_STACK}>
+      <header className={PAGE_HEADER}>
         <Kicker>Evidence</Kicker>
-        <h1 className="font-serif text-[clamp(2.25rem,5vw,3.5rem)] font-bold leading-tight tracking-tight text-stone-950">
-          Sources
-        </h1>
-        <p className="max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800">
+        <h1 className={PAGE_TITLE}>Sources</h1>
+        <p className={BODY}>
           This page lists source labels, what is not known yet, topics held back and every source used on the site.
           Short forms such as PD and DAR are explained in the{" "}
           <Link href="/about#glossary" className="underline underline-offset-2">

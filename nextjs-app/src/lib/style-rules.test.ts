@@ -1,6 +1,7 @@
 // what this file does: keeps page text readable and keeps the editorial look honest
 //   rule 1: text is stone-700 or darker and never text-xs
 //   rule 2 (e3): shadow classes are allowed only in map overlay files and the nav dropdown
+//   rule 3 (u1): page files in app/ use the shared spacing steps
 // reads app/ and src/components/ so a future light color, tiny text or stray shadow does not return
 import { readdirSync, readFileSync } from "node:fs";
 import { basename, join, relative } from "node:path";
@@ -62,6 +63,19 @@ describe("style rules", () => {
       if (SHADOW_ALLOWED.has(basename(file))) continue;
       if (shadow.test(readFileSync(file, "utf8"))) {
         violations.push(`${relative(process.cwd(), file)}: uses a shadow class outside the allow list`);
+      }
+    }
+
+    expect(violations).toEqual([]);
+  });
+
+  it("keeps page files on the shared spacing steps", () => {
+    const violations: string[] = [];
+    const oldGaps = /\bspace-y-(?:4|5|8|10)\b/;
+
+    for (const file of tsxFiles(join(process.cwd(), "app"))) {
+      if (oldGaps.test(readFileSync(file, "utf8"))) {
+        violations.push(`${relative(process.cwd(), file)}: uses a one-off space-y gap, use the shared classes`);
       }
     }
 

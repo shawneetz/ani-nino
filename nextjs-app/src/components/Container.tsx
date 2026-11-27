@@ -3,9 +3,20 @@
 //   full = edge to edge, only for special layouts
 // change in this version (v1): the old prose and wide widths are gone, there is one page width
 //   reading text keeps its own max-w-[68ch] cap, so a wide page fills the row with grids and rails, not long lines
+// change in this version (u1): added the rhythm and type constants below
 import type { ReactNode } from "react";
 
 export const PAGE_WIDTH = "max-w-6xl";
+
+export const PAGE_STACK = "space-y-12 py-8";
+export const SECTION_GAP = "space-y-12";
+export const BLOCK_GAP = "space-y-6";
+export const INNER_GAP = "space-y-3";
+export const PAGE_HEADER = "space-y-3 border-t-2 border-ink pt-4";
+export const PAGE_TITLE =
+  "font-serif text-[clamp(2.25rem,5vw,3.5rem)] font-bold leading-tight tracking-tight text-stone-950";
+export const HEADING = "font-serif text-2xl font-semibold tracking-tight text-stone-950";
+export const BODY = "max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800";
 
 const WIDTHS = {
   page: PAGE_WIDTH,

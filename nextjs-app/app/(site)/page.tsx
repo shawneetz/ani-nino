@@ -14,7 +14,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ButtonLink } from "@/components/Button";
 import { FeaturedProgramCard } from "@/components/FeaturedProgramCard";
-import { Container } from "@/components/Container";
+import { Container, HEADING, PAGE_STACK } from "@/components/Container";
 import { Hero } from "@/components/Hero";
 import { Kicker } from "@/components/Kicker";
 import { Section } from "@/components/Section";
@@ -98,7 +98,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   return (
     <main id="main">
       <Hero />
-      <Container className="space-y-12 py-8">
+      <Container className={PAGE_STACK}>
 
       {/* ledger strip: one row of large serif numerals split by hairlines */}
       <section aria-label="The site in numbers">
@@ -273,7 +273,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
       {/* call to action: github only in v1, so no sign-in wording here */}
       <section aria-labelledby="help-heading" className="space-y-3 border-t-2 border-ink pt-4">
-        <h2 id="help-heading" className="font-serif text-2xl font-semibold tracking-tight text-stone-950">
+        <h2 id="help-heading" className={HEADING}>
           Know a source? Help check it.
         </h2>
         <p className="max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800">
