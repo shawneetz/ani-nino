@@ -118,40 +118,42 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
         title="How to read this site"
         intro="Every program page follows the same order, so you can compare them."
       >
-        <ol className="grid gap-6 md:grid-cols-3">
-          {STEPS.map((step) => (
-            <li key={step.title} className="border-t border-stone-400 pt-3">
-              <h3 className="font-serif text-lg font-semibold text-stone-950">{step.title}</h3>
-              <p className="mt-2 font-serif leading-relaxed text-stone-800">{step.body}</p>
-            </li>
-          ))}
-        </ol>
-        <div className="grid gap-8 pt-2 md:grid-cols-2">
-          <div className="border-t border-stone-400 pt-3">
-            <h3 className="font-serif text-lg font-semibold text-stone-950">The four source labels</h3>
-            <dl className="mt-3 space-y-3">
-              {VOICE_KEYS.map((voice) => (
-                <div key={voice} className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <dt>
-                    <VoiceChip voice={voice} />
-                  </dt>
-                  <dd className="font-sans text-base text-stone-800">{VOICES[voice].blurb}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-          <div className="border-t border-stone-400 pt-3">
-            <h3 className="font-serif text-lg font-semibold text-stone-950">The two statuses</h3>
-            <dl className="mt-3 space-y-3">
-              {PROGRAM_STATUS_KEYS.map((status) => (
-                <div key={status} className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <dt>
-                    <StatusTag status={status} />
-                  </dt>
-                  <dd className="font-sans text-base text-stone-800">{PROGRAM_STATUS_BLURBS[status]}</dd>
-                </div>
-              ))}
-            </dl>
+        <div className="grid gap-x-12 gap-y-6 lg:grid-cols-2">
+          <ol className="grid gap-6 md:grid-cols-3 lg:grid-cols-1">
+            {STEPS.map((step) => (
+              <li key={step.title} className="border-t border-stone-400 pt-3">
+                <h3 className="font-serif text-lg font-semibold text-stone-950">{step.title}</h3>
+                <p className="mt-2 max-w-[68ch] font-serif leading-relaxed text-stone-800">{step.body}</p>
+              </li>
+            ))}
+          </ol>
+          <div className="grid content-start gap-6 md:grid-cols-2 lg:grid-cols-1">
+            <div className="border-t border-stone-400 pt-3">
+              <h3 className="font-serif text-lg font-semibold text-stone-950">The four source labels</h3>
+              <dl className="mt-3 space-y-3">
+                {VOICE_KEYS.map((voice) => (
+                  <div key={voice} className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <dt>
+                      <VoiceChip voice={voice} />
+                    </dt>
+                    <dd className="font-sans text-base text-stone-800">{VOICES[voice].blurb}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+            <div className="border-t border-stone-400 pt-3">
+              <h3 className="font-serif text-lg font-semibold text-stone-950">The two statuses</h3>
+              <dl className="mt-3 space-y-3">
+                {PROGRAM_STATUS_KEYS.map((status) => (
+                  <div key={status} className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <dt>
+                      <StatusTag status={status} />
+                    </dt>
+                    <dd className="font-sans text-base text-stone-800">{PROGRAM_STATUS_BLURBS[status]}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           </div>
         </div>
       </Section>

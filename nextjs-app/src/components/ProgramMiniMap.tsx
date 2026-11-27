@@ -11,10 +11,11 @@ import dynamic from "next/dynamic";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ExplorerProgram } from "@/lib/explorer-types";
 import { PROVINCE_LABELS } from "@/lib/vocab";
+import { INNER_GAP } from "./Container";
 
 // grey pulsing box shown until the map is ready
 function MapPlaceholder() {
-    return <div className="absolute inset-0 animate-pulse rounded-lg bg-stone-100" />;
+    return <div className="absolute inset-0 animate-pulse bg-stone-100" />;
 }
 
 // the map is loaded in the browser only
@@ -46,17 +47,20 @@ export function ProgramMiniMap({ program }: { program: ExplorerProgram }) {
 
     return (
         // stacked on phones, map and list side by side from 768px
-        <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_16rem] print:block!">
+        <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_16rem] print:block!">
             {/* PinMap fills its parent, so the parent needs a position and a height */}
             <div ref={box} className="relative h-80 md:h-96 print:hidden">
                 {near ? <PinMap programs={programs} embedded /> : <MapPlaceholder />}
             </div>
 
-            <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-stone-900">Places</h3>
-                <ul className="space-y-1 text-lg text-stone-800">
+            <div className={INNER_GAP}>
+                <h3 className="font-sans text-sm font-semibold uppercase tracking-kicker text-stone-700">Places</h3>
+                <ul className="border-t border-stone-400">
                     {program.places.map((place) => (
-                        <li key={`${place.name}-${place.province}`}>
+                        <li
+                            key={`${place.name}-${place.province}`}
+                            className="border-b border-stone-400 py-2 font-serif text-lg text-stone-800"
+                        >
                             {place.name}, {PROVINCE_LABELS[place.province]}
                             {place.approximate ? " (approximate)" : ""}
                         </li>

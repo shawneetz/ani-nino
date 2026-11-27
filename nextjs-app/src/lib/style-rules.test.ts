@@ -2,6 +2,7 @@
 //   rule 1: text is stone-700 or darker and never text-xs
 //   rule 2 (e3): shadow classes are allowed only in map overlay files and the nav dropdown
 //   rule 3 (u1): page files in app/ use the shared spacing steps
+//   rule 4 (u2): no boxed card on a reading page, Card is gone and rounded-card is for map overlays only
 // reads app/ and src/components/ so a future light color, tiny text or stray shadow does not return
 import { readdirSync, readFileSync } from "node:fs";
 import { basename, join, relative } from "node:path";
@@ -22,6 +23,8 @@ const SHADOW_ALLOWED = new Set([
   "FilterChips.tsx",
   "Legend.tsx",
 ]);
+
+const CARD_ALLOWED = new Set(["PinMap.tsx", "ResultsBody.tsx"]);
 
 // collect tsx files below one root, in a stable order for readable failures
 function tsxFiles(root: string): string[] {
@@ -76,6 +79,23 @@ describe("style rules", () => {
     for (const file of tsxFiles(join(process.cwd(), "app"))) {
       if (oldGaps.test(readFileSync(file, "utf8"))) {
         violations.push(`${relative(process.cwd(), file)}: uses a one-off space-y gap, use the shared classes`);
+      }
+    }
+
+    expect(violations).toEqual([]);
+  });
+
+  it("keeps boxed cards out of reading pages", () => {
+    const violations: string[] = [];
+    const cardImport = /from\s+["'](?:\.\/|@\/components\/)Card["']/;
+    const cardRadius = /\brounded-card\b/;
+
+    for (const file of allFiles()) {
+      const text = readFileSync(file, "utf8");
+      const name = relative(process.cwd(), file);
+      if (cardImport.test(text)) violations.push(`${name}: imports Card, reading pages use flat blocks`);
+      if (cardRadius.test(text) && !CARD_ALLOWED.has(basename(file))) {
+        violations.push(`${name}: uses rounded-card outside the map overlay files`);
       }
     }
 

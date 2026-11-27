@@ -10,11 +10,12 @@
 import type { Source } from "@/lib/content-schema";
 import { partisanNote, uniqueVoices } from "@/lib/source-summary";
 import { splitFirstSentence } from "@/lib/split-first-sentence";
+import { BLOCK_GAP, BODY, INNER_GAP } from "./Container";
 import { VoiceChip } from "./VoiceChip";
 
 // shared looks, so both panels always match
 const HEADING = "font-serif text-xl font-semibold text-stone-950";
-const BODY = "mt-3 max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800";
+const LEAD = "max-w-[68ch] font-serif text-2xl leading-snug text-stone-950";
 
 type RecordProps = {
   promised?: string;
@@ -29,25 +30,25 @@ export function RecordPanels({ promised, happened, sources }: RecordProps) {
   const { first, rest } = splitFirstSentence(happened);
 
   return (
-    <section id="record" aria-label="Promise and record" className="scroll-mt-24 space-y-6">
+    <section id="record" aria-label="Promise and record" className={`scroll-mt-24 ${BLOCK_GAP}`}>
       {/* two columns only when there is a promise to show */}
-      <div className={`grid gap-6 md:gap-8 ${promised ? "md:grid-cols-2" : ""}`}>
+      <div className={`grid gap-6 ${promised ? "md:grid-cols-2 md:gap-0" : ""}`}>
         {promised && (
           // a top hairline on phones, a vertical hairline between the columns from 768px
-          <div className="border-t border-stone-400 pt-4 md:border-r md:border-t-0 md:pr-8 md:pt-0">
+          <div className={`${INNER_GAP} border-t border-stone-400 pt-4 md:border-r md:border-t-0 md:pr-8 md:pt-0`}>
             <h2 className={HEADING}>What it promised</h2>
             <p className={BODY}>{promised}</p>
           </div>
         )}
-        <div className="border-t border-stone-400 pt-4 md:border-t-0 md:pt-0">
+        <div className={`${INNER_GAP} border-t border-stone-400 pt-4 md:border-t-0 md:pt-0 ${promised ? "md:pl-8" : ""}`}>
           <h2 className={HEADING}>What the record shows</h2>
-          <p className="mt-3 max-w-[68ch] font-serif text-2xl leading-snug text-stone-950">{first}</p>
+          <p className={LEAD}>{first}</p>
           {rest && <p className={BODY}>{rest}</p>}
         </div>
       </div>
 
       {/* who says so, set like a byline, with the balance note when sources lean one way */}
-      <div className="space-y-2 border-t border-stone-400 pt-3">
+      <div className={`${INNER_GAP} border-t border-stone-400 pt-3`}>
         <h2 className="font-sans text-sm font-semibold uppercase tracking-kicker text-stone-700">Who says so</h2>
         {voices.length > 0 ? (
           <div className="flex flex-wrap gap-2">

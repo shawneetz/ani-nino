@@ -3,12 +3,26 @@ import { HERO, SITE } from "@/lib/site";
 import { ButtonLink } from "./Button";
 import { Container } from "./Container";
 
+const LINE_COUNT = 9;
+const ACCENT_LINE = 3;
+
 function ContourLines() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full text-stone-700">
-      {Array.from({ length: 16 }, (_, index) => {
-        const y = 30 + index * 38;
-        return <path key={index} d={`M0 ${y} C 240 ${y - 45} 420 ${y + 45} 640 ${y} S 980 ${y - 40} 1200 ${y + 10}`} fill="none" stroke="currentColor" strokeWidth={1.5} opacity={0.6} />;
+    <svg aria-hidden="true" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
+      {Array.from({ length: LINE_COUNT }, (_, index) => {
+        const y = 50 + index * 62;
+        const lift = 40 + (index % 3) * 22;
+        const accent = index === ACCENT_LINE;
+        return (
+          <path
+            key={index}
+            d={`M0 ${y} C 220 ${y - lift} 420 ${y + lift} 640 ${y} S 980 ${y - lift} 1200 ${y + 14}`}
+            fill="none"
+            strokeLinecap="round"
+            strokeWidth={accent ? 4 : 2.5}
+            className={`[vector-effect:non-scaling-stroke] ${accent ? "stroke-amber-500" : "stroke-stone-500 opacity-70"}`}
+          />
+        );
       })}
     </svg>
   );
@@ -19,11 +33,16 @@ export function Hero() {
     <section aria-labelledby="hero-heading" className="relative isolate flex min-h-[28rem] items-end overflow-hidden bg-stone-950 sm:min-h-[36rem] print:min-h-0 print:bg-white">
       <div aria-hidden="true" className="absolute inset-0 -z-10 print:hidden">
         {HERO ? (
-          <Image src={HERO.src} alt="" fill priority sizes="100vw" className="object-cover grayscale contrast-110" style={{ objectPosition: HERO.position }} />
+          <>
+            <Image src={HERO.src} alt="" fill priority sizes="100vw" className="object-cover grayscale contrast-110" style={{ objectPosition: HERO.position }} />
+            <div className="absolute inset-0 bg-linear-to-t from-stone-950/85 via-stone-950/55 to-stone-950/40" />
+          </>
         ) : (
-          <ContourLines />
+          <>
+            <ContourLines />
+            <div className="absolute inset-0 bg-linear-to-t from-stone-950/90 via-stone-950/30 to-transparent" />
+          </>
         )}
-        <div className="absolute inset-0 bg-linear-to-t from-stone-950/85 via-stone-950/55 to-stone-950/40" />
       </div>
       <Container className="space-y-4 pb-10 pt-24 print:pt-0">
         <p className="font-sans text-sm font-semibold uppercase tracking-kicker text-amber-300 print:text-stone-700">Martial-law farm programs · CALABARZON · 1972 to 1986</p>

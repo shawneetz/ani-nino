@@ -9,15 +9,15 @@ import { StatusTag } from "./StatusTag";
 
 export function RelatedPrograms({ items }: { items: Program[] }) {
     return (
-        <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <ul className="border-t border-stone-400">
             {items.map((item) => (
-                <li key={item.slug}>
+                <li key={item.slug} className="border-b border-stone-400">
                     <Link
                         href={`/programs/${item.slug}`}
-                        className="block h-full rounded-card border border-stone-300 bg-white p-4 hover:border-stone-500"
+                        className="tap-target group block space-y-1 px-1 py-3 hover:bg-stone-100"
                     >
-                        <span className="block text-lg font-semibold text-stone-900">{item.title}</span>
-                        <span className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-base text-stone-700">
+                        <span className="block font-serif text-xl font-semibold leading-snug text-stone-950 group-hover:underline">{item.title}</span>
+                        <span className="figures flex flex-wrap items-center gap-x-3 gap-y-1 font-sans text-base text-stone-700">
                             <span>{yearRange(item)}</span>
                             <span style={{ color: TOPICS[item.topic].color }}>{TOPICS[item.topic].label}</span>
                             <StatusTag status={item.status} />

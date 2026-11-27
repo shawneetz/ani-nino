@@ -21,12 +21,13 @@ export function ProgramHeader({ program }: Props) {
 
   return (
     <header className={PAGE_HEADER}>
-      <Kicker>
-        {/* the topic color depends on the data, so it stays inline */}
-        <span style={{ color: topic.color }}>{topic.label}</span> · {yearRange(program)}
-        {/* marks echo programs so they are not mistaken for martial-law ones */}
-        {program.era === "today" && " · Today"}
-      </Kicker>
+      <div className="flex flex-wrap items-center justify-between gap-x-4">
+        <Kicker>
+          <span style={{ color: topic.color }}>{topic.label}</span> · {yearRange(program)}
+          {program.era === "today" && " · Today"}
+        </Kicker>
+        <CopyLinkButton />
+      </div>
 
       <h1 className={PAGE_TITLE}>{program.title}</h1>
 
@@ -39,9 +40,6 @@ export function ProgramHeader({ program }: Props) {
         topic={program.topic}
       />
 
-      <div>
-        <CopyLinkButton />
-      </div>
     </header>
   );
 }

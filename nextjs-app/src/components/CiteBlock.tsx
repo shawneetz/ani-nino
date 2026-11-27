@@ -6,7 +6,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Button } from "./Button";
-import { Card } from "./Card";
+import { INNER_GAP } from "./Container";
 
 type Status = "idle" | "copied" | "failed";
 
@@ -39,10 +39,10 @@ export function CiteBlock({ text }: CiteBlockProps) {
   const label = status === "copied" ? "Copied" : status === "failed" ? "Copy failed" : "Copy citation";
 
   return (
-    <Card className="space-y-3">
+    <div className={`${INNER_GAP} border-l-4 border-stone-500 py-1 pl-4`}>
       <p
         data-testid="citation-text"
-        className="max-w-[68ch] text-lg leading-relaxed text-stone-800 [overflow-wrap:anywhere]"
+        className="max-w-[68ch] font-serif text-lg leading-relaxed text-stone-800 [overflow-wrap:anywhere]"
       >
         {text}
       </p>
@@ -54,6 +54,6 @@ export function CiteBlock({ text }: CiteBlockProps) {
           {status === "copied" ? "Citation copied to clipboard" : status === "failed" ? "Could not copy the citation" : ""}
         </span>
       </div>
-    </Card>
+    </div>
   );
 }

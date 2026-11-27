@@ -392,7 +392,9 @@ export default function PinMap({
         ref={box}
         role="region"
         aria-label={embedded ? "Map of this program's places" : "Map of programs"}
-        className="isolate h-full w-full rounded-lg border border-stone-200 bg-stone-100"
+        className={`isolate h-full w-full border bg-stone-100 ${
+          embedded ? "border-stone-400" : "rounded-lg border-stone-200"
+        }`}
       />
 
       {/* picker for a spot with several programs, in the middle of the free map */}

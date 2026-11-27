@@ -5,6 +5,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Button } from "./Button";
 
 type Status = "idle" | "copied" | "failed";
 
@@ -34,24 +35,15 @@ export function CopyLinkButton() {
   }
 
   const label = status === "copied" ? "Copied" : status === "failed" ? "Copy failed" : "Copy link";
-  const color =
-    status === "copied"
-      ? "border-emerald-700 bg-emerald-50 text-emerald-900"
-      : status === "failed"
-        ? "border-rose-700 bg-rose-50 text-rose-900"
-        : "border-stone-400 bg-white text-stone-900 hover:border-stone-600";
-
   return (
-    <button
-      type="button"
-      onClick={copy}
-      className={`inline-flex min-h-[44px] items-center rounded-lg border px-4 text-base font-medium focus-visible:outline focus-visible:outline-2 print:hidden ${color}`}
-    >
-      {label}
+    <>
+      <Button variant="quiet" onClick={copy} className="print:hidden">
+        {label}
+      </Button>
       {/* live region so the result is announced */}
       <span role="status" aria-live="polite" className="sr-only">
         {status === "copied" ? "Link copied to clipboard" : status === "failed" ? "Could not copy the link" : ""}
       </span>
-    </button>
+    </>
   );
 }

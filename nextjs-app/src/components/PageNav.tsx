@@ -20,8 +20,8 @@ function jumpTo(id: string) {
 export function PageRail({ items }: { items: NavItem[] }) {
   return (
     <nav aria-label="On this page" className="sticky top-6 hidden self-start lg:block print:hidden!">
-      <p className="mb-2 text-base font-semibold text-stone-900">On this page</p>
-      <ul className="space-y-1 border-l-2 border-stone-200">
+      <p className="mb-2 font-sans text-sm font-semibold uppercase tracking-kicker text-stone-700">On this page</p>
+      <ul className="border-l border-stone-400">
         {items.map((item) => (
           <li key={item.id}>
             <a
@@ -30,7 +30,7 @@ export function PageRail({ items }: { items: NavItem[] }) {
                 event.preventDefault();
                 jumpTo(item.id);
               }}
-              className="-ml-0.5 inline-flex min-h-[44px] items-center border-l-2 border-transparent pl-3 text-base text-stone-700 hover:border-stone-500 hover:text-stone-900 focus-visible:outline focus-visible:outline-2"
+              className="-ml-px inline-flex min-h-[44px] items-center border-l-2 border-transparent pl-3 font-sans text-base text-stone-700 hover:border-ink hover:text-stone-950"
             >
               {item.label}
             </a>
@@ -55,7 +55,7 @@ export function JumpSelect({ items }: { items: NavItem[] }) {
           // reset so the same section can be picked again
           event.target.value = "";
         }}
-        className="min-h-[44px] w-full rounded-lg border border-stone-400 bg-white px-3 text-base text-stone-900 focus-visible:outline focus-visible:outline-2"
+        className="min-h-[44px] w-full rounded-sm border border-stone-500 bg-white px-3 font-sans text-base text-stone-900 hover:border-ink"
       >
         <option value="" disabled>
           Jump to a section
