@@ -10,7 +10,6 @@ import { yearRange } from "@/lib/filter";
 import { firstSentence } from "@/lib/first-sentence";
 import { uniqueVoices } from "@/lib/source-summary";
 import { TOPICS } from "@/lib/vocab";
-import { ProgramImage } from "./ProgramImage";
 import { StatusTag } from "./StatusTag";
 import { VoiceChip } from "./VoiceChip";
 
@@ -20,8 +19,7 @@ export function FeaturedProgramCard({ program }: { program: Program }) {
 
   return (
     // "group" lets the title underline when anywhere on the article is hovered
-    <Link href={`/programs/${program.slug}`} className="group flex h-full flex-col gap-3">
-      <ProgramImage slug={program.slug} topic={program.topic} size="card" />
+    <Link href={`/programs/${program.slug}`} className="group flex h-full flex-col gap-3 border-t border-stone-400 pt-3">
       <p className="figures font-sans text-sm font-semibold uppercase tracking-kicker text-stone-700">
         {/* the topic color depends on the data, so it stays inline */}
         <span style={{ color: topic.color }}>{topic.label}</span> · {yearRange(program)}

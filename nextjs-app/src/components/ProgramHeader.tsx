@@ -10,11 +10,10 @@ import { PAGE_HEADER, PAGE_TITLE } from "./Container";
 import { CopyLinkButton } from "./CopyLinkButton";
 import { Dateline } from "./Dateline";
 import { Kicker } from "./Kicker";
-import { ProgramImage } from "./ProgramImage";
 
 // only the fields the header needs, so it stays easy to test and reuse
 type Props = {
-  program: Pick<Program, "slug" | "title" | "topic" | "era" | "status" | "checkedOn" | "startYear" | "endYear" | "places">;
+  program: Pick<Program, "title" | "topic" | "era" | "status" | "checkedOn" | "startYear" | "endYear" | "places">;
 };
 
 export function ProgramHeader({ program }: Props) {
@@ -31,7 +30,6 @@ export function ProgramHeader({ program }: Props) {
       </div>
 
       <h1 className={PAGE_TITLE}>{program.title}</h1>
-      <ProgramImage slug={program.slug} topic={program.topic} size="banner" />
 
       <Dateline
         status={program.status}

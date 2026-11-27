@@ -7,6 +7,11 @@ export const alt = "Anino ng Ani: Who Paid for the Harvest?";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+const PAPER = "#e9e2d4";
+const INK = "#231e18";
+const ACCENT = "#92400e";
+const MUTED = "#54493b";
+
 export default function OpengraphImage() {
   return new ImageResponse(
     (
@@ -18,15 +23,15 @@ export default function OpengraphImage() {
           width: "100%",
           height: "100%",
           padding: 80,
-          background: "#fafaf9",
-          color: "#171717",
+          background: PAPER,
+          color: INK,
         }}
       >
         <div style={{ fontSize: 96, fontWeight: 700 }}>Anino ng Ani</div>
-        <div style={{ fontSize: 48, marginTop: 24, color: "#b45309" }}>
+        <div style={{ fontSize: 48, marginTop: 24, color: ACCENT }}>
           Who Paid for the Harvest?
         </div>
-        <div style={{ fontSize: 30, marginTop: 40, color: "#525252" }}>
+        <div style={{ fontSize: 30, marginTop: 40, color: MUTED }}>
           A map of martial-law farm policy in CALABARZON, 1972 to 1986
         </div>
       </div>

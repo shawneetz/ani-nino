@@ -8,11 +8,11 @@
      a kicker letter spacing token and a tabular numerals utility */
 @import "tailwindcss";
 
-/* paper and ink, the page sits on paper like a printed reading page */
+/* paper and ink, the page sits on gray-brown paper like an old printed reading page */
 :root {
   color-scheme: light;
-  --background: #f8f5ee;
-  --foreground: #1c1917;
+  --background: #e9e2d4;
+  --foreground: #231e18;
 }
 
 /* these also give bg-paper, text-ink and border-ink classes */
@@ -30,6 +30,18 @@
   --color-accent-strong: #92400e;
   --radius-card: 0.75rem;
   --spacing-section: 2rem;
+
+  --color-stone-50: #f6f2ea;
+  --color-stone-100: #ede7db;
+  --color-stone-200: #ddd5c6;
+  --color-stone-300: #c8bead;
+  --color-stone-400: #a89d8a;
+  --color-stone-500: #877c6a;
+  --color-stone-600: #6b6150;
+  --color-stone-700: #54493b;
+  --color-stone-800: #3d352a;
+  --color-stone-900: #2a241c;
+  --color-stone-950: #1a1510;
 
   /* serif for titles, lead sentences, record text and numerals */
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", serif;
