@@ -4,6 +4,7 @@ import { useId, useRef, useState, type RefObject } from "react";
 import type { Province, Topic } from "@/lib/vocab";
 import { ChipPopover } from "./ChipPopover";
 import { ProvinceOptions, TopicOptions } from "./FilterControls";
+import { MOTION } from "./States";
 import { YearSlider } from "./YearSlider";
 
 type PopoverKey = "topic" | "province" | "year";
@@ -27,8 +28,8 @@ interface FilterChipsProps {
 
 const CHIP =
   "tap-target inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border-2 px-4 font-sans text-base";
-const CHIP_ON = "border-stone-900 bg-stone-900 text-white";
-const CHIP_OFF = "border-stone-500 bg-white text-stone-900 hover:border-ink";
+const CHIP_ON = `border-stone-900 bg-stone-900 text-white hover:bg-stone-700 ${MOTION}`;
+const CHIP_OFF = `border-stone-500 bg-white text-stone-900 hover:border-ink active:bg-stone-200 ${MOTION}`;
 
 function Chevron({ open }: { open: boolean }) {
   return (

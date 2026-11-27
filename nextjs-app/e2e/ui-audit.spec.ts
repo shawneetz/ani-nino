@@ -8,7 +8,8 @@ import path from "node:path";
 
 test.skip(!process.env.UI_AUDIT, "set UI_AUDIT=1 to take the audit screenshots");
 
-const OUT = path.resolve(__dirname, "..", "docs", "ui-audit");
+const ROUND = process.env.UI_AUDIT_ROUND;
+const OUT = path.resolve(__dirname, "..", "docs", "ui-audit", ROUND ? `round-${ROUND}` : "");
 const WIDTHS = [390, 768, 1024, 1440];
 const HEIGHT = 900;
 

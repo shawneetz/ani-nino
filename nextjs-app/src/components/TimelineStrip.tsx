@@ -8,6 +8,7 @@ import type { Program } from "@/lib/content-schema";
 import { yearRange } from "@/lib/filter";
 import { timelineBar } from "@/lib/landing-stats";
 import { FIRST_YEAR, LAST_YEAR, TOPICS } from "@/lib/vocab";
+import { ROW_HOVER } from "./States";
 
 const MIDDLE_YEAR = Math.round((FIRST_YEAR + LAST_YEAR) / 2);
 
@@ -25,7 +26,7 @@ export function TimelineStrip({ programs }: { programs: Program[] }) {
           const bar = timelineBar(program);
           return (
             <li key={program.slug} className="border-b border-stone-300">
-              <Link href={`/programs/${program.slug}`} className="tap-target block px-1 py-2 hover:bg-stone-100">
+              <Link href={`/programs/${program.slug}`} className={`tap-target block px-1 py-2 ${ROW_HOVER}`}>
                 <span className="flex flex-wrap items-baseline justify-between gap-x-3">
                   <span className="font-serif text-base font-semibold text-stone-950">{program.title}</span>
                   <span className="figures font-sans text-sm text-stone-700">{yearRange(program)}</span>

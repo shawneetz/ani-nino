@@ -25,7 +25,7 @@ const SHADOW_ALLOWED = new Set([
   "Legend.tsx",
 ]);
 
-const CARD_ALLOWED = new Set(["PinMap.tsx", "ResultsBody.tsx"]);
+const CARD_ALLOWED = new Set(["PinMap.tsx"]);
 
 const SPACING_ALLOWED = new Set(["Hero.tsx", "Legend.tsx", "FilterControls.tsx"]);
 
@@ -114,6 +114,24 @@ describe("style rules", () => {
       if (cardRadius.test(text) && !CARD_ALLOWED.has(basename(file))) {
         violations.push(`${name}: uses rounded-card outside the map overlay files`);
       }
+    }
+
+    expect(violations).toEqual([]);
+  });
+
+  it("puts every transition behind motion-safe", () => {
+    const violations: string[] = [];
+    const bareTransition = /(?<!motion-safe:)\btransition(?:-[a-z]+)?\b/g;
+
+    for (const file of allFiles()) {
+      if (basename(file) === "PlaceDrawer.tsx") continue;
+      const text = readFileSync(file, "utf8");
+      const code = text
+        .split("\n")
+        .filter((line) => !line.trim().startsWith("//") && !line.trim().startsWith("*") && !line.includes("{/*"))
+        .join("\n");
+      const hits = code.match(bareTransition);
+      if (hits) violations.push(`${relative(process.cwd(), file)}: transition without motion-safe (${hits[0]})`);
     }
 
     expect(violations).toEqual([]);

@@ -11,6 +11,7 @@
 
 import { useId } from "react";
 import { PROVINCE_KEYS, PROVINCE_LABELS, TOPIC_KEYS, TOPICS, type Province, type Topic } from "@/lib/vocab";
+import { MOTION } from "./States";
 
 type Props = {
   topics: Topic[];
@@ -36,7 +37,7 @@ function Chip({ label, pressed, color = "#44403c", onClick }: { label: string; p
       aria-pressed={pressed}
       onClick={onClick}
       style={pressed ? { borderColor: color, backgroundColor: color, color: "#fff" } : { borderColor: color }}
-      className="tap-target rounded-full border-2 px-4 text-base"
+      className={`tap-target rounded-full border-2 px-4 text-base hover:bg-stone-100 active:bg-stone-200 ${MOTION}`}
     >
       {label}
     </button>
@@ -65,8 +66,14 @@ export function ProvinceOptions({ provinces, onToggle }: { provinces: Province[]
 
 // full class names for each switch tone, tailwind only sees whole strings
 const SWITCH_TONES = {
-  accent: { on: "border-accent bg-accent text-white", off: "border-accent bg-white text-stone-900" },
-  confirmed: { on: "border-emerald-700 bg-emerald-700 text-white", off: "border-emerald-700 bg-white text-stone-900" },
+  accent: {
+    on: "border-accent bg-accent text-white hover:bg-accent-strong",
+    off: "border-accent bg-white text-stone-900 hover:bg-stone-100 active:bg-stone-200",
+  },
+  confirmed: {
+    on: "border-emerald-700 bg-emerald-700 text-white hover:bg-emerald-800",
+    off: "border-emerald-700 bg-white text-stone-900 hover:bg-stone-100 active:bg-stone-200",
+  },
 } as const;
 
 function Switch({
@@ -91,7 +98,7 @@ function Switch({
         aria-checked={checked}
         aria-describedby={hintId}
         onClick={onClick}
-        className={`tap-target rounded-full border-2 px-4 text-base ${checked ? SWITCH_TONES[tone].on : SWITCH_TONES[tone].off}`}
+        className={`tap-target rounded-full border-2 px-4 text-base ${MOTION} ${checked ? SWITCH_TONES[tone].on : SWITCH_TONES[tone].off}`}
       >
         {label}
       </button>

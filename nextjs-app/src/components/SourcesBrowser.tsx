@@ -20,6 +20,7 @@ import { GAP_KINDS, VOICES, VOICE_KEYS, type GapKind, type Voice } from "@/lib/v
 import { BLOCK_GAP, BODY, HEADING, INNER_GAP, SECTION_GAP } from "./Container";
 import { PageRail, type NavItem } from "./PageNav";
 import { SourceList } from "./SourceList";
+import { EMPTY_ACTION, EmptyState, MOTION, ROW_HOVER } from "./States";
 
 /**
  * One program that is still being checked, with its open question.
@@ -77,9 +78,9 @@ const SECTION_LINKS: NavItem[] = [
 const SECTION = `scroll-mt-48 ${BLOCK_GAP} border-t-2 border-ink pt-4`;
 const H3 = "font-serif text-xl font-semibold text-stone-950";
 const EMPTY = "font-sans text-base text-stone-700";
-const ROW_LINK = "font-serif text-lg font-semibold underline underline-offset-2";
-const PILL_ON = "border-stone-900 bg-stone-900 text-white";
-const PILL_OFF = "border-stone-500 bg-transparent text-stone-900";
+const ROW_LINK = `font-serif text-lg font-semibold underline underline-offset-2 hover:decoration-2 ${MOTION}`;
+const PILL_ON = `border-stone-900 bg-stone-900 text-white hover:bg-stone-700 ${MOTION}`;
+const PILL_OFF = `border-stone-500 bg-transparent text-stone-900 hover:border-ink active:bg-stone-200 ${MOTION}`;
 
 /**
  * Renders the sticky bar and the four sections of the sources page.
@@ -151,7 +152,7 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
               <li key={link.id}>
                 <a
                   href={`#${link.id}`}
-                  className="tap-target inline-flex items-center rounded-sm px-3 font-sans text-base text-stone-800 underline underline-offset-4 hover:bg-stone-100"
+                  className={`tap-target inline-flex items-center rounded-sm px-3 font-sans text-base text-stone-800 underline underline-offset-4 ${ROW_HOVER}`}
                 >
                   {link.label}
                 </a>
@@ -178,7 +179,7 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
             <button
               type="button"
               onClick={clearAll}
-              className="tap-target font-sans text-base text-stone-700 underline underline-offset-2"
+              className={EMPTY_ACTION}
             >
               Clear search and label
             </button>
@@ -244,7 +245,7 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
         <div id="questions" role="group" aria-labelledby="questions-heading" className={`scroll-mt-48 ${INNER_GAP}`}>
           <h3 id="questions-heading" className={H3}>Open on a page</h3>
           {shownQuestions.length === 0 ? (
-            <p className={EMPTY}>{searching ? "No open questions match your search." : "No open questions."}</p>
+            <EmptyState title={searching ? "No open questions match your search." : "No open questions."} />
           ) : (
             <ul className="border-t border-stone-400">
               {shownQuestions.map((item) => (
@@ -262,7 +263,7 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
         <div id="gaps" role="group" aria-labelledby="gaps-heading" className={`scroll-mt-48 ${INNER_GAP}`}>
           <h3 id="gaps-heading" className={H3}>Missing from the whole site</h3>
           {shownGaps.length === 0 ? (
-            <p className={EMPTY}>{searching ? "No gaps match your search." : "No gaps have been added."}</p>
+            <EmptyState title={searching ? "No gaps match your search." : "No gaps have been added."} />
           ) : (
             <ul className="border-t border-stone-400">
               {shownGaps.map((gap) => (
@@ -292,7 +293,7 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
           <p className={BODY}>These topics are researched but not published; each one names what evidence is missing.</p>
         </div>
         {shownHeldTopics.length === 0 ? (
-          <p className={EMPTY}>{searching ? "No held topics match your search." : "No topics are held."}</p>
+          <EmptyState title={searching ? "No held topics match your search." : "No topics are held."} />
         ) : (
           <ul className="border-t border-stone-400">
             {shownHeldTopics.map((topic) => (
@@ -309,7 +310,7 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
           href={holdingUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="tap-target inline-flex items-center font-sans text-base underline underline-offset-2"
+          className={EMPTY_ACTION}
         >
           See the held files
           <span className="sr-only"> (opens in a new tab)</span>
@@ -320,20 +321,15 @@ export function SourcesBrowser({ openQuestions, gaps, heldTopics, holdingUrl, so
       <section id="all-sources" aria-labelledby="all-sources-heading" className={SECTION}>
         <h2 id="all-sources-heading" className={HEADING}>All sources</h2>
         {shownSources.length === 0 ? (
-          <div className={INNER_GAP}>
-            <p className={EMPTY}>
-              {sources.length === 0 ? "No sources have been added yet." : "No sources match your search and label."}
-            </p>
+          <EmptyState
+            title={sources.length === 0 ? "No sources have been added yet." : "No sources match your search and label."}
+          >
             {hasFilters && (
-              <button
-                type="button"
-                onClick={clearAll}
-                className="tap-target font-sans text-base underline underline-offset-2"
-              >
+              <button type="button" onClick={clearAll} className={EMPTY_ACTION}>
                 Clear search and label
               </button>
             )}
-          </div>
+          </EmptyState>
         ) : (
           VOICE_KEYS.map((key) => {
             const group = shownSources.filter((source) => source.voice === key);

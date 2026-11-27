@@ -7,6 +7,7 @@
 import type { ExplorerProgram } from "@/lib/explorer-types";
 import { yearRange } from "@/lib/filter";
 import { TOPICS } from "@/lib/vocab";
+import { ROW_HOVER } from "./States";
 import { StatusTag } from "./StatusTag";
 
 /**
@@ -40,7 +41,7 @@ export function ResultItem({ program, selected, onSelect }: ResultItemProps) {
     <li
       id={`program-${program.slug}`}
       className={`scroll-mt-4 border-l-4 px-4 py-3 ${
-        selected ? "border-accent bg-amber-50" : "border-transparent hover:bg-stone-100"
+        selected ? "border-accent bg-amber-50" : `border-transparent ${ROW_HOVER}`
       }`}
     >
       <button

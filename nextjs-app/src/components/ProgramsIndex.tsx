@@ -20,6 +20,7 @@ import { Button, ButtonLink } from "./Button";
 import { BLOCK_GAP, INNER_GAP } from "./Container";
 import { FilterControls } from "./FilterControls";
 import { ProgramRow } from "./ProgramRow";
+import { EmptyState } from "./States";
 
 /**
  * Props for the ProgramsIndex component.
@@ -177,12 +178,11 @@ export function ProgramsIndex({ programs }: ProgramsIndexProps) {
             ))}
           </ul>
         ) : (
-          <div className={`${INNER_GAP} border border-dashed border-stone-500 p-4`}>
-            <p className="font-serif text-lg font-semibold text-stone-950">No programs match</p>
+          <EmptyState title="No programs match">
             <Button variant="secondary" onClick={clearAll}>
               Clear search and filters
             </Button>
-          </div>
+          </EmptyState>
         )}
       </section>
     </div>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { Program } from "@/lib/content-schema";
 import { yearRange } from "@/lib/filter";
 import { TOPICS } from "@/lib/vocab";
+import { ROW_HOVER } from "./States";
 import { StatusTag } from "./StatusTag";
 
 export function RelatedPrograms({ items }: { items: Program[] }) {
@@ -14,7 +15,7 @@ export function RelatedPrograms({ items }: { items: Program[] }) {
                 <li key={item.slug} className="border-b border-stone-400">
                     <Link
                         href={`/programs/${item.slug}`}
-                        className="tap-target group block space-y-1 px-1 py-3 hover:bg-stone-100"
+                        className={`tap-target group block space-y-1 px-1 py-3 ${ROW_HOVER}`}
                     >
                         <span className="block font-serif text-xl font-semibold leading-snug text-stone-950 group-hover:underline">{item.title}</span>
                         <span className="figures flex flex-wrap items-center gap-x-3 gap-y-1 font-sans text-base text-stone-700">

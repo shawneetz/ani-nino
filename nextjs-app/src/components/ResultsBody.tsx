@@ -5,6 +5,7 @@ import { useId } from "react";
 import type { ExplorerProgram } from "@/lib/explorer-types";
 import { PROVINCE_LABELS, type Province } from "@/lib/vocab";
 import { ResultItem } from "./ResultItem";
+import { EMPTY_ACTION, EMPTY_BODY, EmptyState } from "./States";
 
 export function MapSearch({ query, onQueryChange, hideLabel = false }: { query: string; onQueryChange: (query: string) => void; hideLabel?: boolean }) {
   const searchId = useId();
@@ -41,16 +42,14 @@ export function ResultsBody({ programs, selectedSlug, explainProvinces, onSelect
           ))}
         </ul>
       ) : explainProvinces.length > 0 ? (
-        <div className="m-3 space-y-2 rounded-card border border-dashed border-stone-400 p-4">
-          <p className="font-serif text-lg font-semibold">No {explainProvinces.map((province) => PROVINCE_LABELS[province]).join(" or ")} program yet</p>
-          <p className="font-serif leading-relaxed text-stone-800">No martial-law farm program in this province has been researched yet.</p>
-          <Link href="/sources#gap-cavite-not-covered" className="tap-target inline-flex items-center font-sans text-base underline underline-offset-2">Here is why</Link>
-        </div>
+        <EmptyState className="m-3" title={`No ${explainProvinces.map((province) => PROVINCE_LABELS[province]).join(" or ")} program yet`}>
+          <p className={EMPTY_BODY}>No martial-law farm program in this province has been researched yet.</p>
+          <Link href="/sources#gap-cavite-not-covered" className={EMPTY_ACTION}>Here is why</Link>
+        </EmptyState>
       ) : (
-        <div className="m-3 space-y-2 rounded-card border border-dashed border-stone-400 p-4">
-          <p className="font-serif text-lg font-semibold">No programs match</p>
-          <button type="button" onClick={onClear} className="tap-target font-sans text-base underline underline-offset-2">Clear filters and search</button>
-        </div>
+        <EmptyState className="m-3" title="No programs match">
+          <button type="button" onClick={onClear} className={EMPTY_ACTION}>Clear filters and search</button>
+        </EmptyState>
       )}
     </section>
   );

@@ -40,6 +40,7 @@ import {
 import { GROUP_LOOK, markerLook, SELECTED_SHADOW } from "@/lib/marker-style";
 import type { Province } from "@/lib/vocab";
 import { Button } from "./Button";
+import { EMPTY_BODY, EmptyState, ROW_HOVER } from "./States";
 
 type MapLibreLib = typeof MapLibre;
 type Group = PlaceGroup<ExplorerProgram>;
@@ -417,7 +418,7 @@ export default function PinMap({
                     setPickerKey(null);
                     handlers.current.onSelect?.(item.slug);
                   }}
-                  className="tap-target w-full rounded-lg px-2 py-1 text-left text-base hover:bg-stone-100"
+                  className={`tap-target w-full rounded-lg px-2 py-1 text-left text-base ${ROW_HOVER}`}
                 >
                   {item.title}
                   <span className="block text-sm text-stone-700">{yearRange(item)}</span>
@@ -431,9 +432,11 @@ export default function PinMap({
 
       {/* shown only if the cdn is blocked or offline, the program list still works */}
       {failed && (
-        <p role="alert" className="absolute inset-0 flex items-center justify-center rounded-lg bg-stone-100 p-4 text-center text-sm text-stone-700">
-          The map could not load. Check your internet connection. The program list still works.
-        </p>
+        <div role="alert" className="absolute inset-0 flex items-center justify-center bg-stone-100 p-4">
+          <EmptyState title="The map could not load" className="max-w-sm bg-white">
+            <p className={EMPTY_BODY}>Check your internet connection. The program list still works.</p>
+          </EmptyState>
+        </div>
       )}
     </div>
   );
